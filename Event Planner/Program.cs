@@ -1,5 +1,11 @@
-namespace Event_Planner
+namespace EventPlanner
 {
+    using Data;
+
+    using Services.Implementations;
+    using Services.Contracts;
+    using Microsoft.EntityFrameworkCore;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -9,11 +15,20 @@ namespace Event_Planner
             // Add services to the container.
 
             builder.Services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            ConfigureServices(builder);
+            #region Project Specific Configurations
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            ConfigureDbContext(builder.Services, connectionString);
+
+            ConfigureServices(builder.Services);
+
+            #endregion
 
             var app = builder.Build();
 
@@ -34,9 +49,19 @@ namespace Event_Planner
             app.Run();
         }
 
-        private static void ConfigureServices(WebApplicationBuilder builder)
+        private static void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddAutoMapper(typeof(Program));
+
+            services.AddScoped<IEventService, EventService>();
+        }
+
+        private static void ConfigureDbContext(IServiceCollection services, string? connectionString)
+        {
+            if (string.IsNullOrEmpty(connectionString)) throw new ArgumentException($"Invalid connection string: {connectionString}");
+
+            services.AddDbContext<EventPlannerDbContext>(options => options.UseSqlServer(connectionString));
         }
     }
 }
