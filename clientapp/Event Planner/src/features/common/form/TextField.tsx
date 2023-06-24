@@ -8,7 +8,6 @@ export const TextField = ({ label, placeholder, disabled }: ITextFieldProps) => 
   return (
     <label className="flex flex-col">
       <span className="mb-2">{label}</span>
-      {/* <span>{error}</span> */}
       <input
         type="text"
         disabled={disabled}
