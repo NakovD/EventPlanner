@@ -1,12 +1,13 @@
 namespace EventPlanner
 {
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+
     using Data;
 
     using Services.Implementations;
     using Services.Contracts;
-    using Microsoft.EntityFrameworkCore;
-    using AutoMapper;
-    using EventPlanner.Services.Profiles;
+    using Services.Profiles;
 
     public class Program
     {
@@ -14,17 +15,23 @@ namespace EventPlanner
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            #region Default Services Configurations
+
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddCors();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            #endregion
+
             #region Project Specific Configurations
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = builder.Configuration.GetConnectionString(WebConstants.DefaultConnection);
 
             ConfigureDbContext(builder.Services, connectionString);
 
@@ -33,6 +40,16 @@ namespace EventPlanner
             #endregion
 
             var app = builder.Build();
+
+            #region Configure Cors
+
+            var clientAppHost = builder.Configuration.GetValue<string>(WebConstants.ClientAppHost);
+
+            app.UseCors(options => options.WithOrigins(clientAppHost).AllowAnyMethod());
+
+            #endregion
+
+            #region Default Application Setup
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -49,6 +66,8 @@ namespace EventPlanner
             app.MapControllers();
 
             app.Run();
+
+            #endregion
         }
 
         private static void ConfigureServices(IServiceCollection services)

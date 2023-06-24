@@ -1,5 +1,4 @@
-import { SignUp } from 'features/authentication/signUp/SignUp';
+import { router } from 'infrastructure/routing/router';
+import { RouterProvider } from 'react-router-dom';
 
-export const App = () => {
-  return <SignUp />;
-};
+export const App = () => <RouterProvider router={router} />;

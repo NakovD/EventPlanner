@@ -14,6 +14,8 @@ module.exports = {
       'secondary-dark': '#230b22',
       'accent-dark': '#832a80',
       'light-blue': '#5887FF',
+      'shadow-color': 'black',
+      transparent: 'transparent',
     },
     extend: {},
   },

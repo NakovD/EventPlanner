@@ -1,33 +1,18 @@
 import { Button } from 'features/common/button/Button';
+import { TextField } from 'features/common/form/TextField';
 
 export const LogIn = () => {
   return (
-    <div className="xl:max-w-4xl xl:m-auto w-full grid grid-cols-2">
-      <img src="/images/sign-up.jpg" alt="free event image" />
-      <form className="p-10 flex gap-10 flex-col justify-center">
-        <h2 className="text-4xl mb-10">Login</h2>
-        <div className="form-row">
-          <input
-            type="text"
-            name="full-name"
-            id="full-name"
-            className="input-text"
-            placeholder="Your Name"
-          />
-        </div>
-
-        <div className="form-row">
-          <input
-            type="password"
-            name="password"
-            id="password"
-            className="input-text"
-            placeholder="Password"
-          />
-        </div>
-
-        <Button label="Login" isSubmit={true} />
-      </form>
+    <div className="h-full flex bg-gradient-to-l from-light-blue to-background-light to-blue-500">
+      <div className="xl:max-w-4xl xl:m-auto w-full grid grid-cols-2 rounded-2xl overflow-hidden bg-background-light">
+        <img src="/images/sign-in.jpg" alt="free event image" />
+        <form className="p-10 flex gap-7 flex-col justify-center">
+          <h2 className="text-4xl mb-10">Login Form</h2>
+          <TextField label="Username" />
+          <TextField label="Password" />
+          <Button label="Register" isSubmit={true} />
+        </form>
+      </div>
     </div>
   );
 };
