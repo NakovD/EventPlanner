@@ -21,7 +21,7 @@
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<EventDto>> GetAll()
+        public async Task<IEnumerable<EventDto>> GetAllAsync()
         {
             var neededEvents = await context.Events
                 .AsNoTracking()

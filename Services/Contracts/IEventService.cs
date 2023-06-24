@@ -4,6 +4,6 @@
 
     public interface IEventService
     {
-        Task<IEnumerable<EventDto>> GetAll();
+        Task<IEnumerable<EventDto>> GetAllAsync();
     }
 }
