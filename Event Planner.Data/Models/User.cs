@@ -17,6 +17,6 @@
         [Required]
         public string Password { get; set; } = null!;
 
-        public ICollection<string> Events { get; set; } = new List<string>();
+        //public ICollection<string> Events { get; set; } = new List<string>();
     }
 }

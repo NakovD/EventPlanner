@@ -17,5 +17,7 @@
         public string Location { get; set; } = null!;
 
         public string Category { get; set; } = null!;
+
+        public string Image { get; set; } = null!;
     }
 }

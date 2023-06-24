@@ -5,6 +5,8 @@ namespace EventPlanner
     using Services.Implementations;
     using Services.Contracts;
     using Microsoft.EntityFrameworkCore;
+    using AutoMapper;
+    using EventPlanner.Services.Profiles;
 
     public class Program
     {
@@ -51,8 +53,7 @@ namespace EventPlanner
 
         private static void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddAutoMapper(typeof(Program));
+            services.AddAutoMapper(configAction => configAction.AddProfile<EventProfile>());
 
             services.AddScoped<IEventService, EventService>();
         }

@@ -12,7 +12,6 @@
 
         public EventPlannerDbContext(DbContextOptions<EventPlannerDbContext> options) : base(options)
         {
-            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 

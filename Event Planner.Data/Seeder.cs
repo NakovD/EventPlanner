@@ -17,11 +17,7 @@
                     OrganizerId = 1,
                     Location = "Sliven",
                     Category = "Report",
-                    Images = new List<string>
-                    {
-                        "https://plus.unsplash.com/premium_photo-1686975618210-fad216b0e253?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=809&q=80",
-                        "https://images.unsplash.com/photo-1687380304706-b978daa78f92?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-                    }
+                    Image = "https://plus.unsplash.com/premium_photo-1686975618210-fad216b0e253?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=809&q=80"
                 },
                 new Event {
                     Id = 2,
@@ -32,11 +28,7 @@
                     OrganizerId = 2,
                     Location = "Kri4im",
                     Category = "Seminar",
-                    Images = new List<string>
-                    {
-                        "https://plus.unsplash.com/premium_photo-1686975618210-fad216b0e253?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=809&q=80",
-                        "https://images.unsplash.com/photo-1687380304706-b978daa78f92?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
-                    }
+                    Image = "https://images.unsplash.com/photo-1687380304706-b978daa78f92?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
                 },
                 new Event {
                     Id = 3,
@@ -47,11 +39,7 @@
                     OrganizerId = 3,
                     Location = "Pernik",
                     Category = "Party",
-                    Images = new List<string>
-                    {
-                        "https://images.unsplash.com/photo-1685392024691-0a4e366701d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
-                        "https://plus.unsplash.com/premium_photo-1672976129906-5982aa060951?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80"
-                    }
+                    Image = "https://plus.unsplash.com/premium_photo-1672976129906-5982aa060951?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80"
                 },
 
             };

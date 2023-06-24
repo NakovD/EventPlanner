@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class Event
     {
@@ -30,7 +31,6 @@
         [Required]
         public string Category { get; set; } = null!;
 
-        public ICollection<string> Images { get; set; } = new List<string>();
-
+        public string Image { get; set; } = null!;
     }
 }
