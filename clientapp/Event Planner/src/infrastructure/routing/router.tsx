@@ -1,6 +1,7 @@
 import { LogIn } from 'features/authentication/logIn/LogIn';
 import { Layout } from 'features/common/layout/Layout';
 import { AllEvents } from 'features/events/all/AllEvents';
+import { EventDetails } from 'features/events/details/EventDetails';
 import { Home } from 'features/home/Home';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { createBrowserRouter } from 'react-router-dom';
@@ -12,21 +13,24 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        path: routePaths.home,
         element: <Home />,
       },
       {
-        path: routePaths.allEvents,
+        path: routePaths.allEvents.path,
         element: <AllEvents />,
+      },
+      {
+        path: routePaths.eventDetails.path,
+        element: <EventDetails />,
       },
     ],
   },
   {
-    path: routePaths.login,
+    path: routePaths.login.path,
     element: <LogIn />,
   },
   {
-    path: routePaths.singup,
+    path: routePaths.singup.path,
     element: <LogIn />,
   },
 ]);

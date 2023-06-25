@@ -1,10 +1,9 @@
 import { QueryKey, useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { API } from 'infrastructure/api';
-import { getQueryKey } from 'infrastructure/api/utilities/getQueryKey';
 
 interface IUseReadQueryOptions {
   endpoint: string;
-  dependentQueryKeys?: QueryKey;
+  queryKey: QueryKey;
 }
 
 export const useReadQuery = <TData>(
@@ -14,13 +13,9 @@ export const useReadQuery = <TData>(
 
   const queryFn = () => API.GET<TData>(endpoint);
 
-  const dependentQueryKeys = options.dependentQueryKeys;
+  const queryKey = options.queryKey;
 
-  const defaultQueryKey = getQueryKey(endpoint);
-
-  const finalQueryKey = [defaultQueryKey, ...(dependentQueryKeys ?? [])];
-
-  const query = useQuery<TData>(finalQueryKey, queryFn, options);
+  const query = useQuery<TData>(queryKey, queryFn, options);
 
   return query;
 };

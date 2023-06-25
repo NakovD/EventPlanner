@@ -15,8 +15,20 @@
         {
             this.eventService = eventService;
         }
-        [HttpGet]
-        public async Task<IEnumerable<EventDto>> GetAll() => await eventService.GetAllAsync();
+        [HttpGet("All")]
+        public async Task<IEnumerable<EventDto>> All() => await eventService.GetAllAsync();
+
+        [HttpGet("{id}")]
+        public async Task<EventDto?> GetById([FromRoute]int id)
+        {
+            if (id == 0)
+            {
+                //handle error;
+            }
+            var neededEvent = await eventService.GetByIdAsync(id);
+
+            return neededEvent;
+        }
 
         //[HttpGet("{id}")]
         //public string Get(int id)

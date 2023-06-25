@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 interface IButtonProps {
   label: string;
+  className?: string;
   to?: string;
   isSubmit?: boolean;
   disabled?: boolean;
@@ -12,12 +13,14 @@ interface IButtonProps {
 export const Button = ({
   label,
   to,
+  className,
   isSubmit = false,
   disabled,
   onClick,
 }: IButtonProps) => {
   const buttonStyles = classNames(
     'py-2 px-4 bg-primary-light text-text-dark focus:outline-none hover',
+    className,
     { ['cursor-not-allower']: disabled },
   );
 

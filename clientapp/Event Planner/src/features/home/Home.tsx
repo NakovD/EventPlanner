@@ -1,8 +1,8 @@
 export const Home = () => {
   return (
     <div className="bg-gray-200 w-full text-xl md:text-2xl text-gray-800 leading-normal rounded-t">
-      <div className="flex h-full bg-white rounded overflow-hidden shadow-2xl">
-        <div className="flex flex-wrap max-w-screen-xl mx-auto mb-10">
+      <div className="flex h-full bg-white rounded overflow-hidden">
+        <div className="flex flex-wrap max-w-screen-xl mx-auto mb-10 shadow-2xl">
           <div className="w-full md:w-2/3 rounded-t">
             <img src="/images/home.jpg" className="h-full w-full shadow" />
           </div>

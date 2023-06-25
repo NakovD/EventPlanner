@@ -1,11 +1,14 @@
 ﻿namespace EventPlanner.Services.Implementations
 {
+    using Data;
+    using Contracts;
+    using Models;
+
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using Contracts;
-    using EventPlanner.Data;
-    using EventPlanner.Services.Models;
+
     using Microsoft.EntityFrameworkCore;
+
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -21,14 +24,22 @@
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<EventDto>> GetAllAsync()
-        {
-            var neededEvents = await context.Events
+        public async Task<IEnumerable<EventDto>> GetAllAsync() =>
+                await context.Events
                 .AsNoTracking()
                 .ProjectTo<EventDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            return neededEvents;
+
+        public async Task<EventDto?> GetByIdAsync(int id)
+        {
+            var neededEvent = await context.Events.FindAsync(id);
+
+            if (neededEvent == null) return null;
+
+            var dto = mapper.Map<EventDto>(neededEvent);
+
+            return dto;
         }
     }
 }

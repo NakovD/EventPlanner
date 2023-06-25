@@ -1,11 +1,14 @@
 import { IAllEventsEntity } from 'features/events/all/models/allEventsEntity';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
+import { routePaths } from 'infrastructure/routing/routePaths';
+import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { Link } from 'react-router-dom';
 
 export const AllEvents = () => {
   const { data } = useReadQuery<IAllEventsEntity[]>({
-    ...getRequestsOptions.GetAllEvents,
+    endpoint: getRequestsOptions.GetAllEvents.endpoint,
+    queryKey: [getRequestsOptions.GetAllEvents.queryKey],
   });
 
   return (
@@ -30,7 +33,7 @@ export const AllEvents = () => {
           </p>
           <Link
             className="absolute opacity-0 max-w-[80%] top-auto right-auto bottom-4 left-8 group-hover:opacity-100"
-            to={''}
+            to={replacePlaceholderWithId(routePaths.eventDetails.path, e.id)}
           >
             Find out more <span className="align-text-top"> --{'>'}</span>
           </Link>

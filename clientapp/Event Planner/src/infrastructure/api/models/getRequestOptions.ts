@@ -1,5 +1,5 @@
 export interface IGetRequestOptions {
   endpoint: string;
-  key: string;
+  queryKey: string;
   staleTime?: number;
 }
