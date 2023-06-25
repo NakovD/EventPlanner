@@ -8,6 +8,9 @@ namespace EventPlanner
     using Services.Implementations;
     using Services.Contracts;
     using Services.Profiles;
+    using EventPlanner.EmailService;
+    using EventPlanner.EmailService.Contracts;
+    using EventPlanner.EmailService.Implementations;
 
     public class Program
     {
@@ -36,6 +39,12 @@ namespace EventPlanner
             ConfigureDbContext(builder.Services, connectionString);
 
             ConfigureServices(builder.Services);
+
+            #endregion
+
+            #region Email Service Setup
+
+            ConfigureEmailService(builder);
 
             #endregion
 
@@ -75,6 +84,8 @@ namespace EventPlanner
             services.AddAutoMapper(configAction => configAction.AddProfile<EventProfile>());
 
             services.AddScoped<IEventService, EventService>();
+
+            services.AddScoped<IEmailSender, EmailSender>();
         }
 
         private static void ConfigureDbContext(IServiceCollection services, string? connectionString)
@@ -82,6 +93,13 @@ namespace EventPlanner
             if (string.IsNullOrEmpty(connectionString)) throw new ArgumentException($"Invalid connection string: {connectionString}");
 
             services.AddDbContext<EventPlannerDbContext>(options => options.UseSqlServer(connectionString));
+        }
+
+        private static void ConfigureEmailService(WebApplicationBuilder builder)
+        {
+            var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+
+            builder.Services.AddSingleton(emailConfig);
         }
     }
 }

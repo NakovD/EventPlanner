@@ -1,5 +1,6 @@
 ﻿namespace EventPlanner.Controllers
 {
+    using EventPlanner.EmailService.Contracts;
     using Microsoft.AspNetCore.Mvc;
 
     using Services.Contracts;
@@ -19,7 +20,7 @@
         public async Task<IEnumerable<EventDto>> All() => await eventService.GetAllAsync();
 
         [HttpGet("{id}")]
-        public async Task<EventDto?> GetById([FromRoute]int id)
+        public async Task<EventDto?> GetById([FromRoute] int id)
         {
             if (id == 0)
             {

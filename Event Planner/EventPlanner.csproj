@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EventPlanner.EmailService\EventPlanner.EmailService.csproj" />
     <ProjectReference Include="..\Services\EventPlanner.Services.csproj" />
   </ItemGroup>
 
