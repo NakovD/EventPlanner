@@ -11,6 +11,10 @@ namespace EventPlanner
     using EventPlanner.EmailService;
     using EventPlanner.EmailService.Contracts;
     using EventPlanner.EmailService.Implementations;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.IdentityModel.Tokens;
+    using System.Text;
 
     public class Program
     {
@@ -42,6 +46,12 @@ namespace EventPlanner
 
             #endregion
 
+            #region Identity Setup
+
+            ConfigureIdentity(builder.Services, builder.Configuration);
+
+            #endregion
+
             #region Email Service Setup
 
             ConfigureEmailService(builder);
@@ -69,14 +79,49 @@ namespace EventPlanner
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
             app.Run();
 
             #endregion
+        }
+
+        private static void ConfigureIdentity(IServiceCollection services, ConfigurationManager configuration)
+        {
+            var validAudience = configuration.GetValue<string>("Jwt:Audience");
+            var validIssuer = configuration.GetValue<string>("Jwt:Issuer");
+            var validKey = configuration.GetValue<string>("Jwt:Key");
+
+            services
+            .AddIdentityCore<IdentityUser>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = false;
+                    options.User.RequireUniqueEmail = true;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = false;
+                }).AddEntityFrameworkStores<EventPlannerDbContext>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidAudience = validAudience,
+                        ValidIssuer = validIssuer,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(validKey))
+                    };
+                });
         }
 
         private static void ConfigureServices(IServiceCollection services)
@@ -86,6 +131,8 @@ namespace EventPlanner
             services.AddScoped<IEventService, EventService>();
 
             services.AddScoped<IEmailSender, EmailSender>();
+
+            services.AddScoped<IAuthService, AuthService>();
         }
 
         private static void ConfigureDbContext(IServiceCollection services, string? connectionString)

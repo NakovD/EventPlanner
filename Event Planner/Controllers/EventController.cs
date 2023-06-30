@@ -1,6 +1,5 @@
 ﻿namespace EventPlanner.Controllers
 {
-    using EventPlanner.EmailService.Contracts;
     using Microsoft.AspNetCore.Mvc;
 
     using Services.Contracts;
@@ -8,7 +7,7 @@
 
     [Route("api/[controller]")]
     [ApiController]
-    public class EventController : ControllerBase
+    public class EventController : BasicController
     {
         private readonly IEventService eventService;
 

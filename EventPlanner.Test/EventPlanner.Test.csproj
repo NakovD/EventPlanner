@@ -20,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Services\EventPlanner.Services.csproj" />
+    <ProjectReference Include="..\Event Planner.Data\EventPlanner.Data.csproj" />
+    <ProjectReference Include="..\EventPlanner.Services\EventPlanner.Services.csproj" />
   </ItemGroup>
 
 </Project>
