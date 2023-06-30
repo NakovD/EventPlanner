@@ -1,20 +1,20 @@
 namespace EventPlanner
 {
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-
     using Data;
-
     using Services.Implementations;
     using Services.Contracts;
     using Services.Profiles;
-    using EventPlanner.EmailService;
-    using EventPlanner.EmailService.Contracts;
-    using EventPlanner.EmailService.Implementations;
+    using EmailService;
+    using EmailService.Contracts;
+    using EmailService.Implementations;
+
+    using System.Text;
+
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.IdentityModel.Tokens;
-    using System.Text;
 
     public class Program
     {
@@ -106,7 +106,9 @@ namespace EventPlanner
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                     options.Password.RequireLowercase = false;
-                }).AddEntityFrameworkStores<EventPlannerDbContext>();
+                })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<EventPlannerDbContext>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

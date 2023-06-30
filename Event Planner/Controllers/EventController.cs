@@ -15,6 +15,7 @@
         {
             this.eventService = eventService;
         }
+
         [HttpGet("All")]
         public async Task<IEnumerable<EventDto>> All() => await eventService.GetAllAsync();
 

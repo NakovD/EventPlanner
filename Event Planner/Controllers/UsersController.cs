@@ -12,12 +12,15 @@
     {
         private readonly UserManager<IdentityUser> userManager;
 
+        private readonly RoleManager<IdentityRole> roleManager;
+
         private readonly IAuthService authService;
 
-        public UsersController(UserManager<IdentityUser> userManager, IAuthService authService)
+        public UsersController(UserManager<IdentityUser> userManager, IAuthService authService, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.authService = authService;
+            this.roleManager = roleManager;
         }
 
         [HttpPost("CreateUser")]
@@ -39,7 +42,6 @@
 
             return Created("Create User", user);
         }
-
 
         [HttpPost("GetToken")]
         public async Task<ActionResult<AuthResponse>> CreateBearerToken(AuthUserDto userDto)
