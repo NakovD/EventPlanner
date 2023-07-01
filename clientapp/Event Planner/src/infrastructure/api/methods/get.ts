@@ -1,9 +1,10 @@
-import axios from 'axios';
+import { AxiosRequestConfig } from 'axios';
+import { eventPlannerInstance } from 'infrastructure/api/axios';
 
-const API_KEY = import.meta.env.VITE_API_KEY as string;
-
-export const get = async <TData>(endpoint: string): Promise<TData> => {
-  const finalURL = `${API_KEY}${endpoint}`;
-  const { data } = await axios.get<TData>(finalURL);
+export const get = async <TData>(
+  endpoint: string,
+  config?: AxiosRequestConfig,
+): Promise<TData> => {
+  const { data } = await eventPlannerInstance.get<TData>(endpoint, config);
   return data;
 };
