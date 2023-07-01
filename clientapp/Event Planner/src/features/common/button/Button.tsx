@@ -34,7 +34,7 @@ export const Button = ({
   return (
     <button
       className={buttonStyles}
-      type={isSubmit ? 'button' : 'submit'}
+      type={isSubmit ? 'submit' : 'button'}
       disabled={disabled}
       onClick={onClick}
     >

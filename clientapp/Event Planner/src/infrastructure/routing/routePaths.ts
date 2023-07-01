@@ -12,7 +12,7 @@ export const routePaths = {
     path: '/login',
     name: 'Login',
   },
-  singup: {
+  signup: {
     path: '/signup',
     name: 'Sign Up',
   },

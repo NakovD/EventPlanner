@@ -8,7 +8,7 @@
 
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;
 
@@ -16,14 +16,14 @@
 
         private readonly IAuthService authService;
 
-        public UsersController(UserManager<IdentityUser> userManager, IAuthService authService, RoleManager<IdentityRole> roleManager)
+        public UserController(UserManager<IdentityUser> userManager, IAuthService authService, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.authService = authService;
             this.roleManager = roleManager;
         }
 
-        [HttpPost("CreateUser")]
+        [HttpPost("Register")]
         public async Task<ActionResult<UserDto>> CreateUser(UserDto user)
         {
             var isValid = ModelState.IsValid;
@@ -38,12 +38,14 @@
 
             if (!result.Succeeded) return BadRequest(result.Errors);
 
-            user.Password = null;
+            var newUser = await userManager.FindByNameAsync(user.UserName);
 
-            return Created("Create User", user);
+            var response = authService.CreateToken(newUser);
+
+            return Ok(response);
         }
 
-        [HttpPost("GetToken")]
+        [HttpPost("Login")]
         public async Task<ActionResult<AuthResponse>> CreateBearerToken(AuthUserDto userDto)
         {
             var isValid = ModelState.IsValid;

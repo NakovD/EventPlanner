@@ -1,4 +1,5 @@
 import { LogIn } from 'features/authentication/logIn/LogIn';
+import { SignUp } from 'features/authentication/signUp/SignUp';
 import { Layout } from 'features/common/layout/Layout';
 import { AllEvents } from 'features/events/all/AllEvents';
 import { EventDetails } from 'features/events/details/EventDetails';
@@ -30,7 +31,7 @@ export const router = createBrowserRouter([
     element: <LogIn />,
   },
   {
-    path: routePaths.singup.path,
-    element: <LogIn />,
+    path: routePaths.signup.path,
+    element: <SignUp />,
   },
 ]);

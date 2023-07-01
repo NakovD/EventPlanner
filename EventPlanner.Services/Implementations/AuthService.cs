@@ -16,7 +16,7 @@
 
     public class AuthService : IAuthService
     {
-        private const int EXPIRATION_MINUTES = 1;
+        private const int EXPIRATION_HOURS = 12;
 
         private readonly IConfiguration configuration;
 
@@ -27,7 +27,7 @@
 
         public AuthResponse CreateToken(IdentityUser user)
         {
-            var expiration = DateTime.UtcNow.AddMinutes(EXPIRATION_MINUTES);
+            var expiration = DateTime.UtcNow.AddHours(EXPIRATION_HOURS);
 
             var token = CreateJwtToken(
                 CreateClaims(user),

@@ -1,8 +1,13 @@
 import { Button } from 'features/common/button/Button';
+import { HeaderAdminDropdown } from 'features/common/header/components/HeaderAdminDropdown';
+import { HeaderUser } from 'features/common/header/components/HeaderUser';
+import { useHeader } from 'features/common/header/hooks/useHeader';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { Link } from 'react-router-dom';
 
 export const Header = () => {
+  const { isAuthenticated, isVisible, ref, toggleAdminDropdown } = useHeader();
+
   return (
     <header className="px-10 pb-7 bg-secondary-light flex justify-between items-center">
       <Link className="font-extrabold text-6xl" to={routePaths.index}>
@@ -47,7 +52,7 @@ export const Header = () => {
         </div>
         <div
           id="navbar-with-mega-menu"
-          className="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:block"
+          className="hs-collapse hidden transition-all duration-300 basis-full grow sm:block"
         >
           <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:pl-5">
             <Link
@@ -59,9 +64,9 @@ export const Header = () => {
             </Link>
             <Link
               className="font-medium text-gray-600 hover:text-primary-light dark:text-gray-400 dark:hover:text-gray-500"
-              to={''}
+              to={routePaths.allEvents.path}
             >
-              Account
+              My Events
             </Link>
             <Link
               className="font-medium text-gray-600 hover:text-primary-light dark:text-gray-400 dark:hover:text-gray-500"
@@ -69,19 +74,17 @@ export const Header = () => {
             >
               Work
             </Link>
-            <Link
-              className="font-medium text-gray-600 hover:text-primary-light dark:text-gray-400 dark:hover:text-gray-500"
-              to={''}
+            <div
+              ref={ref}
+              className="hs-dropdown relative hs-dropdown-open [--strategy:static] sm:[--strategy:relative] [--adaptive:none]"
             >
-              Blog
-            </Link>
-            <div className="hs-dropdown [--strategy:static] sm:[--strategy:fixed] [--adaptive:none]">
               <button
+                onClick={toggleAdminDropdown}
                 id="hs-mega-menu-basic-dr"
                 type="button"
                 className="flex items-center w-full text-gray-600 hover:text-primary-light font-medium dark:text-gray-400 dark:hover:text-gray-500 "
               >
-                Dropdown
+                Admin Area
                 <svg
                   className="ml-2 w-2.5 h-2.5 text-gray-600"
                   width="16"
@@ -98,33 +101,15 @@ export const Header = () => {
                   ></path>
                 </svg>
               </button>
-
-              <div className="hs-dropdown-menu transition-[opacity,margin] duration-[0.1ms] sm:duration-[150ms] hs-dropdown-open:opacity-100 opacity-0 sm:w-48 z-10 bg-white sm:shadow-md rounded-lg p-2 dark:bg-gray-800 sm:dark:border dark:border-gray-700 dark:divide-gray-700 before:absolute top-full sm:border before:-top-5 before:left-0 before:w-full before:h-5 hidden">
-                <Link
-                  className="flex items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                  to={''}
-                >
-                  About
-                </Link>
-
-                <Link
-                  className="flex items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                  to={''}
-                >
-                  Downloads
-                </Link>
-                <Link
-                  className="flex items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-                  to={''}
-                >
-                  Team Account
-                </Link>
-              </div>
+              <HeaderAdminDropdown isVisible={isVisible} />
             </div>
           </div>
         </div>
       </nav>
-      <Button to={routePaths.login.path} label={routePaths.login.name} />
+      {isAuthenticated && <HeaderUser />}
+      {!isAuthenticated && (
+        <Button to={routePaths.login.path} label={routePaths.login.name} />
+      )}
     </header>
   );
 };
