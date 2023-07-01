@@ -2,6 +2,7 @@ import { LogIn } from 'features/authentication/logIn/LogIn';
 import { SignUp } from 'features/authentication/signUp/SignUp';
 import { Layout } from 'features/common/layout/Layout';
 import { AllEvents } from 'features/events/all/AllEvents';
+import { EventCreate } from 'features/events/create/EventCreate';
 import { EventDetails } from 'features/events/details/EventDetails';
 import { Home } from 'features/home/Home';
 import { routePaths } from 'infrastructure/routing/routePaths';
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
       {
         path: routePaths.eventDetails.path,
         element: <EventDetails />,
+      },
+      {
+        path: routePaths.eventCreate.path,
+        element: <EventCreate />,
       },
     ],
   },

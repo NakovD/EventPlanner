@@ -7,7 +7,7 @@ export const Layout = () => {
     <div className="bg-primary-light p-20 min-h-screen h-full">
       <Header />
       <AuthOutlet>
-        <main className="bg-secondary-light flex flex-col">
+        <main className="bg-secondary-light flex flex-col px-10">
           <Outlet />
         </main>
       </AuthOutlet>

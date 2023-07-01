@@ -4,6 +4,7 @@
     using Data.Models;
 
     using AutoMapper;
+    using EventPlanner.Services.Models.Event;
 
     public class EventProfile : Profile
     {

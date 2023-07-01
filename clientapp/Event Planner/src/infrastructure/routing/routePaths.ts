@@ -4,6 +4,10 @@ export const routePaths = {
     path: '/all-events',
     name: 'All Events',
   },
+  eventCreate: {
+    path: '/event-create',
+    name: 'Event Create',
+  },
   eventDetails: {
     path: '/event/:id',
     name: 'Event Page',

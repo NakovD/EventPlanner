@@ -1,4 +1,4 @@
-﻿namespace EventPlanner.Services.Models
+﻿namespace EventPlanner.Services.Models.Event
 {
     public class EventDto
     {

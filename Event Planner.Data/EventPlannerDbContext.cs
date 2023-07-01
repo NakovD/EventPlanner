@@ -1,11 +1,11 @@
 ﻿namespace EventPlanner.Data
 {
     using Models;
+
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-    public class EventPlannerDbContext : IdentityDbContext<IdentityUser>
+    public class EventPlannerDbContext : IdentityDbContext<User>
     {
         public DbSet<Event> Events { get; set; } = null!;
 

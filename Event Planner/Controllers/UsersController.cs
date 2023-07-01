@@ -42,6 +42,8 @@
 
             var response = authService.CreateToken(newUser);
 
+            await userManager.AddToRoleAsync(newUser, "User");
+
             return Ok(response);
         }
 

@@ -1,5 +1,5 @@
 import { Button } from 'features/common/button/Button';
-import { IAllEventsEntity } from 'features/events/all/models/allEventsEntity';
+import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';

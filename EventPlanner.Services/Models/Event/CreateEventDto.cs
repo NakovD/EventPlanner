@@ -1,40 +1,38 @@
-﻿namespace EventPlanner.Data.Models
+﻿namespace EventPlanner.Services.Models.Event
 {
-    using Microsoft.AspNetCore.Identity;
-    using System;
+    using Common.Attributes;
+    using static Common.ValidationValues.EventValidationValues;
+
     using System.ComponentModel.DataAnnotations;
 
-    public class Event
+    public class CreateEventDto
     {
 
-        [Key]
-        public int Id { get; set; }
-
         [Required]
+        [MaxLength(TitleMaxLength)]
         public string Title { get; set; } = null!;
 
         [Required]
-        public string Description { get; set; } = null!;
-
-        [Required]
+        [DateGreaterThanToday]
         public DateTime Date { get; set; }
 
         [Required]
+        [TimeIsValidFormat]
         public string Time { get; set; } = null!;
 
         [Required]
-        public int OrganizerId { get; set; }
+        [MaxLength(DescriptionMaxLength)]
+        public string Description { get; set; } = null!;
 
         [Required]
-        public IdentityUser Organizer { get; set; } = null!;
-
-        [Required]
+        [MaxLength(LocationMaxLength)]
         public string Location { get; set; } = null!;
 
         [Required]
         public string Category { get; set; } = null!;
 
         [Required]
+        [MaxLength(ImageLinkMaxLength)]
         public string Image { get; set; } = null!;
     }
 }

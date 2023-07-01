@@ -1,9 +1,11 @@
 ﻿namespace EventPlanner.Controllers
 {
+    using EventPlanner.Services.Models.Event;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
     using Services.Contracts;
-    using Services.Models;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -11,45 +13,39 @@
     {
         private readonly IEventService eventService;
 
-        public EventController(IEventService eventService)
+        private readonly UserManager<IdentityUser> userManager;
+
+        public EventController(IEventService eventService, UserManager<IdentityUser> userManager)
         {
             this.eventService = eventService;
+            this.userManager = userManager;
         }
 
         [HttpGet("All")]
         public async Task<IEnumerable<EventDto>> All() => await eventService.GetAllAsync();
 
         [HttpGet("{id}")]
-        public async Task<EventDto?> GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            if (id == 0)
-            {
-                //handle error;
-            }
+            if (id <= 0) return BadRequest();
             var neededEvent = await eventService.GetByIdAsync(id);
 
-            return neededEvent;
+            return Ok(neededEvent);
         }
 
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
+        [HttpPost("Create")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Create([FromBody]CreateEventDto eventDto)
+        {
+            var isDtoValid = ModelState.IsValid;
 
-        //[HttpPost]
-        //public void Post([FromBody] string value)
-        //{
-        //}
+            if (!isDtoValid) return BadRequest();
 
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
+            var isActionSuccess = await eventService.CreateEventAsync(eventDto);
 
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+            if (!isActionSuccess) return BadRequest();
+
+            return Ok();
+        }
     }
 }

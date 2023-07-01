@@ -5,7 +5,7 @@ namespace EventPlanner.Test
     using EventPlanner.Data.Models;
     using EventPlanner.Services.Contracts;
     using EventPlanner.Services.Implementations;
-    using EventPlanner.Services.Models;
+    using EventPlanner.Services.Models.Event;
     using EventPlanner.Services.Profiles;
     using Microsoft.EntityFrameworkCore;
     using Moq;
