@@ -12,6 +12,7 @@ namespace EventPlanner.Test
 
     using Microsoft.EntityFrameworkCore;
     using System.Globalization;
+    using AutoMapper.QueryableExtensions;
 
     public class EventServiceTest
     {
@@ -240,6 +241,35 @@ namespace EventPlanner.Test
             var expected = await eventService.UpdateEventAsync(new EventFormDto(), eventId);
 
             Assert.IsFalse(expected);
+        }
+
+        [Test]
+        [TestCase("1")]
+        [TestCase("2")]
+        public async Task GetUserEventsReturnsTheEventsOfTheUser(string userId)
+        {
+            var actual = await eventService.GetUserEventsAsync(userId);
+
+            var expected = await db.Events.Where(e => e.OrganizerId == userId)
+                .ProjectTo<EventDto>(mapper.ConfigurationProvider).ToListAsync();
+
+            var actualIds = actual.Select(e => e.Id).ToList();
+
+            var expectedIs = expected.Select(e => e.Id).ToList();
+
+            Assert.IsTrue(actual.Count() == expected.Count());
+
+            CollectionAssert.AreEquivalent(actualIds, expectedIs);
+        }
+
+        [Test]
+        [TestCase(null)]
+        [TestCase("")]
+        public async Task GetUserEventsReturnsNullWithInvalidUserId(string? userId)
+        {
+            var expected = await eventService.GetUserEventsAsync(userId);
+
+            Assert.IsNull(expected);
         }
     }
 }
