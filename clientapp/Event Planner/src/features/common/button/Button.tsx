@@ -26,7 +26,7 @@ export const Button = ({
 
   if (to) {
     return (
-      <Link className={buttonStyles} to={to}>
+      <Link className={'inline-block ' + buttonStyles} to={to}>
         {label}
       </Link>
     );

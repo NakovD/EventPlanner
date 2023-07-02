@@ -2,6 +2,7 @@ import { Button } from 'features/common/button/Button';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
+import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -87,6 +88,11 @@ export const EventDetails = () => {
           </div>
         </div>
         <Button className="mt-4" label="I'm interested. Count me in!" />
+        <Button
+          className="mx-3"
+          to={replacePlaceholderWithId(routePaths.eventEdit.path, event?.id as number)}
+          label="Edit this event"
+        />
         <div>
           <p className="xl:pr-48 text-base lg:leading-tight leading-normal text-gray-600 mt-7">
             {event?.description}

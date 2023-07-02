@@ -4,11 +4,12 @@ import { eventValidationSchema } from 'features/events/form/validators/eventVali
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { useCreateMutation } from 'infrastructure/api/hooks/useCreateMutation';
 import { routePaths } from 'infrastructure/routing/routePaths';
+import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-export const useEventForm = (formData?: IEventForm) => {
+export const useEventForm = (formData?: IEventForm, eventId?: string) => {
   const navigate = useNavigate();
 
   const defaultValues: IEventForm = formData
@@ -28,8 +29,13 @@ export const useEventForm = (formData?: IEventForm) => {
     resolver: yupResolver(eventValidationSchema),
   });
 
+  const endpoint =
+    formData && eventId
+      ? replacePlaceholderWithId(endpoints.events.edit, eventId)
+      : endpoints.events.create;
+
   const { mutate, isSuccess } = useCreateMutation<IEventForm>({
-    endpoint: endpoints.events.create,
+    endpoint: endpoint,
   });
 
   const onSubmit = handleSubmit((data) => mutate(data));

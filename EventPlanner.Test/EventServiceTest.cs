@@ -162,7 +162,7 @@ namespace EventPlanner.Test
             var organizerId = "userId";
             var customTitle = "Very custom title";
 
-            var eventDto = new CreateEventDto
+            var eventDto = new EventFormDto
             {
                 Title = customTitle,
                 Date = "22/09/2023",
@@ -187,7 +187,7 @@ namespace EventPlanner.Test
         {
             string userId = "";
 
-            var actual = await eventService.CreateEventAsync(new CreateEventDto(), userId);
+            var actual = await eventService.CreateEventAsync(new EventFormDto(), userId);
 
             var expected = false;
 

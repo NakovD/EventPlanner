@@ -3,6 +3,7 @@ export const endpoints = {
     getAll: '/Event/All',
     getSingle: '/Event/:id',
     create: '/Event/Create',
+    edit: '/Event/Edit/:id',
   },
   user: {
     login: '/User/login',

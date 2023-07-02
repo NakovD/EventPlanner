@@ -7,11 +7,12 @@ import { propertyOf } from 'infrastructure/utilities/propertyOf';
 
 interface IEventFormProps {
   title: string;
+  eventId?: string;
   formData?: IEventForm;
 }
 
-export const EventForm = ({ title, formData }: IEventFormProps) => {
-  const { control, onSubmit } = useEventForm(formData);
+export const EventForm = ({ title, eventId, formData }: IEventFormProps) => {
+  const { control, onSubmit } = useEventForm(formData, eventId);
 
   return (
     <>

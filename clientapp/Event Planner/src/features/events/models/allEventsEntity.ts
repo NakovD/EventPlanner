@@ -6,4 +6,5 @@ export interface IAllEventsEntity {
   location: string;
   category: string;
   image: string;
+  date: string;
 }

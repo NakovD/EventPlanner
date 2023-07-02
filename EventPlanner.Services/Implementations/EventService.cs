@@ -4,6 +4,7 @@
     using Contracts;
     using Models.Event;
     using Data.Models;
+    using static Common.Formats.EventFormats;
 
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -12,6 +13,7 @@
     using AutoMapper.QueryableExtensions;
 
     using Microsoft.EntityFrameworkCore;
+    using System.Globalization;
 
     public class EventService : IEventService
     {
@@ -25,7 +27,7 @@
             this.mapper = mapper;
         }
 
-        public async Task<bool> CreateEventAsync(CreateEventDto eventDto, string? userId)
+        public async Task<bool> CreateEventAsync(EventFormDto eventDto, string? userId)
         {
             var isUserIdValid = !string.IsNullOrEmpty(userId);
 
@@ -63,6 +65,32 @@
             var dto = mapper.Map<EventDto>(neededEvent);
 
             return dto;
+        }
+
+        public async Task<bool> UpdateEventAsync(EventFormDto eventDto, int eventId)
+        {
+            var neededEvent = await context.Events.FindAsync(eventId);
+
+            if (neededEvent == null) return false;
+
+            neededEvent.Title = eventDto.Title;
+            neededEvent.Description = eventDto.Description;
+            neededEvent.Location = eventDto.Location;
+            neededEvent.Category = eventDto.Category;
+            neededEvent.Date = DateTime.ParseExact(eventDto.Date, DateFormat, CultureInfo.InvariantCulture);
+            neededEvent.Time = eventDto.Time;
+            neededEvent.Image = eventDto.Image;
+
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -6,7 +6,11 @@ export const routePaths = {
   },
   eventCreate: {
     path: '/event-create',
-    name: 'Event Create',
+    name: 'Create Event',
+  },
+  eventEdit: {
+    path: '/event-edit/:id',
+    name: 'Edit Evetnt',
   },
   eventDetails: {
     path: '/event/:id',

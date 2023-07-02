@@ -13,12 +13,9 @@
     {
         private readonly IEventService eventService;
 
-        private readonly UserManager<User> userManager;
-
-        public EventController(IEventService eventService, UserManager<User> userManager)
+        public EventController(IEventService eventService)
         {
             this.eventService = eventService;
-            this.userManager = userManager;
         }
 
         [HttpGet("All")]
@@ -34,7 +31,7 @@
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create([FromBody]CreateEventDto eventDto)
+        public async Task<IActionResult> Create([FromBody]EventFormDto eventDto)
         {
             var isDtoValid = ModelState.IsValid;
 
@@ -45,6 +42,20 @@
             var isActionSuccess = await eventService.CreateEventAsync(eventDto, userId);
 
             if (!isActionSuccess) return BadRequest();
+
+            return Ok();
+        }
+
+        [HttpPost("Edit/{id}")]
+        public async Task<IActionResult> Edit([FromBody] EventFormDto eventDto, [FromRoute]int id)
+        {
+            var isDtoValid = ModelState.IsValid;
+
+            if (!isDtoValid) return BadRequest();
+
+            var actionSuccess = await eventService.UpdateEventAsync(eventDto, id);
+
+            if (!actionSuccess) return BadRequest();
 
             return Ok();
         }

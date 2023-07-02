@@ -5,7 +5,7 @@
 
     using System.ComponentModel.DataAnnotations;
 
-    public class CreateEventDto
+    public class EventFormDto
     {
 
         [Required]
