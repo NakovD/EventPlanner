@@ -2,18 +2,15 @@
 {
     using Contracts;
     using Models;
+    using Data.Models;
 
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.Extensions.Configuration;
     using System;
-    using System.Collections.Generic;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Linq;
     using System.Text;
-    using System.Threading.Tasks;
-    using Microsoft.IdentityModel.Tokens;
+    using System.IdentityModel.Tokens.Jwt;
     using System.Security.Claims;
-    using EventPlanner.Data.Models;
+
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.IdentityModel.Tokens;
 
     public class AuthService : IAuthService
     {

@@ -1,13 +1,11 @@
 ﻿namespace EventPlanner.Controllers
 {
-    using EventPlanner.Data.Models;
-    using EventPlanner.Services.Models.Event;
-    using Microsoft.AspNetCore.Authorization;
+    using Data.Models;
+    using Services.Models.Event;
+    using Services.Contracts;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-
-    using Services.Contracts;
-    using System.Security.Claims;
 
     [Route("api/[controller]")]
     [ApiController]

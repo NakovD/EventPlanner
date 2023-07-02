@@ -1,5 +1,3 @@
-using static Azure.Core.HttpHeader;
-
 namespace EventPlanner.Test
 {
     using AutoMapper;
@@ -10,9 +8,6 @@ namespace EventPlanner.Test
     using EventPlanner.Services.Models.Event;
     using EventPlanner.Services.Profiles;
     using Microsoft.EntityFrameworkCore;
-    using System.Formats.Asn1;
-    using System.Globalization;
-    using static EventPlanner.Services.Common.Formats.EventFormats;
 
     public class EventServiceTest
     {

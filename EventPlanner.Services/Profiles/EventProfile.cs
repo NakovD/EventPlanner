@@ -1,12 +1,12 @@
 ﻿namespace EventPlanner.Services.Profiles
 {
-    using Models;
     using Data.Models;
+    using Models.Event;
+    using static Common.Formats.EventFormats;
+
+    using System.Globalization;
 
     using AutoMapper;
-    using EventPlanner.Services.Models.Event;
-    using static Common.Formats.EventFormats;
-    using System.Globalization;
 
     public class EventProfile : Profile
     {

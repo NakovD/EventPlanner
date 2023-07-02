@@ -1,9 +1,7 @@
 ﻿namespace EventPlanner.Services.Contracts
 {
     using Models;
-
-    using Microsoft.AspNetCore.Identity;
-    using EventPlanner.Data.Models;
+    using Data.Models;
 
     public interface IAuthService
     {

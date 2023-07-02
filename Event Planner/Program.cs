@@ -1,6 +1,7 @@
 namespace EventPlanner
 {
     using Data;
+    using Data.Models;
     using Services.Implementations;
     using Services.Contracts;
     using Services.Profiles;
@@ -15,7 +16,6 @@ namespace EventPlanner
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.IdentityModel.Tokens;
-    using EventPlanner.Data.Models;
 
     public class Program
     {

@@ -1,9 +1,10 @@
 ﻿namespace EventPlanner.Services.Common.Attributes
 {
-    using System.ComponentModel.DataAnnotations;
-    using System.Globalization;
     using static Common.ErrorMessages.EventErrorMessages;
     using static Common.Formats.EventFormats;
+
+    using System.ComponentModel.DataAnnotations;
+    using System.Globalization;
 
     public class DateGreaterThanToday : ValidationAttribute
     {

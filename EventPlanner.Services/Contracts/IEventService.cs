@@ -1,7 +1,6 @@
 ﻿namespace EventPlanner.Services.Contracts
 {
-    using EventPlanner.Services.Models.Event;
-    using Models;
+    using Models.Event;
 
     public interface IEventService
     {

@@ -1,6 +1,6 @@
 ﻿namespace EventPlanner.Data.Models
 {
-    using EventPlanner.Data.Enums;
+    using Enums;
 
     public class Attendee
     {

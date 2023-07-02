@@ -3,15 +3,15 @@
     using Data;
     using Contracts;
     using Models.Event;
+    using Data.Models;
+
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
     using Microsoft.EntityFrameworkCore;
-
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using EventPlanner.Data.Models;
 
     public class EventService : IEventService
     {
