@@ -4,6 +4,7 @@ using EventPlanner.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventPlanner.Data.Migrations
 {
     [DbContext(typeof(EventPlannerDbContext))]
-    partial class EventPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230702120423_Attendee name column added")]
+    partial class Attendeenamecolumnadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
