@@ -9,6 +9,8 @@
     {
         public DbSet<Event> Events { get; set; } = null!;
 
+        public DbSet<Attendee> Attendees { get; set; } = null!;
+
         public EventPlannerDbContext(DbContextOptions<EventPlannerDbContext> options) : base(options)
         {
         }

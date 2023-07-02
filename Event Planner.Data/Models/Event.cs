@@ -35,5 +35,7 @@
 
         [Required]
         public string Image { get; set; } = null!;
+
+        public ICollection<Attendee> Attendees { get; set; } = new List<Attendee>();
     }
 }
