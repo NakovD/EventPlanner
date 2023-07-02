@@ -13,6 +13,7 @@
     using System.Threading.Tasks;
     using Microsoft.IdentityModel.Tokens;
     using System.Security.Claims;
+    using EventPlanner.Data.Models;
 
     public class AuthService : IAuthService
     {
@@ -25,7 +26,7 @@
             this.configuration = configuration;
         }
 
-        public AuthResponse CreateToken(IdentityUser user)
+        public AuthResponse CreateToken(User user)
         {
             var expiration = DateTime.UtcNow.AddHours(EXPIRATION_HOURS);
 
@@ -53,9 +54,9 @@
                 signingCredentials: credentials
             );
 
-        private Claim[] CreateClaims(IdentityUser user) =>
+        private Claim[] CreateClaims(User user) =>
           new[] {
-                new Claim(JwtRegisteredClaimNames.Sub, configuration["Jwt:Subject"]),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),

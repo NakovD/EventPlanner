@@ -9,6 +9,6 @@
 
         Task<EventDto?> GetByIdAsync(int id);
 
-        Task<bool> CreateEventAsync(CreateEventDto eventDto);
+        Task<bool> CreateEventAsync(CreateEventDto eventDto, string? userId);
     }
 }

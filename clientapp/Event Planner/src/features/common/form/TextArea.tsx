@@ -1,7 +1,7 @@
 import { TextField as MUITextFIeld } from '@mui/material';
 import { Control, FieldPath, FieldValues, useController } from 'react-hook-form';
 
-interface ITextFieldProps<TFormValues extends FieldValues> {
+interface ITextAreaProps<TFormValues extends FieldValues> {
   label: string;
   name: FieldPath<TFormValues>;
   control: Control<TFormValues>;
@@ -10,20 +10,21 @@ interface ITextFieldProps<TFormValues extends FieldValues> {
   info?: string;
 }
 
-export const TextField = <TFormValues extends FieldValues>({
+export const TextArea = <TFormValues extends FieldValues>({
   control,
   name,
   label,
   placeholder,
   disabled,
   info,
-}: ITextFieldProps<TFormValues>) => {
+}: ITextAreaProps<TFormValues>) => {
   const { field, fieldState } = useController({ control, name });
 
   const helperText = fieldState.error ? fieldState.error.message : info;
 
   return (
     <MUITextFIeld
+      multiline
       autoComplete="off"
       error={!!fieldState.error}
       helperText={helperText}

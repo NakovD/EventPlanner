@@ -1,17 +1,21 @@
 ﻿namespace EventPlanner.Services.Common.Attributes
 {
     using System.ComponentModel.DataAnnotations;
+    using System.Globalization;
     using static Common.ErrorMessages.EventErrorMessages;
+    using static Common.Formats.EventFormats;
 
     public class DateGreaterThanToday : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var date = (DateTime?)value;
+            var date = (string?)value;
 
-            if (date == null) return new ValidationResult(InvalidDate);
+            var isValidDate = DateTime.TryParseExact(date, DateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out var validDate);
 
-            var isBeforeToday = date < DateTime.Today;
+            if (!isValidDate) return new ValidationResult(InvalidDate);
+
+            var isBeforeToday = validDate < DateTime.Today;
 
             if (isBeforeToday) return new ValidationResult(DateIsBeforeToday);
 

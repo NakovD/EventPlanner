@@ -14,7 +14,7 @@
 
         [Required]
         [DateGreaterThanToday]
-        public DateTime Date { get; set; }
+        public string Date { get; set; } = null!;
 
         [Required]
         [TimeIsValidFormat]

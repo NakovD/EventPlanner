@@ -86,9 +86,9 @@ namespace EventPlanner.Test
                     Image = "some img soruce",
                     Location = "Sliven",
                     Description = "some desc",
-                    OrganizerId = 1,
+                    OrganizerId = "2",
                     Date = new DateTime(2023, 12, 11),
-                    Time = new TimeSpan(4, 12, 0),
+                    Time = "12:23",
                 },
                 new Event
                 {
@@ -98,9 +98,9 @@ namespace EventPlanner.Test
                     Image = "another img soruce",
                     Location = "Pernik",
                     Description = "some desc",
-                    OrganizerId = 2,
+                    OrganizerId = "1",
                     Date = new DateTime(2023, 3, 11),
-                    Time = new TimeSpan(2, 43, 0),
+                    Time = "12:21",
                 },
                 new Event
                 {
@@ -110,9 +110,9 @@ namespace EventPlanner.Test
                     Image = "yeah, yeah img soruce",
                     Location = "Sungulare",
                     Description = "some desc",
-                    OrganizerId = 3,
+                    OrganizerId = "2",
                     Date = new DateTime(2023, 3, 11),
-                    Time = new TimeSpan(12, 57, 0),
+                    Time = "12:13",
                 }
             };
         }

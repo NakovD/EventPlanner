@@ -23,10 +23,10 @@
         public string Time { get; set; } = null!;
 
         [Required]
-        public int OrganizerId { get; set; }
+        public string OrganizerId { get; set; } = null!;
 
         [Required]
-        public IdentityUser Organizer { get; set; } = null!;
+        public User Organizer { get; set; } = null!;
 
         [Required]
         public string Location { get; set; } = null!;

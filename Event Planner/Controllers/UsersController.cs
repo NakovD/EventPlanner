@@ -5,18 +5,19 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using EventPlanner.Data.Models;
 
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<User> userManager;
 
         private readonly RoleManager<IdentityRole> roleManager;
 
         private readonly IAuthService authService;
 
-        public UserController(UserManager<IdentityUser> userManager, IAuthService authService, RoleManager<IdentityRole> roleManager)
+        public UserController(UserManager<User> userManager, IAuthService authService, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.authService = authService;
@@ -30,7 +31,7 @@
 
             if (!isValid) return BadRequest(ModelState);
 
-            var result = await userManager.CreateAsync(new IdentityUser
+            var result = await userManager.CreateAsync(new User
             {
                 UserName = user.UserName,
                 Email = user.Email

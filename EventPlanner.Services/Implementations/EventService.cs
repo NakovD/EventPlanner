@@ -25,18 +25,13 @@
             this.mapper = mapper;
         }
 
-        public async Task<bool> CreateEventAsync(CreateEventDto eventDto)
+        public async Task<bool> CreateEventAsync(CreateEventDto eventDto, string? userId)
         {
-            var newEvent = new Event
-            {
-                Title = eventDto.Title,
-                Description = eventDto.Description,
-                Time = eventDto.Time,
-                Date = eventDto.Date,
-                Category = eventDto.Category,
-                Image = eventDto.Image,
-                Location = eventDto.Location,
-            };
+            if (userId == null) return false;
+
+            var newEvent = mapper.Map<Event>(eventDto);
+
+            newEvent.OrganizerId = userId;
 
             try
             {

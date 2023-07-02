@@ -6,11 +6,11 @@
         {
             public const int TitleMaxLength = 50;
 
-            public const int DescriptionMaxLength = 50;
+            public const int DescriptionMaxLength = 250;
 
             public const int LocationMaxLength = 30;
 
-            public const int ImageLinkMaxLength = 30;
+            public const int ImageLinkMaxLength = 200;
         }
     }
 }

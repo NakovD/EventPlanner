@@ -15,6 +15,7 @@ namespace EventPlanner
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.IdentityModel.Tokens;
+    using EventPlanner.Data.Models;
 
     public class Program
     {
@@ -97,7 +98,7 @@ namespace EventPlanner
             var validKey = configuration.GetValue<string>("Jwt:Key");
 
             services
-            .AddIdentityCore<IdentityUser>(options =>
+            .AddIdentityCore<User>(options =>
                 {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.User.RequireUniqueEmail = true;

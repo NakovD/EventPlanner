@@ -3,9 +3,10 @@
     using Models;
 
     using Microsoft.AspNetCore.Identity;
+    using EventPlanner.Data.Models;
 
     public interface IAuthService
     {
-        AuthResponse CreateToken(IdentityUser user);
+        AuthResponse CreateToken(User user);
     }
 }
