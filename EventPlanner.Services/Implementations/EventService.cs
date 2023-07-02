@@ -27,11 +27,13 @@
 
         public async Task<bool> CreateEventAsync(CreateEventDto eventDto, string? userId)
         {
-            if (userId == null) return false;
+            var isUserIdValid = !string.IsNullOrEmpty(userId);
+
+            if (!isUserIdValid) return false;
 
             var newEvent = mapper.Map<Event>(eventDto);
 
-            newEvent.OrganizerId = userId;
+            newEvent.OrganizerId = userId!;
 
             try
             {

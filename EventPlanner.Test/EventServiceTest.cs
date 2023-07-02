@@ -1,3 +1,5 @@
+using static Azure.Core.HttpHeader;
+
 namespace EventPlanner.Test
 {
     using AutoMapper;
@@ -8,7 +10,9 @@ namespace EventPlanner.Test
     using EventPlanner.Services.Models.Event;
     using EventPlanner.Services.Profiles;
     using Microsoft.EntityFrameworkCore;
-    using Moq;
+    using System.Formats.Asn1;
+    using System.Globalization;
+    using static EventPlanner.Services.Common.Formats.EventFormats;
 
     public class EventServiceTest
     {
@@ -22,7 +26,7 @@ namespace EventPlanner.Test
 
         private IEventService eventService;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             SeedEventDtos();
@@ -36,6 +40,11 @@ namespace EventPlanner.Test
             db = new EventPlannerDbContext(dbOptions);
             var mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<EventProfile>()));
             this.mapper = mapper;
+
+            //Prepare service
+            eventService = new EventService(db, mapper);
+
+            //Fill Db
             db.AddRange(events);
             db.SaveChanges();
         }
@@ -49,9 +58,10 @@ namespace EventPlanner.Test
                     Id = 1,
                     Title = "First event",
                     Category = "wedding",
+                    Description = "some desc",
                     Image = "some img soruce",
                     Location = "Sliven",
-                    Time = "04:12:00",
+                    Time = "12:23",
                 },
                 new EventDto
                 {
@@ -60,16 +70,17 @@ namespace EventPlanner.Test
                     Category = "birthday party",
                     Image = "another img soruce",
                     Location = "Pernik",
-                    Time = "02:43:00",
+                    Time = "12:21",
                 },
                 new EventDto
                 {
                     Id = 3,
                     Title = "Third event",
                     Category = "Dance show off",
+                    Description = "some desc",
                     Image = "yeah, yeah img soruce",
                     Location = "Sungulare",
-                    Time = "12:57:00",
+                    Time = "12:13",
                 }
             };
         }
@@ -120,11 +131,72 @@ namespace EventPlanner.Test
         [Test]
         public async Task GetAllReturnsCorrectData()
         {
-            eventService = new EventService(db, mapper);
 
             var result = await eventService.GetAllAsync();
 
-            Assert.That(result.Count(), Is.EqualTo(eventDtos.Count()));
+            Assert.That(result.Count(), Is.EqualTo(db.Events.Count()));
+        }
+
+        [Test]
+        public async Task GetByIdAsyncReturnsCorrectData()
+        {
+            var id = 1;
+
+            var result = await eventService.GetByIdAsync(id);
+
+            var expected = eventDtos.SingleOrDefault(e => e.Id == id);
+
+            Assert.That(result?.Id, Is.EqualTo(expected?.Id));
+        }
+
+        [Test]
+        public async Task GetByIdAsyncReturnsNullWithInvalidId()
+        {
+            var id = 0;
+
+            var result = await eventService.GetByIdAsync(id);
+
+            EventDto expected = null;
+
+            Assert.IsTrue(result == expected);
+        }
+
+        [Test]
+        public async Task CreateEventCreatesCorrectEvent()
+        {
+            var organizerId = "userId";
+            var customTitle = "Very custom title";
+
+            var eventDto = new CreateEventDto
+            {
+                Title = customTitle,
+                Date = "22/09/2023",
+                Time = "12:23",
+                Description = "Description",
+                Location = "Location",
+                Category = "Category",
+                Image = "some img"
+            };
+
+            var actual = await eventService.CreateEventAsync(eventDto, organizerId);
+
+            var createdEvent = db.Events.SingleOrDefault(e => e.Title == customTitle);
+
+            Assert.IsTrue(actual);
+
+            Assert.That(createdEvent?.OrganizerId, Is.EqualTo(organizerId));
+        }
+
+        [Test]
+        public async Task CreateEventReturnsFalseWithInvalidUserId()
+        {
+            string userId = "";
+
+            var actual = await eventService.CreateEventAsync(new CreateEventDto(), userId);
+
+            var expected = false;
+
+            Assert.IsTrue(actual == expected);
         }
     }
 }
