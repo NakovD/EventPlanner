@@ -1,13 +1,17 @@
 namespace EventPlanner.Test
 {
+    using Data;
+    using Data.Models;
+    using static Services.Common.Formats.EventFormats;
+    using Services.Contracts;
+    using Services.Implementations;
+    using Services.Models.Event;
+    using Services.Profiles;
+
     using AutoMapper;
-    using EventPlanner.Data;
-    using EventPlanner.Data.Models;
-    using EventPlanner.Services.Contracts;
-    using EventPlanner.Services.Implementations;
-    using EventPlanner.Services.Models.Event;
-    using EventPlanner.Services.Profiles;
+
     using Microsoft.EntityFrameworkCore;
+    using System.Globalization;
 
     public class EventServiceTest
     {
@@ -183,15 +187,59 @@ namespace EventPlanner.Test
         }
 
         [Test]
-        public async Task CreateEventReturnsFalseWithInvalidUserId()
+        [TestCase("")]
+        [TestCase(null)]
+        public async Task CreateEventReturnsFalseWithInvalidUserId(string? userId)
         {
-            string userId = "";
-
             var actual = await eventService.CreateEventAsync(new EventFormDto(), userId);
 
             var expected = false;
 
             Assert.IsTrue(actual == expected);
+        }
+
+        [Test]
+        public async Task EditEventEditsTheEventCorrectly()
+        {
+            var eventId = 1;
+
+            var updatedEvent = new EventFormDto
+            {
+                Title = "This Very new title",
+                Description = "The updated description",
+                Time = "12:43",
+                Date = "12/10/2023",
+                Location = "Kri4im",
+                Category = "new Category",
+                Image = "the best new image"
+            };
+
+            var actual = await eventService.UpdateEventAsync(updatedEvent, eventId);
+
+            var expected = await db.Events.SingleAsync(e => e.Id == eventId);
+
+            Assert.IsTrue(actual);
+
+            Assert.IsTrue(eventId == expected.Id);
+            Assert.IsTrue(updatedEvent.Title == expected.Title);
+            Assert.IsTrue(updatedEvent.Description == expected.Description);
+            Assert.IsTrue(updatedEvent.Time == expected.Time);
+            Assert.IsTrue(updatedEvent.Date == expected.Date.ToString(DateFormat, CultureInfo.InvariantCulture));
+            Assert.IsTrue(updatedEvent.Location == expected.Location);
+            Assert.IsTrue(updatedEvent.Category == expected.Category);
+            Assert.IsTrue(updatedEvent.Image == expected.Image);
+
+        }
+
+        [Test]
+        [TestCase(-1)]
+        [TestCase(0)]
+        [TestCase(500)]
+        public async Task EditEventReturnsFalseWithInvalidEventId(int eventId)
+        {
+            var expected = await eventService.UpdateEventAsync(new EventFormDto(), eventId);
+
+            Assert.IsFalse(expected);
         }
     }
 }
