@@ -14,6 +14,7 @@ namespace EventPlanner.Test
     using System.Globalization;
     using AutoMapper.QueryableExtensions;
 
+    [TestFixture]
     public class EventServiceTest
     {
         private IEnumerable<EventDto> eventDtos;
@@ -38,6 +39,7 @@ namespace EventPlanner.Test
                 .Options;
 
             db = new EventPlannerDbContext(dbOptions);
+
             var mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<EventProfile>()));
             this.mapper = mapper;
 
