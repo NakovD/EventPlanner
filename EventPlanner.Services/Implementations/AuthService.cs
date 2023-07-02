@@ -11,6 +11,7 @@
 
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
+    using EventPlanner.Services.Models.Auth;
 
     public class AuthService : IAuthService
     {

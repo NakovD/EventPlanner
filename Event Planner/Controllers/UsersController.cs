@@ -6,6 +6,7 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using EventPlanner.Services.Models.Auth;
 
     [Route("api/[controller]")]
     [ApiController]

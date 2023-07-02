@@ -17,13 +17,13 @@
 
     public class EventService : IEventService
     {
-        private readonly EventPlannerDbContext context;
+        private readonly EventPlannerDbContext dbContext;
 
         private readonly IMapper mapper;
 
-        public EventService(EventPlannerDbContext context, IMapper mapper)
+        public EventService(EventPlannerDbContext dbContext, IMapper mapper)
         {
-            this.context = context;
+            this.dbContext = dbContext;
             this.mapper = mapper;
         }
 
@@ -39,8 +39,8 @@
 
             try
             {
-                await context.Events.AddAsync(newEvent);
-                await context.SaveChangesAsync();
+                await dbContext.Events.AddAsync(newEvent);
+                await dbContext.SaveChangesAsync();
             }
             catch (OperationCanceledException)
             {
@@ -51,14 +51,14 @@
         }
 
         public async Task<IEnumerable<EventDto>> GetAllAsync() =>
-                await context.Events
+                await dbContext.Events
                 .AsNoTracking()
                 .ProjectTo<EventDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
 
         public async Task<EventDto?> GetByIdAsync(int id)
         {
-            var neededEvent = await context.Events.FindAsync(id);
+            var neededEvent = await dbContext.Events.FindAsync(id);
 
             if (neededEvent == null) return null;
 
@@ -73,7 +73,7 @@
 
             if (!isUserIdValid) return null;
 
-            var userEvents = await context.Events
+            var userEvents = await dbContext.Events
                 .AsNoTracking()
                 .Where(e => e.OrganizerId == userId)
                 .ProjectTo<EventDto>(mapper.ConfigurationProvider)
@@ -84,7 +84,7 @@
 
         public async Task<bool> UpdateEventAsync(EventFormDto eventDto, int eventId)
         {
-            var neededEvent = await context.Events.FindAsync(eventId);
+            var neededEvent = await dbContext.Events.FindAsync(eventId);
 
             if (neededEvent == null) return false;
 
@@ -98,7 +98,7 @@
 
             try
             {
-                await context.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
             }
             catch (OperationCanceledException)
             {

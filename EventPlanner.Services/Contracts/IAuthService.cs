@@ -2,6 +2,7 @@
 {
     using Models;
     using Data.Models;
+    using EventPlanner.Services.Models.Auth;
 
     public interface IAuthService
     {

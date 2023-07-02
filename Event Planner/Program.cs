@@ -129,13 +129,20 @@ namespace EventPlanner
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(configAction => configAction.AddProfile<EventProfile>());
+            services.AddAutoMapper(configAction =>
+            {
+                configAction.AddProfile<EventProfile>();
+
+                configAction.AddProfile<AttendeeProfile>();
+            });
 
             services.AddScoped<IEventService, EventService>();
 
             services.AddScoped<IEmailSender, EmailSender>();
 
             services.AddScoped<IAuthService, AuthService>();
+
+            services.AddScoped<IAttendeeService, AttendeeService>();
         }
 
         private static void ConfigureDbContext(IServiceCollection services, string? connectionString)
