@@ -19,7 +19,7 @@ export const EventEdit = () => {
   const eventFormData = getEventFormData(event, isLoading);
 
   return (
-    <>
+    <div className="my-10">
       {isLoading ? (
         <CircularProgress color="secondary" />
       ) : (
@@ -29,7 +29,7 @@ export const EventEdit = () => {
           title="Edit your special event"
         />
       )}
-    </>
+    </div>
   );
 };
 

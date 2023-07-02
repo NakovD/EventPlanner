@@ -64,9 +64,9 @@ export const Header = () => {
             </Link>
             <Link
               className="font-medium text-gray-600 hover:text-primary-light dark:text-gray-400 dark:hover:text-gray-500"
-              to={routePaths.allEvents.path}
+              to={routePaths.userEvents.path}
             >
-              My Events
+              {routePaths.userEvents.name}
             </Link>
             <Link
               className="font-medium text-gray-600 hover:text-primary-light dark:text-gray-400 dark:hover:text-gray-500"

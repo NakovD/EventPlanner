@@ -4,6 +4,7 @@ export const endpoints = {
     getSingle: '/Event/:id',
     create: '/Event/Create',
     edit: '/Event/Edit/:id',
+    getAllUserEvents: '/Event/User',
   },
   user: {
     login: '/User/login',

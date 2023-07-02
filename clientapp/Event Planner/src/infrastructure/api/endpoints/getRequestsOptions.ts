@@ -4,6 +4,7 @@ import { IGetRequestOptions } from 'infrastructure/api/models/getRequestOptions'
 export enum GetRequestType {
   getAllEvents = 'GetAllEvents',
   getSingleEvent = 'GetSingleEvent',
+  getAllUserEvents = 'GetAllUserEvents',
 }
 
 export const getRequestsOptions: { [keyof in GetRequestType]: IGetRequestOptions } = {
@@ -14,5 +15,9 @@ export const getRequestsOptions: { [keyof in GetRequestType]: IGetRequestOptions
   [GetRequestType.getSingleEvent]: {
     endpoint: endpoints.events.getSingle,
     queryKey: 'event',
+  },
+  [GetRequestType.getAllUserEvents]: {
+    endpoint: endpoints.events.getAllUserEvents,
+    queryKey: 'all-user-events',
   },
 };

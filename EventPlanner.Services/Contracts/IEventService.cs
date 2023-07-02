@@ -6,6 +6,8 @@
     {
         Task<IEnumerable<EventDto>> GetAllAsync();
 
+        Task<IEnumerable<EventDto>?> GetUserEventsAsync(string? userId);
+
         Task<EventDto?> GetByIdAsync(int id);
 
         Task<bool> CreateEventAsync(EventFormDto eventDto, string? userId);

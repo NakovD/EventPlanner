@@ -19,7 +19,19 @@
         }
 
         [HttpGet("All")]
-        public async Task<IEnumerable<EventDto>> All() => await eventService.GetAllAsync();
+        public async Task<IActionResult> All() => Ok(await eventService.GetAllAsync());
+
+        [HttpGet("User")]
+        public async Task<IActionResult> AllUserEvents()
+        {
+            var userId = GetUserId();
+
+            var result = await eventService.GetUserEventsAsync(userId);
+
+            if (result == null) return BadRequest();
+
+            return Ok(result);
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)

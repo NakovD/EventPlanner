@@ -67,6 +67,21 @@
             return dto;
         }
 
+        public async Task<IEnumerable<EventDto>?> GetUserEventsAsync(string? userId)
+        {
+            var isUserIdValid = !string.IsNullOrEmpty(userId);
+
+            if (!isUserIdValid) return null;
+
+            var userEvents = await context.Events
+                .AsNoTracking()
+                .Where(e => e.OrganizerId == userId)
+                .ProjectTo<EventDto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return userEvents;
+        }
+
         public async Task<bool> UpdateEventAsync(EventFormDto eventDto, int eventId)
         {
             var neededEvent = await context.Events.FindAsync(eventId);

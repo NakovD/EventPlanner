@@ -5,6 +5,7 @@ import { AllEvents } from 'features/events/all/AllEvents';
 import { EventCreate } from 'features/events/create/EventCreate';
 import { EventDetails } from 'features/events/details/EventDetails';
 import { EventEdit } from 'features/events/edit/EventEdit';
+import { UserEvents } from 'features/events/user/UserEvents';
 import { Home } from 'features/home/Home';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { createBrowserRouter } from 'react-router-dom';
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: routePaths.allEvents.path,
         element: <AllEvents />,
+      },
+      {
+        path: routePaths.userEvents.path,
+        element: <UserEvents />,
       },
       {
         path: routePaths.eventEdit.path,

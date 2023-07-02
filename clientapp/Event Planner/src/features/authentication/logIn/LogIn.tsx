@@ -3,7 +3,9 @@ import { useLogin } from 'features/authentication/logIn/hooks/useLogin';
 import { ILoginForm } from 'features/authentication/logIn/models/loginForm';
 import { Button } from 'features/common/button/Button';
 import { TextField } from 'features/common/form/TextField';
+import { routePaths } from 'infrastructure/routing/routePaths';
 import { propertyOf } from 'infrastructure/utilities/propertyOf';
+import { Link } from 'react-router-dom';
 
 export const LogIn = () => {
   const { isLoading, isError, error, control, onSubmit } = useLogin();
@@ -24,6 +26,15 @@ export const LogIn = () => {
             name={propertyOf<ILoginForm>('password')}
             label="Password"
           />
+          <p className="shadow-text-light">
+            Dont have an account?{' '}
+            <Link
+              className="hover:underline text-primary-dark"
+              to={routePaths.signup.path}
+            >
+              Sign up here
+            </Link>
+          </p>
           <Button label="Login" isSubmit={true} />
           {isLoading && <CircularProgress color="secondary" />}
           {isError && error && <Typography color={'red'}>{error}</Typography>}

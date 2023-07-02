@@ -4,6 +4,10 @@ export const routePaths = {
     path: '/all-events',
     name: 'All Events',
   },
+  userEvents: {
+    path: '/my-events',
+    name: 'My Events',
+  },
   eventCreate: {
     path: '/event-create',
     name: 'Create Event',
