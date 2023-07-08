@@ -5,6 +5,7 @@ import { Layout } from 'features/common/layout/Layout';
 import { AllEvents } from 'features/events/all/AllEvents';
 import { EventCreate } from 'features/events/create/EventCreate';
 import { EventDetails } from 'features/events/details/EventDetails';
+import { EventDetailsAttendeeOnly } from 'features/events/details/EventDetailsAttendeeOnly';
 import { EventEdit } from 'features/events/edit/EventEdit';
 import { UserEvents } from 'features/events/user/UserEvents';
 import { Home } from 'features/home/Home';
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
   {
     path: routePaths.login.path,
     element: <LogIn />,
+  },
+  {
+    path: routePaths.eventDetailsInvitedAttendee.path,
+    element: <EventDetailsAttendeeOnly />,
   },
   {
     path: routePaths.signup.path,

@@ -2,9 +2,11 @@
 {
     using Services.Contracts;
     using Services.Models.Attendee;
+    using Services.Models.Event;
     using EmailService.Contracts;
     using EmailService.Messages;
     using static EmailService.EmailTextTemplates;
+    using static WebConstants;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -23,12 +25,15 @@
 
         private readonly IDataProtector dataProtector;
 
-        public AttendeeController(IAttendeeService attendeeService, IEmailSender emailService, IEventService eventService, IDataProtectionProvider dataProtectionProvider)
+        private readonly IJsonService jsonService;
+
+        public AttendeeController(IAttendeeService attendeeService, IEmailSender emailService, IEventService eventService, IDataProtectionProvider dataProtectionProvider, IJsonService jsonService)
         {
             this.attendeeService = attendeeService;
             this.emailService = emailService;
             this.eventService = eventService;
-            dataProtector = dataProtectionProvider.CreateProtector("AttendeesControllerPurpose");
+            dataProtector = dataProtectionProvider.CreateProtector(AttendeeInviteDataPurpose);
+            this.jsonService = jsonService;
         }
 
         [HttpGet("AllByEvent/{id}")]
@@ -56,7 +61,7 @@
 
             //to Do move this to an email service
 
-            var formattedEmailUrl = PrepareEmailUrl(attendeeFormDto.EmailUrl, attendeeId);
+            var formattedEmailUrl = PrepareEmailUrl(attendeeFormDto.EmailUrl, new EventAttendeeDto { AttendeeId = attendeeId, EventId = neededEvent!.Id });
 
             var message = GenerateInviteMessage(attendeeFormDto.Email, attendeeFormDto.Name, neededEvent?.Title!, formattedEmailUrl);
 
@@ -76,20 +81,21 @@
             return message;
         }
 
-        private string PrepareEmailUrl(string eventUrl, int attendeeId)
+        private string PrepareEmailUrl(string eventUrl, EventAttendeeDto eventAttendeeDto)
         {
             var formattedUrl = eventUrl.Replace(":id", "");
 
-            var finalEmailUrl = ProtectUserDataInEmailUrl(attendeeId, formattedUrl);
+            var protectedData = ProtectUserData(eventAttendeeDto);
 
-            return finalEmailUrl;
+            return $"{formattedUrl}{protectedData}";
         }
 
-        private string ProtectUserDataInEmailUrl(int attendeeId, string emailUrl)
+        private string ProtectUserData(EventAttendeeDto eventAttendeeDto)
         {
-            var protectedAttendeeId = dataProtector.Protect(attendeeId.ToString());
+            var eventAttendeeDtoAsJsonString = jsonService.Serialize(eventAttendeeDto);
+            var protectedData = dataProtector.Protect(eventAttendeeDtoAsJsonString);
 
-            return $"{emailUrl}{protectedAttendeeId}";
+            return protectedData;
         }
     }
 }

@@ -145,6 +145,8 @@ namespace EventPlanner
             services.AddScoped<IAuthService, AuthService>();
 
             services.AddScoped<IAttendeeService, AttendeeService>();
+
+            services.AddScoped<IJsonService, JsonService>();
         }
 
         private static void ConfigureDbContext(IServiceCollection services, string? connectionString)

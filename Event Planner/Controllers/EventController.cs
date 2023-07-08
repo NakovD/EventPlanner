@@ -3,9 +3,12 @@
     using Data.Models;
     using Services.Models.Event;
     using Services.Contracts;
+    using static WebConstants;
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.DataProtection;
+    using Microsoft.AspNetCore.Authorization;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -13,9 +16,15 @@
     {
         private readonly IEventService eventService;
 
-        public EventController(IEventService eventService)
+        private readonly IDataProtector dataProtector;
+
+        private readonly IJsonService jsonService;
+
+        public EventController(IEventService eventService, IDataProtectionProvider dataProtectionProvider, IJsonService jsonService)
         {
             this.eventService = eventService;
+            this.jsonService = jsonService;
+            dataProtector = dataProtectionProvider.CreateProtector(AttendeeInviteDataPurpose);
         }
 
         [HttpGet("All")]
@@ -70,6 +79,27 @@
             if (!actionSuccess) return BadRequest();
 
             return Ok();
+        }
+
+        [AllowAnonymous]
+        [HttpGet("AttendeeOnly/{encryptedData}")]
+        public async Task<IActionResult> AttendeeOnly(string encryptedData)
+        {
+            var unprotectedData = dataProtector.Unprotect(encryptedData);
+
+            var dto = jsonService.Deserialize<EventAttendeeDto>(unprotectedData);
+
+            if (dto == null) return BadRequest();
+
+            if (dto.EventId <= 0) return BadRequest();
+
+            var neededEvent = await eventService.GetByIdAsync(dto.EventId);
+
+            if (neededEvent == null) return BadRequest();
+
+            if (neededEvent.OrganizerId == dto.AttendeeId.ToString()) return BadRequest();
+
+            return Ok(neededEvent);
         }
     }
 }

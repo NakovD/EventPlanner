@@ -8,9 +8,10 @@ import { useState } from 'react';
 
 interface IEventAttendeesListProps {
   eventId: number;
+  canEdit: boolean;
 }
 
-export const EventAttendeesList = ({ eventId }: IEventAttendeesListProps) => {
+export const EventAttendeesList = ({ eventId, canEdit }: IEventAttendeesListProps) => {
   const [show, setShow] = useState(false);
 
   const { data, isLoading, isError } = useReadQuery<IAttendee[]>({
@@ -70,10 +71,12 @@ export const EventAttendeesList = ({ eventId }: IEventAttendeesListProps) => {
             <p>Status: {a.status}</p>
           </div>
         ))}
-        <Button
-          label="Manage attendees"
-          to={replacePlaceholderWithId(routePaths.manageAttendees.path, eventId)}
-        />
+        {canEdit && (
+          <Button
+            label="Manage attendees"
+            to={replacePlaceholderWithId(routePaths.manageAttendees.path, eventId)}
+          />
+        )}
       </div>
     </div>
   );

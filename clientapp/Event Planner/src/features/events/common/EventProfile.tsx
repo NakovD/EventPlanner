@@ -1,0 +1,153 @@
+import { EventAttendeesList } from 'features/attendees/components/EventAttendeesList';
+import { Button } from 'features/common/button/Button';
+import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
+import { routePaths } from 'infrastructure/routing/routePaths';
+import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
+import { useState } from 'react';
+
+interface IEventProfileProps {
+  canEdit: boolean;
+  event: IAllEventsEntity;
+}
+
+export const EventProfile = ({ canEdit, event }: IEventProfileProps) => {
+  const [show2, setShow2] = useState(false);
+
+  return (
+    <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
+      <div className="xl:w-2/6 lg:w-2/5 w-80 md:block hidden">
+        <img className="w-full" alt="img of a girl posing" src={event?.image} />
+        <img
+          className="mt-6 w-full"
+          alt="img of a girl posing"
+          src="https://i.ibb.co/qxkRXSq/component-image-two.png"
+        />
+      </div>
+      <div className="md:hidden">
+        <img
+          className="w-full"
+          alt="img of a girl posing"
+          src="https://i.ibb.co/QMdWfzX/component-image-one.png"
+        />
+        <div className="flex items-center justify-between mt-3 space-x-4 md:space-x-0">
+          <img
+            alt="img-tag-one"
+            className="md:w-48 md:h-48 w-full"
+            src="https://i.ibb.co/cYDrVGh/Rectangle-245.png"
+          />
+          <img
+            alt="img-tag-one"
+            className="md:w-48 md:h-48 w-full"
+            src="https://i.ibb.co/f17NXrW/Rectangle-244.png"
+          />
+          <img
+            alt="img-tag-one"
+            className="md:w-48 md:h-48 w-full"
+            src="https://i.ibb.co/cYDrVGh/Rectangle-245.png"
+          />
+          <img
+            alt="img-tag-one"
+            className="md:w-48 md:h-48 w-full"
+            src="https://i.ibb.co/f17NXrW/Rectangle-244.png"
+          />
+        </div>
+      </div>
+      <div className="xl:w-2/5 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
+        <div className="border-b border-gray-200 pb-6">
+          <p className="text-sm leading-none text-gray-600">{event?.location}</p>
+          <h1
+            className="
+                lg:text-2xl
+                text-xl
+                font-semibold
+                lg:leading-6
+                leading-7
+                text-gray-800
+                mt-2
+              "
+          >
+            {event?.title}
+          </h1>
+        </div>
+        <div className="py-4 border-b border-gray-200 flex items-center justify-between">
+          <p className="text-base leading-4 text-gray-800">Location</p>
+          <div className="flex items-center justify-center">
+            <p className="text-sm leading-none text-gray-600">{event?.location}</p>
+          </div>
+        </div>
+        <div className="py-4 border-b border-gray-200 flex items-center justify-between">
+          <p className="text-base leading-4 text-gray-800">Day</p>
+          <div className="flex items-center justify-center">
+            <p className="text-sm leading-none text-gray-600 mr-3">{event?.time}</p>
+          </div>
+        </div>
+        <Button className="mt-4" label="I'm interested. Count me in!" />
+        {canEdit && (
+          <Button
+            className="mx-3"
+            to={replacePlaceholderWithId(routePaths.eventEdit.path, event?.id as number)}
+            label="Edit this event"
+          />
+        )}
+        <div className="mt-4">
+          Event Description
+          <p className="xl:pr-48 text-base lg:leading-tight leading-normal text-gray-600 mt-7">
+            {event?.description}
+          </p>
+          <p className="text-base leading-4 mt-7 text-gray-600"></p>
+          {/* <p className="text-base leading-4 mt-4 text-gray-600">Length: 13.2 inches</p>
+          <p className="text-base leading-4 mt-4 text-gray-600">Height: 10 inches</p>
+          <p className="text-base leading-4 mt-4 text-gray-600">Depth: 5.1 inches</p>
+          <p className="md:w-96 text-base leading-normal text-gray-600 mt-4">
+            Composition: 100% calf leather, inside: 100% lamb leather
+          </p> */}
+        </div>
+        <EventAttendeesList canEdit={canEdit} eventId={event?.id ?? 0} />
+        <div>
+          <div className="border-b py-4 border-gray-200">
+            <div
+              onClick={() => setShow2(!show2)}
+              className="flex justify-between items-center cursor-pointer"
+            >
+              <p className="text-base leading-4 text-gray-800">Discussion</p>
+              <button
+                className="
+                    cursor-pointer
+                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400
+                    rounded
+                  "
+                aria-label="show or hide"
+              >
+                <svg
+                  className={'transform ' + (show2 ? 'rotate-180' : 'rotate-0')}
+                  width="10"
+                  height="6"
+                  viewBox="0 0 10 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9 1L5 5L1 1"
+                    stroke="#4B5563"
+                    strokeWidth="1.25"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div
+              className={
+                'pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 ' +
+                (show2 ? 'block' : 'hidden')
+              }
+              id="sect"
+            >
+              the Discussion will be here
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

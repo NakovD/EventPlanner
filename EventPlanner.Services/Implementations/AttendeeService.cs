@@ -32,6 +32,8 @@
 
             var newAttendee = mapper.Map<Attendee>(attendeeDto);
 
+            if (attendeeDto.UserId != null && attendeeDto.UserId == neededEvent.OrganizerId) return (false, -1);
+
             try
             {
                 await dbContext.Attendees.AddAsync(newAttendee);
