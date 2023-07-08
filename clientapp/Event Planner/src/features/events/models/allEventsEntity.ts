@@ -7,4 +7,5 @@ export interface IAllEventsEntity {
   category: string;
   image: string;
   date: string;
+  organizerId: string;
 }

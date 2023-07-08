@@ -136,6 +136,8 @@ namespace EventPlanner
                 configAction.AddProfile<AttendeeProfile>();
             });
 
+            services.AddDataProtection();
+
             services.AddScoped<IEventService, EventService>();
 
             services.AddScoped<IEmailSender, EmailSender>();

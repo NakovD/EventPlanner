@@ -9,6 +9,6 @@
     {
         Task<IEnumerable<AttendeeDto>> GetAllByEventAsync(int eventId);
 
-        Task<bool> CreateAttendeeAsync(AttendeeFormDto attendeeDto);
+        Task<(bool, int)> CreateAttendeeAsync(AttendeeFormDto attendeeDto);
     }
 }

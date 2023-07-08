@@ -1,8 +1,11 @@
+import { useAppContext } from 'AppContext';
 import { AuthOutlet } from 'features/authentication/authOutlet/AuthOutlet';
 import { Header } from 'features/common/header/Header';
 import { Outlet } from 'react-router-dom';
 
 export const Layout = () => {
+  const { isReady } = useAppContext();
+  if (!isReady) return <div>Loading, please wait</div>;
   return (
     <div className="bg-primary-light p-20 min-h-screen h-full">
       <Header />

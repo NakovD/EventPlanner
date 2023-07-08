@@ -18,5 +18,6 @@
 
         public string Image { get; set; } = null!;
 
+        public string OrganizerId { get; set; } = null!;
     }
 }

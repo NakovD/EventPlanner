@@ -16,6 +16,10 @@ export const routePaths = {
     path: '/event-edit/:id',
     name: 'Edit Evetnt',
   },
+  eventDetailsInvitedAttendee: {
+    path: '/event-attendee-only/:id',
+    name: 'Event page',
+  },
   eventDetails: {
     path: '/event/:id',
     name: 'Event Page',
@@ -27,5 +31,9 @@ export const routePaths = {
   signup: {
     path: '/signup',
     name: 'Sign Up',
+  },
+  manageAttendees: {
+    path: '/manage-attendees/:id',
+    name: 'Event Attendees',
   },
 };

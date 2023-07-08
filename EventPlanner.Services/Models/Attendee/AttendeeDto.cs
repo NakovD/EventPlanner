@@ -6,6 +6,8 @@
 
         public string Name { get; set; } = null!;
 
+        public string Email { get; set; } = null!;
+
         public int EventId { get; set; }
 
         public string? UserId { get; set; }

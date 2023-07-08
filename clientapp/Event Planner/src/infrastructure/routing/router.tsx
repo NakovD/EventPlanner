@@ -1,3 +1,4 @@
+import { ManageAttendees } from 'features/attendees/manage/ManageAttendees';
 import { LogIn } from 'features/authentication/logIn/LogIn';
 import { SignUp } from 'features/authentication/signUp/SignUp';
 import { Layout } from 'features/common/layout/Layout';
@@ -39,6 +40,7 @@ export const router = createBrowserRouter([
         path: routePaths.eventCreate.path,
         element: <EventCreate />,
       },
+      { path: routePaths.manageAttendees.path, element: <ManageAttendees /> },
     ],
   },
   {

@@ -24,11 +24,11 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<bool> CreateAttendeeAsync(AttendeeFormDto attendeeDto)
+        public async Task<(bool, int)> CreateAttendeeAsync(AttendeeFormDto attendeeDto)
         {
             var neededEvent = await dbContext.Events.FindAsync(attendeeDto.EventId);
 
-            if (neededEvent == null) return false;
+            if (neededEvent == null) return (false, -1);
 
             var newAttendee = mapper.Map<Attendee>(attendeeDto);
 
@@ -39,10 +39,10 @@
             }
             catch (OperationCanceledException)
             {
-                return false;
+                return (false, -1);
             }
 
-            return true;
+            return (true, newAttendee.Id);
         }
 
         public async Task<IEnumerable<AttendeeDto>> GetAllByEventAsync(int eventId) => await dbContext

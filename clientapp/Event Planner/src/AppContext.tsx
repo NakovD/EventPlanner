@@ -13,6 +13,7 @@ interface IAppContextProps {
 }
 
 type AppContext = {
+  isReady: boolean;
   isAuthenticated: boolean;
   user: IUser | undefined;
   setIsAuthenticated: (token?: string) => void;
@@ -27,11 +28,13 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
 
   const [user, setUser] = useState<IUser | undefined>(undefined);
 
-  const { data, isError, isSuccess } = useReadQuery<IAuthResponse>({
+  const { data, isError, isSuccess, isFetched } = useReadQuery<IAuthResponse>({
     endpoint: replacePlaceholderWithId(endpoints.user.authenticate, token ?? ''),
     queryKey: ['authenticate-user'],
-    enabled: user === undefined,
+    enabled: user === undefined && hasValue(token),
   });
+
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     if (isError) return authCallback();
@@ -42,6 +45,9 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
         userName: data.userName,
         userId: data.userId,
       });
+
+    if (isFetched) setIsReady(isFetched);
+    if (!token) setIsReady(true);
   }, [isError, isSuccess]);
 
   const [isAuthenticated, setIsAuthenticated] = useState(hasValue(token));
@@ -58,6 +64,7 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
   }, []);
 
   const context: AppContext = {
+    isReady,
     user,
     isAuthenticated,
     setIsAuthenticated: authCallback,

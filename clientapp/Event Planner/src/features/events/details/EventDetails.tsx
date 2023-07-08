@@ -1,3 +1,5 @@
+import { useAppContext } from 'AppContext';
+import { EventAttendeesList } from 'features/attendees/components/EventAttendeesList';
 import { Button } from 'features/common/button/Button';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
@@ -11,13 +13,16 @@ export const EventDetails = () => {
   const { id } = useParams();
   if (!id) throw new Error('No id found!');
 
-  const [show, setShow] = useState(false);
+  const { user } = useAppContext();
+
   const [show2, setShow2] = useState(false);
 
   const { data: event } = useReadQuery<IAllEventsEntity>({
     endpoint: replacePlaceholderWithId(getRequestsOptions.GetSingleEvent.endpoint, id),
     queryKey: [getRequestsOptions.GetSingleEvent.queryKey],
   });
+
+  const canEdit = user?.userId === event?.organizerId;
 
   return (
     <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
@@ -88,11 +93,13 @@ export const EventDetails = () => {
           </div>
         </div>
         <Button className="mt-4" label="I'm interested. Count me in!" />
-        <Button
-          className="mx-3"
-          to={replacePlaceholderWithId(routePaths.eventEdit.path, event?.id as number)}
-          label="Edit this event"
-        />
+        {canEdit && (
+          <Button
+            className="mx-3"
+            to={replacePlaceholderWithId(routePaths.eventEdit.path, event?.id as number)}
+            label="Edit this event"
+          />
+        )}
         <div>
           <p className="xl:pr-48 text-base lg:leading-tight leading-normal text-gray-600 mt-7">
             {event?.description}
@@ -105,51 +112,7 @@ export const EventDetails = () => {
             Composition: 100% calf leather, inside: 100% lamb leather
           </p> */}
         </div>
-        <div>
-          <div className="border-t border-b py-4 mt-7 border-gray-200">
-            <div
-              onClick={() => setShow(!show)}
-              className="flex justify-between items-center cursor-pointer"
-            >
-              <p className="text-base leading-4 text-gray-800">Shipping and returns</p>
-              <button
-                className="
-                    cursor-pointer
-                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400
-                    rounded
-                  "
-                aria-label="show or hide"
-              >
-                <svg
-                  className={'transform ' + (show ? 'rotate-180' : 'rotate-0')}
-                  width="10"
-                  height="6"
-                  viewBox="0 0 10 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M9 1L5 5L1 1"
-                    stroke="#4B5563"
-                    strokeWidth="1.25"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div
-              className={
-                'pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 ' +
-                (show ? 'block' : 'hidden')
-              }
-              id="sect"
-            >
-              You will be responsible for paying for your own shipping costs for returning
-              your item. Shipping costs are nonrefundable
-            </div>
-          </div>
-        </div>
+        <div>{canEdit && <EventAttendeesList eventId={event?.id ?? 0} />}</div>
         <div>
           <div className="border-b py-4 border-gray-200">
             <div

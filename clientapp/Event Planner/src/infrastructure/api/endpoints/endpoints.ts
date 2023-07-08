@@ -10,5 +10,10 @@ export const endpoints = {
     login: '/User/login',
     register: '/User/register',
     authenticate: '/User/authenticate/:id',
+    getAll: '/User/All',
+  },
+  attendees: {
+    allByEvent: '/Attendee/AllByEvent/:id',
+    createNew: '/Attendee/Create',
   },
 };

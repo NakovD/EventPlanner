@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
     using EventPlanner.Services.Models.Auth;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.EntityFrameworkCore;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -72,7 +73,7 @@
 
         [AllowAnonymous]
         [HttpGet("Authenticate/{token}")]
-        public async Task<ActionResult<AuthResponse>> AuthenticateUser([FromRoute]string token)
+        public async Task<ActionResult<AuthResponse>> AuthenticateUser([FromRoute] string token)
         {
             var isTokenValid = await authService.ValidateTokenAsync(token);
 
@@ -87,6 +88,17 @@
             var authResponse = authService.CreateToken(user);
 
             return Ok(authResponse);
+        }
+
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var allUsers = await userManager.Users
+                .AsNoTracking()
+                .Select(u => new { Username = u.UserName, u.Email, u.Id })
+                .ToListAsync();
+
+            return Ok(allUsers);
         }
     }
 }
