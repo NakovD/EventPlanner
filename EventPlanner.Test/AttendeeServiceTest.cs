@@ -149,14 +149,14 @@
             var eventId = 50;
             var name = "Test";
 
-            var actual = await attendeeService.CreateAttendeeAsync(new AttendeeFormDto
+            var (isSuccess, _) = await attendeeService.CreateAttendeeAsync(new AttendeeFormDto
             {
                 Email = "some@email.bg",
                 Name = name,
                 EventId = eventId,
             });
 
-            Assert.IsTrue(actual);
+            Assert.IsTrue(isSuccess);
 
             var addedAttendee = await db.Attendees
                 .AsNoTracking()
@@ -168,9 +168,9 @@
         [Test]
         public async Task CreateReturnsFalseWithInvalidEventId()
         {
-            var actual = await attendeeService.CreateAttendeeAsync(new AttendeeFormDto { EventId = -1 });
+            var (isSuccess, _) = await attendeeService.CreateAttendeeAsync(new AttendeeFormDto { EventId = -1 });
 
-            Assert.IsFalse(actual);
+            Assert.IsFalse(isSuccess);
         }
     }
 }
