@@ -9,5 +9,6 @@ export const endpoints = {
   user: {
     login: '/User/login',
     register: '/User/register',
+    authenticate: '/User/authenticate/:id',
   },
 };

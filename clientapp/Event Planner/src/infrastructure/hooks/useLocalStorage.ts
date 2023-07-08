@@ -3,7 +3,8 @@ import { useCallback } from 'react';
 export const useLocalStorage = () => {
   const getItem = useCallback(<T>(key: string) => {
     const item = localStorage.getItem(key);
-    return item as unknown as T;
+    if (!item) return null;
+    return JSON.parse(item) as unknown as T;
   }, []);
 
   const setItem = useCallback(

@@ -1,8 +1,8 @@
 ﻿namespace EventPlanner.Services.Implementations
 {
     using Contracts;
-    using Models;
     using Data.Models;
+    using Models.Auth;
 
     using System;
     using System.Text;
@@ -11,7 +11,7 @@
 
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
-    using EventPlanner.Services.Models.Auth;
+    using System.Threading.Tasks;
 
     public class AuthService : IAuthService
     {
@@ -19,11 +19,26 @@
 
         private readonly IConfiguration configuration;
 
+        private readonly JwtSecurityTokenHandler tokenHandler;
+
+        private readonly TokenValidationParameters validationParameters;
+
         public AuthService(IConfiguration configuration)
         {
             this.configuration = configuration;
-        }
+            tokenHandler = new JwtSecurityTokenHandler();
+            validationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidAudience = configuration["Jwt:Audience"],
+                ValidIssuer = configuration["Jwt:Issuer"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+            };
 
+        }
         public AuthResponse CreateToken(User user)
         {
             var expiration = DateTime.UtcNow.AddHours(EXPIRATION_HOURS);
@@ -34,12 +49,13 @@
                 expiration
             );
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-
             return new AuthResponse
             {
                 Token = tokenHandler.WriteToken(token),
-                Expiration = expiration
+                Expiration = expiration,
+                UserName = user.UserName,
+                UserEmail = user.Email,
+                UserId = user.Id,
             };
         }
 
@@ -69,5 +85,21 @@
                 ),
                 SecurityAlgorithms.HmacSha256
             );
+
+        public async Task<bool> ValidateTokenAsync(string token)
+        {
+            var validateTokenResult = await tokenHandler.ValidateTokenAsync(token, validationParameters);
+
+            var isTokenValid = validateTokenResult.IsValid;
+
+            return isTokenValid;
+        }
+
+        public string GetUserIdFromToken(string token)
+        {
+            var claimsPrincipal = tokenHandler.ValidateToken(token, validationParameters, out var _);
+
+            return claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
     }
 }

@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using EventPlanner.Services.Models.Auth;
+    using Microsoft.AspNetCore.Authorization;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -67,6 +68,25 @@
             var response = authService.CreateToken(user);
 
             return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("Authenticate/{token}")]
+        public async Task<ActionResult<AuthResponse>> AuthenticateUser([FromRoute]string token)
+        {
+            var isTokenValid = await authService.ValidateTokenAsync(token);
+
+            if (!isTokenValid) return Unauthorized();
+
+            var userId = authService.GetUserIdFromToken(token);
+
+            var user = await userManager.FindByIdAsync(userId);
+
+            if (user == null) return BadRequest();
+
+            var authResponse = authService.CreateToken(user);
+
+            return Ok(authResponse);
         }
     }
 }

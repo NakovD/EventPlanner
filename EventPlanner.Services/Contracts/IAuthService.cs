@@ -7,5 +7,9 @@
     public interface IAuthService
     {
         AuthResponse CreateToken(User user);
+
+        Task<bool> ValidateTokenAsync(string token);
+
+        string GetUserIdFromToken(string token);
     }
 }

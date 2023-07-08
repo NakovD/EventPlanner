@@ -1,7 +1,12 @@
+import { IAuthResponse } from 'features/authentication/models/authResponse';
+import { IUser } from 'features/authentication/models/user';
+import { endpoints } from 'infrastructure/api/endpoints/endpoints';
+import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 import { constants } from 'infrastructure/constants';
 import { useLocalStorage } from 'infrastructure/hooks/useLocalStorage';
 import { hasValue } from 'infrastructure/utilities/hasValue';
-import { createContext, useCallback, useContext, useState } from 'react';
+import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 interface IAppContextProps {
   children: React.ReactNode;
@@ -9,6 +14,7 @@ interface IAppContextProps {
 
 type AppContext = {
   isAuthenticated: boolean;
+  user: IUser | undefined;
   setIsAuthenticated: (token?: string) => void;
 };
 
@@ -18,6 +24,25 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
   const { getItem, setItem, deleteItem } = useLocalStorage();
 
   const token = getItem<string>(constants.localStorageTokenKey);
+
+  const [user, setUser] = useState<IUser | undefined>(undefined);
+
+  const { data, isError, isSuccess } = useReadQuery<IAuthResponse>({
+    endpoint: replacePlaceholderWithId(endpoints.user.authenticate, token ?? ''),
+    queryKey: ['authenticate-user'],
+    enabled: user === undefined,
+  });
+
+  useEffect(() => {
+    if (isError) return authCallback();
+    if (data) authCallback(data.token);
+    if (isSuccess && data)
+      setUser({
+        userEmail: data.userEmail,
+        userName: data.userName,
+        userId: data.userId,
+      });
+  }, [isError, isSuccess]);
 
   const [isAuthenticated, setIsAuthenticated] = useState(hasValue(token));
 
@@ -33,6 +58,7 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
   }, []);
 
   const context: AppContext = {
+    user,
     isAuthenticated,
     setIsAuthenticated: authCallback,
   };
