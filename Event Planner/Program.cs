@@ -5,9 +5,9 @@ namespace EventPlanner
     using Services.Implementations;
     using Services.Contracts;
     using Services.Profiles;
-    using EmailService;
-    using EmailService.Contracts;
-    using EmailService.Implementations;
+    using EmailSender;
+    using EmailSender.Contracts;
+    using EmailService = Services.Implementations.EmailService;
 
     using System.Text;
 
@@ -140,13 +140,16 @@ namespace EventPlanner
 
             services.AddScoped<IEventService, EventService>();
 
-            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IEmailSender, EmailSender.Implementations.EmailSender>();
 
             services.AddScoped<IAuthService, AuthService>();
 
             services.AddScoped<IAttendeeService, AttendeeService>();
 
             services.AddScoped<IJsonService, JsonService>();
+
+            services.AddScoped<IEmailService, EmailService>();
+
         }
 
         private static void ConfigureDbContext(IServiceCollection services, string? connectionString)

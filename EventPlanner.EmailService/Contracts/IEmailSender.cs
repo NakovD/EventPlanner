@@ -1,4 +1,4 @@
-﻿namespace EventPlanner.EmailService.Contracts
+﻿namespace EventPlanner.EmailSender.Contracts
 {
     using Messages;
 

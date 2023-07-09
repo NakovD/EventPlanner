@@ -16,9 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventPlanner.Test", "EventPlanner.Test\EventPlanner.Test.csproj", "{39D9195C-C1A1-40FC-B655-52A22AA3463E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventPlanner.EmailService", "EventPlanner.EmailService\EventPlanner.EmailService.csproj", "{E780AB80-A18B-48F2-8785-C3DFAD9416D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventPlanner.EmailSender", "EventPlanner.EmailService\EventPlanner.EmailSender.csproj", "{E780AB80-A18B-48F2-8785-C3DFAD9416D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventPlanner.Services", "EventPlanner.Services\EventPlanner.Services.csproj", "{F1E1D2DE-E98C-4D76-ADA4-B9DE1BCCD9E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventPlanner.Services", "EventPlanner.Services\EventPlanner.Services.csproj", "{F1E1D2DE-E98C-4D76-ADA4-B9DE1BCCD9E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

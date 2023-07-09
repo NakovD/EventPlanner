@@ -3,9 +3,6 @@
     using Services.Contracts;
     using Services.Models.Attendee;
     using Services.Models.Event;
-    using EmailService.Contracts;
-    using EmailService.Messages;
-    using static EmailService.EmailTextTemplates;
     using static WebConstants;
 
     using Microsoft.AspNetCore.Authorization;
@@ -19,21 +16,21 @@
     {
         private readonly IAttendeeService attendeeService;
 
-        private readonly IEmailSender emailService;
-
         private readonly IEventService eventService;
 
         private readonly IDataProtector dataProtector;
 
         private readonly IJsonService jsonService;
 
-        public AttendeeController(IAttendeeService attendeeService, IEmailSender emailService, IEventService eventService, IDataProtectionProvider dataProtectionProvider, IJsonService jsonService)
+        private readonly IEmailService emailService;
+
+        public AttendeeController(IAttendeeService attendeeService, IEventService eventService, IDataProtectionProvider dataProtectionProvider, IJsonService jsonService, IEmailService emailService)
         {
             this.attendeeService = attendeeService;
-            this.emailService = emailService;
             this.eventService = eventService;
             dataProtector = dataProtectionProvider.CreateProtector(AttendeeInviteDataPurpose);
             this.jsonService = jsonService;
+            this.emailService = emailService;
         }
 
         [HttpGet("AllByEvent/{id}")]
@@ -59,35 +56,11 @@
 
             var neededEvent = await eventService.GetByIdAsync(attendeeFormDto.EventId);
 
-            //to Do move this to an email service
+            var protectedUserData = ProtectUserData(new EventAttendeeDto { AttendeeId = attendeeId, EventId = neededEvent!.Id });
 
-            var formattedEmailUrl = PrepareEmailUrl(attendeeFormDto.EmailUrl, new EventAttendeeDto { AttendeeId = attendeeId, EventId = neededEvent!.Id });
-
-            var message = GenerateInviteMessage(attendeeFormDto.Email, attendeeFormDto.Name, neededEvent?.Title!, formattedEmailUrl);
-
-            await emailService.SendEmailAsync(message);
+            await emailService.SendEmailInviteAsync(attendeeFormDto.Email, attendeeFormDto.Name, neededEvent.Title, attendeeFormDto.EmailUrl, protectedUserData);
 
             return Ok();
-        }
-
-        private Message GenerateInviteMessage(string receiver, string attendeeName, string eventName, string eventUrl)
-        {
-            var subject = string.Format(InviteEmailSubject, eventName);
-
-            var body = string.Format(InviteEmailBody, attendeeName, eventName, eventUrl);
-
-            var message = new Message(new string[] { receiver }, subject, body);
-
-            return message;
-        }
-
-        private string PrepareEmailUrl(string eventUrl, EventAttendeeDto eventAttendeeDto)
-        {
-            var formattedUrl = eventUrl.Replace(":id", "");
-
-            var protectedData = ProtectUserData(eventAttendeeDto);
-
-            return $"{formattedUrl}{protectedData}";
         }
 
         private string ProtectUserData(EventAttendeeDto eventAttendeeDto)

@@ -1,4 +1,4 @@
-﻿namespace EventPlanner.EmailService.Messages
+﻿namespace EventPlanner.EmailSender.Messages
 {
     using MimeKit;
     using System.Collections.Generic;

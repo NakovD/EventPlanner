@@ -1,4 +1,4 @@
-﻿namespace EventPlanner.EmailService
+﻿namespace EventPlanner.EmailSender
 {
     public static class EmailTextTemplates
     {
