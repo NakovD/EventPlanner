@@ -63,6 +63,24 @@
             return Ok();
         }
 
+        [HttpPost("UpdateStatus/{id}")]
+        public async Task<IActionResult> UpdateStatus([FromRoute]int id, [FromBody] AttendeeStatusDto dto)
+        {
+            if (id <= 0) return BadRequest();
+
+            var isModelValid = ModelState.IsValid;
+
+            if (!isModelValid) return BadRequest();
+
+            var userId = GetUserId();
+
+            var actionSuccess = await attendeeService.UpdateAttendeeStatus(id, dto.NewStatus, userId!);
+
+            if (!actionSuccess) return BadRequest();
+
+            return Ok();
+        }
+
         private string ProtectUserData(EventAttendeeDto eventAttendeeDto)
         {
             var eventAttendeeDtoAsJsonString = jsonService.Serialize(eventAttendeeDto);

@@ -1,7 +1,5 @@
 import { IAttendee } from 'features/attendees/models/attendee';
 import { Button } from 'features/common/button/Button';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useState } from 'react';
@@ -9,22 +7,18 @@ import { useState } from 'react';
 interface IEventAttendeesListProps {
   eventId: number;
   canEdit: boolean;
+  attendees: IAttendee[];
 }
 
-export const EventAttendeesList = ({ eventId, canEdit }: IEventAttendeesListProps) => {
+export const EventAttendeesList = ({
+  eventId,
+  canEdit,
+  attendees,
+}: IEventAttendeesListProps) => {
   const [show, setShow] = useState(false);
 
-  const { data, isLoading, isError } = useReadQuery<IAttendee[]>({
-    endpoint: replacePlaceholderWithId(
-      getRequestsOptions.GetAllEventAttendees.endpoint,
-      eventId,
-    ),
-    queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, eventId],
-    enabled: show,
-  });
-
   return (
-    <div className="border-t border-b py-4 mt-7 border-gray-200">
+    <div className="border-b py-4 border-gray-200">
       <div
         onClick={() => setShow(!show)}
         className="flex justify-between items-center cursor-pointer"
@@ -63,14 +57,14 @@ export const EventAttendeesList = ({ eventId, canEdit }: IEventAttendeesListProp
         }
         id="sect"
       >
-        {isLoading && <p>Loading please, wait!</p>}
-        {isError && <p>Something went wrong on the server :(</p>}
-        {data?.map((a) => (
-          <div key={a.id} className="flex gap-4">
-            <p>Name: {a.name}</p>
-            <p>Status: {a.status}</p>
-          </div>
-        ))}
+        <div className="flex gap-5 flex-col">
+          {attendees.map((a) => (
+            <div key={a.id} className="flex gap-4">
+              <p>Name: {a.name}</p>
+              <p>Status: {a.status}</p>
+            </div>
+          ))}
+        </div>
         {canEdit && (
           <Button
             label="Manage attendees"

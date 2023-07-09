@@ -16,5 +16,6 @@ export const endpoints = {
   attendees: {
     allByEvent: '/Attendee/AllByEvent/:id',
     createNew: '/Attendee/Create',
+    updateStatus: 'Attendee/UpdateStatus/:id',
   },
 };

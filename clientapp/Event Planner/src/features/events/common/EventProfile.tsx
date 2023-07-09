@@ -1,6 +1,11 @@
+import { useAppContext } from 'AppContext';
 import { EventAttendeesList } from 'features/attendees/components/EventAttendeesList';
+import { IAttendee } from 'features/attendees/models/attendee';
 import { Button } from 'features/common/button/Button';
+import { EventAttendeeControls } from 'features/events/common/EventAttendeeControls';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
+import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
+import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useState } from 'react';
@@ -12,6 +17,20 @@ interface IEventProfileProps {
 
 export const EventProfile = ({ canEdit, event }: IEventProfileProps) => {
   const [show2, setShow2] = useState(false);
+
+  const { user } = useAppContext();
+
+  const { data: attendees } = useReadQuery<IAttendee[]>({
+    endpoint: replacePlaceholderWithId(
+      getRequestsOptions.GetAllEventAttendees.endpoint,
+      event.id,
+    ),
+    queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, event.id],
+  });
+
+  const userAttendee = attendees?.find((a) => a.userId === user?.userId);
+
+  const shouldShowAttendeeActions = userAttendee !== undefined;
 
   return (
     <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
@@ -81,11 +100,10 @@ export const EventProfile = ({ canEdit, event }: IEventProfileProps) => {
             <p className="text-sm leading-none text-gray-600 mr-3">{event?.time}</p>
           </div>
         </div>
-        <Button className="mt-4" label="I'm interested. Count me in!" />
         {canEdit && (
           <Button
             className="mx-3"
-            to={replacePlaceholderWithId(routePaths.eventEdit.path, event?.id as number)}
+            to={replacePlaceholderWithId(routePaths.eventEdit.path, event?.id)}
             label="Edit this event"
           />
         )}
@@ -102,7 +120,14 @@ export const EventProfile = ({ canEdit, event }: IEventProfileProps) => {
             Composition: 100% calf leather, inside: 100% lamb leather
           </p> */}
         </div>
-        <EventAttendeesList canEdit={canEdit} eventId={event?.id ?? 0} />
+        {shouldShowAttendeeActions && (
+          <EventAttendeeControls attendeeId={userAttendee.id} eventId={event.id} />
+        )}
+        <EventAttendeesList
+          attendees={attendees ?? []}
+          canEdit={canEdit}
+          eventId={event?.id ?? 0}
+        />
         <div>
           <div className="border-b py-4 border-gray-200">
             <div

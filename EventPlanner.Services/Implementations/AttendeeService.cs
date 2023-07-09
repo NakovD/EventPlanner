@@ -11,6 +11,7 @@
     using AutoMapper.QueryableExtensions;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
+    using EventPlanner.Data.Enums;
 
     public class AttendeeService : IAttendeeService
     {
@@ -24,15 +25,15 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<(bool, int)> CreateAttendeeAsync(AttendeeFormDto attendeeDto)
+        public async Task<(bool, int)> CreateAttendeeAsync(AttendeeFormDto dto)
         {
-            var neededEvent = await dbContext.Events.FindAsync(attendeeDto.EventId);
+            var neededEvent = await dbContext.Events.FindAsync(dto.EventId);
 
             if (neededEvent == null) return (false, -1);
 
-            var newAttendee = mapper.Map<Attendee>(attendeeDto);
+            var newAttendee = mapper.Map<Attendee>(dto);
 
-            if (attendeeDto.UserId != null && attendeeDto.UserId == neededEvent.OrganizerId) return (false, -1);
+            if (dto.UserId != null && dto.UserId == neededEvent.OrganizerId) return (false, -1);
 
             try
             {
@@ -54,5 +55,27 @@
             .ProjectTo<AttendeeDto>(mapper.ConfigurationProvider)
             .ToListAsync();
 
+        public async Task<bool> UpdateAttendeeStatus(int id, int newStatus, string userId)
+        {
+            var neededAttendee = await dbContext.Attendees.FindAsync(id);
+
+            if (neededAttendee == null) return false;
+
+            var canUpdate = neededAttendee.UserId == userId;
+
+            if (!canUpdate) return false;
+
+            try
+            {
+                neededAttendee.Status = (RSVPStatus)newStatus;
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
