@@ -21,6 +21,8 @@ namespace EventPlanner.Test
 
         private IEnumerable<Event> events;
 
+        private IEnumerable<Category> categories;
+
         private EventPlannerDbContext db;
 
         private IMapper mapper;
@@ -30,6 +32,8 @@ namespace EventPlanner.Test
         [OneTimeSetUp]
         public void Setup()
         {
+            SeedCategories();
+
             SeedEventDtos();
 
             SeedEvents();
@@ -43,14 +47,14 @@ namespace EventPlanner.Test
             var mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<EventProfile>()));
             this.mapper = mapper;
 
+            //Prepare service
+            eventService = new EventService(db, mapper);
 
             //Fill Db
             db.AddRange(events);
+            db.Categories.AddRange(categories);
             db.SaveChanges();
 
-
-            //Prepare service
-            eventService = new EventService(db, mapper);
         }
 
         private void SeedEventDtos()
@@ -128,6 +132,30 @@ namespace EventPlanner.Test
                     OrganizerId = "2",
                     Date = new DateTime(2023, 3, 11),
                     Time = "12:13",
+                }
+            };
+        }
+
+        private void SeedCategories()
+        {
+            categories = new List<Category>() {
+                new Category
+                {
+                    Id = 1,
+                    Name = "First Category",
+                    LastUpdated = DateTime.Now,
+                },
+                new Category
+                {
+                    Id = 2,
+                    Name = "Second Category",
+                    LastUpdated = DateTime.Now,
+                },
+                new Category
+                {
+                    Id = 3,
+                    Name = "Third Category",
+                    LastUpdated = DateTime.Now,
                 }
             };
         }
