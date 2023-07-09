@@ -18,4 +18,7 @@ export const endpoints = {
     createNew: '/Attendee/Create',
     updateStatus: 'Attendee/UpdateStatus/:id',
   },
+  categories: {
+    getAll: '/Category/All',
+  },
 };

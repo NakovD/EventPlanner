@@ -43,12 +43,14 @@ namespace EventPlanner.Test
             var mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<EventProfile>()));
             this.mapper = mapper;
 
-            //Prepare service
-            eventService = new EventService(db, mapper);
 
             //Fill Db
             db.AddRange(events);
             db.SaveChanges();
+
+
+            //Prepare service
+            eventService = new EventService(db, mapper);
         }
 
         private void SeedEventDtos()
@@ -95,7 +97,7 @@ namespace EventPlanner.Test
                 {
                     Id = 1,
                     Title = "First event",
-                    Category = "wedding",
+                    CategoryId = 1,
                     Image = "some img soruce",
                     Location = "Sliven",
                     Description = "some desc",
@@ -107,7 +109,7 @@ namespace EventPlanner.Test
                 {
                     Id = 2,
                     Title = "Second event",
-                    Category = "birthday party",
+                    CategoryId = 2,
                     Image = "another img soruce",
                     Location = "Pernik",
                     Description = "some desc",
@@ -119,7 +121,7 @@ namespace EventPlanner.Test
                 {
                     Id = 3,
                     Title = "Third event",
-                    Category = "Dance show off",
+                    CategoryId = 3,
                     Image = "yeah, yeah img soruce",
                     Location = "Sungulare",
                     Description = "some desc",
@@ -176,7 +178,7 @@ namespace EventPlanner.Test
                 Time = "12:23",
                 Description = "Description",
                 Location = "Location",
-                Category = "Category",
+                CategoryId = 1,
                 Image = "some img"
             };
 
@@ -213,7 +215,7 @@ namespace EventPlanner.Test
                 Time = "12:43",
                 Date = "12/10/2023",
                 Location = "Kri4im",
-                Category = "new Category",
+                CategoryId = 1,
                 Image = "the best new image"
             };
 
@@ -229,7 +231,7 @@ namespace EventPlanner.Test
             Assert.IsTrue(updatedEvent.Time == expected.Time);
             Assert.IsTrue(updatedEvent.Date == expected.Date.ToString(DateFormat, CultureInfo.InvariantCulture));
             Assert.IsTrue(updatedEvent.Location == expected.Location);
-            Assert.IsTrue(updatedEvent.Category == expected.Category);
+            Assert.IsTrue(updatedEvent.CategoryId == expected.CategoryId);
             Assert.IsTrue(updatedEvent.Image == expected.Image);
 
         }

@@ -53,7 +53,7 @@
             var eventt = new Event
             {
                 Id = 50,
-                Category = "category",
+                CategoryId = 1,
                 Date = DateTime.Now,
                 Title = "Title",
                 Description = "Description",

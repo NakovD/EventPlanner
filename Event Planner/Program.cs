@@ -134,6 +134,8 @@ namespace EventPlanner
                 configAction.AddProfile<EventProfile>();
 
                 configAction.AddProfile<AttendeeProfile>();
+
+                configAction.AddProfile<CategoryProfile>();
             });
 
             services.AddDataProtection();
@@ -149,6 +151,8 @@ namespace EventPlanner
             services.AddScoped<IJsonService, JsonService>();
 
             services.AddScoped<IEmailService, EmailService>();
+
+            services.AddScoped<ICategoryService, CategoryService>();
 
         }
 

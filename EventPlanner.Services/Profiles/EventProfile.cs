@@ -13,7 +13,8 @@
         public EventProfile()
         {
             CreateMap<Event, EventDto>()
-                .ForMember(x => x.Date, y => y.MapFrom(x => x.Date.ToString(DateFormat, CultureInfo.InvariantCulture)));
+                .ForMember(x => x.Date, y => y.MapFrom(x => x.Date.ToString(DateFormat, CultureInfo.InvariantCulture)))
+                .ForMember(x => x.Category, y => y.MapFrom(x => x.Category.Name));
 
             CreateMap<EventFormDto, Event>()
                 .ForMember(x => x.Date, y => y.MapFrom(x => DateTime.ParseExact(x.Date, DateFormat, CultureInfo.InvariantCulture)));

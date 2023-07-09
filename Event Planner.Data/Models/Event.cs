@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public class Event
     {
@@ -31,7 +32,11 @@
         public string Location { get; set; } = null!;
 
         [Required]
-        public string Category { get; set; } = null!;
+        [ForeignKey(nameof(Category))]
+        public int CategoryId { get; set; }
+
+        [Required]
+        public Category Category { get; set; } = null!;
 
         [Required]
         public string Image { get; set; } = null!;

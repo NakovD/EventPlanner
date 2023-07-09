@@ -10,7 +10,10 @@ export const eventValidationSchema = yup.object({
     .matches(new RegExp(/^[\d]{2}:[\d]{2}$/g), {
       message: 'The time field should match the following pattern: hh:mm',
     }),
-  category: yup.string().required(),
+  category: yup.object({
+    label: yup.string().required(),
+    value: yup.number().required(),
+  }),
   date: yup
     .string()
     .required()

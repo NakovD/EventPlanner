@@ -8,6 +8,7 @@ export enum GetRequestType {
   getAllEventAttendees = 'GetAllEventAttendees',
   getAllUsers = 'GetAllUsers',
   getEventForAttendeeOnly = 'GetEventForAttendeeOnly',
+  getAllCategories = 'GetAllCategories',
 }
 
 export const getRequestsOptions: { [keyof in GetRequestType]: IGetRequestOptions } = {
@@ -34,5 +35,9 @@ export const getRequestsOptions: { [keyof in GetRequestType]: IGetRequestOptions
   [GetRequestType.getEventForAttendeeOnly]: {
     endpoint: endpoints.events.attendeeOnly,
     queryKey: 'event-attendee-only',
+  },
+  [GetRequestType.getAllCategories]: {
+    endpoint: endpoints.categories.getAll,
+    queryKey: 'all-categories',
   },
 };

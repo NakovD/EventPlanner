@@ -1,4 +1,5 @@
 import { Button } from 'features/common/button/Button';
+import { ESelect } from 'features/common/form/ESelect';
 import { TextArea } from 'features/common/form/TextArea';
 import { TextField } from 'features/common/form/TextField';
 import { useEventForm } from 'features/events/form/hooks/useEventForm';
@@ -12,7 +13,7 @@ interface IEventFormProps {
 }
 
 export const EventForm = ({ title, eventId, formData }: IEventFormProps) => {
-  const { control, onSubmit } = useEventForm(formData, eventId);
+  const { categories, control, onSubmit } = useEventForm(formData, eventId);
 
   return (
     <>
@@ -30,11 +31,10 @@ export const EventForm = ({ title, eventId, formData }: IEventFormProps) => {
           label="Description"
           info="Some brief explanation(250 chars) about your event."
         />
-        <TextField
+        <ESelect
           control={control}
+          options={categories}
           name={propertyOf<IEventForm>('category')}
-          label="Category"
-          info="Under contruction."
         />
         <TextField
           control={control}

@@ -29,7 +29,7 @@
         public string Location { get; set; } = null!;
 
         [Required]
-        public string Category { get; set; } = null!;
+        public int CategoryId { get; set; }
 
         [Required]
         [MaxLength(ImageLinkMaxLength)]

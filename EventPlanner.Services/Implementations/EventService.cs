@@ -53,6 +53,7 @@
         public async Task<IEnumerable<EventDto>> GetAllAsync() =>
                 await dbContext.Events
                 .AsNoTracking()
+                .Include(e => e.Category)
                 .ProjectTo<EventDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -91,7 +92,7 @@
             neededEvent.Title = eventDto.Title;
             neededEvent.Description = eventDto.Description;
             neededEvent.Location = eventDto.Location;
-            neededEvent.Category = eventDto.Category;
+            neededEvent.CategoryId = eventDto.CategoryId;
             neededEvent.Date = DateTime.ParseExact(eventDto.Date, DateFormat, CultureInfo.InvariantCulture);
             neededEvent.Time = eventDto.Time;
             neededEvent.Image = eventDto.Image;
