@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { AttendeeStatusType } from 'features/attendees/enums/attendeeStatusType';
 import { IAttendeeStatusRequest } from 'features/attendees/models/attendeeStatusRequest';
 import { Button } from 'features/common/button/Button';
@@ -6,7 +5,7 @@ import { useSnackBar } from 'features/common/snackbar/hooks/useSnackBar';
 import { SnackBar } from 'features/common/snackbar/Snackbar';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useCreateMutation } from 'infrastructure/api/hooks/useCreateMutation';
+import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useEffect, useState } from 'react';
 
@@ -21,24 +20,17 @@ export const EventAttendeeControls = ({
 }: IEventAttendeeControlsProps) => {
   const [show, setShow] = useState(false);
 
-  const { mutate, isSuccess, isError } = useCreateMutation<IAttendeeStatusRequest>({
+  const { mutate, isSuccess, isError } = useAppMutation<IAttendeeStatusRequest>({
     endpoint: replacePlaceholderWithId(endpoints.attendees.updateStatus, attendeeId),
+    queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, eventId],
   });
-
-  const queryClient = useQueryClient();
 
   const snackbarType = isSuccess && !isError ? 'success' : 'error';
 
   const { snackBarProps, openSnackBar } = useSnackBar({ type: snackbarType });
 
   useEffect(() => {
-    if (isSuccess) {
-      openSnackBar();
-      queryClient.invalidateQueries([
-        getRequestsOptions.GetAllEventAttendees.queryKey,
-        eventId,
-      ]);
-    }
+    if (isSuccess) openSnackBar();
   }, [isSuccess]);
 
   return (

@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useQueryClient } from '@tanstack/react-query';
 import { IExternalAttendeeForm } from 'features/attendees/form/models/externalAttendeeForm';
 import { IExternalAttendeeRequest } from 'features/attendees/form/models/externalAttendeeRequest';
 import { externalAttendeeFormValidationSchema } from 'features/attendees/form/validators/externalAttendeeFormValidationSchema';
@@ -9,7 +8,7 @@ import { useSnackBar } from 'features/common/snackbar/hooks/useSnackBar';
 import { SnackBar } from 'features/common/snackbar/Snackbar';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useCreateMutation } from 'infrastructure/api/hooks/useCreateMutation';
+import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
 import { constants } from 'infrastructure/constants';
 import { propertyOf } from 'infrastructure/utilities/propertyOf';
 import { useEffect } from 'react';
@@ -26,10 +25,9 @@ export const ExternalAttendeeForm = ({ eventId }: IExternalAttendeeFormProps) =>
     resolver: yupResolver(externalAttendeeFormValidationSchema),
   });
 
-  const queryClient = useQueryClient();
-
-  const { mutate, isSuccess, isError } = useCreateMutation<IExternalAttendeeRequest>({
+  const { mutate, isSuccess, isError } = useAppMutation<IExternalAttendeeRequest>({
     endpoint: endpoints.attendees.createNew,
+    queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, eventId],
   });
 
   const snackbarType = isSuccess && !isError ? 'success' : 'error';
@@ -38,10 +36,6 @@ export const ExternalAttendeeForm = ({ eventId }: IExternalAttendeeFormProps) =>
 
   useEffect(() => {
     if (isSuccess) {
-      queryClient.invalidateQueries([
-        getRequestsOptions.GetAllEventAttendees.queryKey,
-        eventId,
-      ]);
       reset(defaultValues);
       openSnackBar();
     }

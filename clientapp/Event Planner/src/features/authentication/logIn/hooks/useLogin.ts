@@ -3,7 +3,7 @@ import { ILoginForm } from 'features/authentication/logIn/models/loginForm';
 import { ILoginRequest } from 'features/authentication/logIn/models/loginRequest';
 import { IAuthResponse } from 'features/authentication/models/authResponse';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
-import { useCreateMutation } from 'infrastructure/api/hooks/useCreateMutation';
+import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const useLogin = () => {
   const { isAuthenticated, setIsAuthenticated } = useAppContext();
-  const { mutate, isLoading, isSuccess, data, error, isError } = useCreateMutation<
+  const { mutate, isLoading, isSuccess, data, error, isError } = useAppMutation<
     ILoginRequest,
     IAuthResponse,
     string
