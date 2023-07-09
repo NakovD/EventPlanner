@@ -75,6 +75,7 @@
                 new Attendee
                 {
                 Id = 1,
+                UserId = "user-id",
                 Email = "some@email.bg",
                 EventId = 1,
                 Name = "Milana",
@@ -169,6 +170,42 @@
         public async Task CreateReturnsFalseWithInvalidEventId()
         {
             var (isSuccess, _) = await attendeeService.CreateAttendeeAsync(new AttendeeFormDto { EventId = -1 });
+
+            Assert.IsFalse(isSuccess);
+        }
+
+        [Test]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public async Task UpdateAttendeeStatusReturnTrueWithValidStatus(int status)
+        {
+            var attendeeId = 1;
+            var userId = "user-id";
+
+            var isSuccess = await attendeeService.UpdateAttendeeStatus(attendeeId, status, userId);
+
+            var attendee = await db.Attendees.FindAsync(attendeeId);
+            var userActualStatus = attendee!.Status;
+
+            Assert.IsTrue(isSuccess);
+
+            Assert.IsTrue((RSVPStatus)status == userActualStatus);
+        }
+
+        [Test]
+        public async Task UpdateAttendeeStatusReturnsFalseWithInvalidAttendee()
+        {
+            var isSuccess = await attendeeService.UpdateAttendeeStatus(-1, 1, "user-id");
+
+            Assert.IsFalse(isSuccess);
+        }
+
+        [Test]
+        public async Task UpdateAttendeeStatusReturnsFalseIfTheUserIsNotTheAttendee()
+        {
+            var isSuccess = await attendeeService.UpdateAttendeeStatus(2, 1, "user-id");
 
             Assert.IsFalse(isSuccess);
         }
