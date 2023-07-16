@@ -95,7 +95,7 @@
                 Email = "Hristina@email.bg",
                 EventId = 3,
                 Name = "Hristina",
-                Status = RSVPStatus.NotAttending
+                Status = RSVPStatus.NotResponded
                 },
             };
 
@@ -208,6 +208,66 @@
             var isSuccess = await attendeeService.UpdateAttendeeStatusAsync(2, 1, "user-id");
 
             Assert.IsFalse(isSuccess);
+        }
+
+        [Test]
+        public async Task GetExternalAttendeeStatusReturnsCorrectData()
+        {
+            var attendeeId = 2;
+
+            var result = (RSVPStatus)await attendeeService.GetExternalAttendeeStatusAsync(attendeeId);
+
+            var expected = RSVPStatus.Attending;
+
+            Assert.IsTrue(result == expected);
+        }
+
+        [Test]
+        public async Task GetExternalAttendeeStatusReturnsCorrectResultWithInvalidAttendeeId()
+        {
+            var attendeeId = 123912;
+
+            var result = await attendeeService.GetExternalAttendeeStatusAsync(attendeeId);
+
+            var expected = -1;
+
+            Assert.IsTrue(result == expected);
+        }
+
+        [Test]
+        public async Task UpdateExternalAttendeeStatusUpdatedTheStatusCorrectly()
+        {
+            var attendeeId = 3;
+
+            var result = await attendeeService.UpdateExternalAttendeeStatusAsync(attendeeId, 2);
+
+            Assert.IsTrue(result);
+
+            var attendee = await db.Attendees.FindAsync(attendeeId);
+
+            var status = attendee.Status;
+
+            Assert.IsTrue(status == RSVPStatus.NotAttending);
+        }
+
+        [Test]
+        public async Task UpdateExternalAttendeeReturnsFalseWithInvalidAttendeeId()
+        {
+            var attendeeId = 213123;
+
+            var result = await attendeeService.UpdateExternalAttendeeStatusAsync(attendeeId, 2);
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public async Task UpdateExternalAttendeeReturnsFalseIfAttendeeIsAlreadyUpdatedHisStatus()
+        {
+            var attendeeId = 2;
+
+            var result = await attendeeService.UpdateExternalAttendeeStatusAsync(attendeeId, 3);
+
+            Assert.IsFalse(result);
         }
     }
 }
