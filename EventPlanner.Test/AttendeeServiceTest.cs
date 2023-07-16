@@ -184,7 +184,7 @@
             var attendeeId = 1;
             var userId = "user-id";
 
-            var isSuccess = await attendeeService.UpdateAttendeeStatus(attendeeId, status, userId);
+            var isSuccess = await attendeeService.UpdateAttendeeStatusAsync(attendeeId, status, userId);
 
             var attendee = await db.Attendees.FindAsync(attendeeId);
             var userActualStatus = attendee!.Status;
@@ -197,7 +197,7 @@
         [Test]
         public async Task UpdateAttendeeStatusReturnsFalseWithInvalidAttendee()
         {
-            var isSuccess = await attendeeService.UpdateAttendeeStatus(-1, 1, "user-id");
+            var isSuccess = await attendeeService.UpdateAttendeeStatusAsync(-1, 1, "user-id");
 
             Assert.IsFalse(isSuccess);
         }
@@ -205,7 +205,7 @@
         [Test]
         public async Task UpdateAttendeeStatusReturnsFalseIfTheUserIsNotTheAttendee()
         {
-            var isSuccess = await attendeeService.UpdateAttendeeStatus(2, 1, "user-id");
+            var isSuccess = await attendeeService.UpdateAttendeeStatusAsync(2, 1, "user-id");
 
             Assert.IsFalse(isSuccess);
         }
