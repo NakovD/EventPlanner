@@ -11,5 +11,7 @@
         public int Type { get; set; }
 
         public bool IsReaded { get; set; }
+
+        public int EventId { get; set; }
     }
 }

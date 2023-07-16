@@ -6,7 +6,9 @@ import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
 import { useInvalidateQueries } from 'infrastructure/api/hooks/useInvalidateQueries';
+import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
+import { Link } from 'react-router-dom';
 
 interface INotificationProps {
   notification: INotification;
@@ -24,6 +26,12 @@ export const Notification = ({ notification }: INotificationProps) => {
     onSuccess: () =>
       invalidate([getRequestsOptions.GetUnreadNotificationsCount.queryKey]),
   });
+
+  const eventLink = replacePlaceholderWithId(
+    routePaths.eventDetails.path,
+    notification.eventId,
+  );
+
   return (
     <div className="flex gap-10 shadow-2xl p-5 relative">
       {!notification.isReaded && (
@@ -42,6 +50,9 @@ export const Notification = ({ notification }: INotificationProps) => {
           Notification created at: {notification.createdAt}
         </p>
         <Button className="max-w-xs" label="Mark as readed" onClick={() => mutate({})} />
+        <Link className="text-right font-medium text-primary-light" to={eventLink}>
+          Go to the event
+        </Link>
       </div>
     </div>
   );

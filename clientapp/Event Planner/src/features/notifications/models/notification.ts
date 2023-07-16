@@ -6,4 +6,5 @@ export interface INotification {
   createdAt: string;
   type: NotificationType;
   isReaded: boolean;
+  eventId: number;
 }
