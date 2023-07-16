@@ -4,7 +4,7 @@
     using Contracts;
     using Models.Event;
     using Data.Models;
-    using static Common.Formats.EventFormats;
+    using static Common.Formats.DateFormats;
 
     using System.Collections.Generic;
     using System.Threading.Tasks;

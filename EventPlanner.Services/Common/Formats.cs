@@ -2,7 +2,7 @@
 {
     public static class Formats
     {
-        public static class EventFormats
+        public static class DateFormats
         {
             public const string DateFormat = "dd/MM/yyyy";
         }

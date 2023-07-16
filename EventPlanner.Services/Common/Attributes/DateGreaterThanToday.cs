@@ -1,7 +1,7 @@
 ﻿namespace EventPlanner.Services.Common.Attributes
 {
     using static Common.ErrorMessages.EventErrorMessages;
-    using static Common.Formats.EventFormats;
+    using static Common.Formats.DateFormats;
 
     using System.ComponentModel.DataAnnotations;
     using System.Globalization;

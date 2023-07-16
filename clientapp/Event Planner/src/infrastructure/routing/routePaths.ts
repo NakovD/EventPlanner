@@ -36,4 +36,8 @@ export const routePaths = {
     path: '/manage-attendees/:id',
     name: 'Event Attendees',
   },
+  notifications: {
+    path: '/notifications',
+    name: 'Notifications',
+  },
 };

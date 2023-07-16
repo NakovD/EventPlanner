@@ -2,7 +2,7 @@ namespace EventPlanner.Test
 {
     using Data;
     using Data.Models;
-    using static Services.Common.Formats.EventFormats;
+    using static Services.Common.Formats.DateFormats;
     using Services.Contracts;
     using Services.Implementations;
     using Services.Models.Event;

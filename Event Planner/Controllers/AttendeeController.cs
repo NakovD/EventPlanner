@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.DataProtection;
+    using EventPlanner.Services.Models.Notification;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -24,13 +25,16 @@
 
         private readonly IEmailService emailService;
 
-        public AttendeeController(IAttendeeService attendeeService, IEventService eventService, IDataProtectionProvider dataProtectionProvider, IJsonService jsonService, IEmailService emailService)
+        private readonly INotificationService notificationService;
+
+        public AttendeeController(IAttendeeService attendeeService, IEventService eventService, IDataProtectionProvider dataProtectionProvider, IJsonService jsonService, IEmailService emailService, INotificationService notificationService)
         {
             this.attendeeService = attendeeService;
             this.eventService = eventService;
             dataProtector = dataProtectionProvider.CreateProtector(AttendeeInviteDataPurpose);
             this.jsonService = jsonService;
             this.emailService = emailService;
+            this.notificationService = notificationService;
         }
 
         [AllowAnonymous]
@@ -60,6 +64,18 @@
             var protectedUserData = ProtectUserData(new EventAttendeeDto { AttendeeId = attendeeId, EventId = neededEvent!.Id });
 
             await emailService.SendEmailInviteAsync(attendeeFormDto.Email, attendeeFormDto.Name, neededEvent.Title, attendeeFormDto.EmailUrl, protectedUserData);
+
+            if (attendeeFormDto.UserId != null)
+            {
+                var notificationDto = new NotificationFormDto
+                {
+                    EventId = neededEvent.Id,
+                    Description = string.Format(NotificationEventInviteText, neededEvent.Title),
+                    Type = 0,
+                };
+
+                await notificationService.CreateNotificationAsync(attendeeFormDto.UserId, notificationDto);
+            }
 
             return Ok();
         }

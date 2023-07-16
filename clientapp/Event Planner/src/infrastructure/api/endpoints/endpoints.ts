@@ -23,4 +23,9 @@ export const endpoints = {
   categories: {
     getAll: '/Category/All',
   },
+  notifications: {
+    unreadCount: '/Notification/UnreadCount',
+    getAll: '/Notification/All',
+    markSingleAsReaded: '/Notification/MarkSingleAsRead/:id',
+  },
 };

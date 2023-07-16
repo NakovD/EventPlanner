@@ -18,7 +18,6 @@
 
         private readonly IMapper mapper;
 
-
         public CategoryService(EventPlannerDbContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;

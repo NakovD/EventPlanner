@@ -9,6 +9,7 @@ import { EventDetailsAttendeeOnly } from 'features/events/details/EventDetailsAt
 import { EventEdit } from 'features/events/edit/EventEdit';
 import { UserEvents } from 'features/events/user/UserEvents';
 import { Home } from 'features/home/Home';
+import { Notifications } from 'features/notifications/Notifications';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { createBrowserRouter } from 'react-router-dom';
 
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
         element: <EventCreate />,
       },
       { path: routePaths.manageAttendees.path, element: <ManageAttendees /> },
+      {
+        path: routePaths.notifications.path,
+        element: <Notifications />,
+      },
     ],
   },
   {

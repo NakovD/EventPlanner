@@ -2,7 +2,7 @@
 {
     using Data.Models;
     using Models.Event;
-    using static Common.Formats.EventFormats;
+    using static Common.Formats.DateFormats;
 
     using System.Globalization;
 
