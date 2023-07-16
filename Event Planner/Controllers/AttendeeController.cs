@@ -33,6 +33,7 @@
             this.emailService = emailService;
         }
 
+        [AllowAnonymous]
         [HttpGet("AllByEvent/{id}")]
         public async Task<IActionResult> GetAllByEventId(int id)
         {
@@ -74,11 +75,46 @@
 
             var userId = GetUserId();
 
-            var actionSuccess = await attendeeService.UpdateAttendeeStatus(id, dto.NewStatus, userId!);
+            var actionSuccess = await attendeeService.UpdateAttendeeStatusAsync(id, dto.NewStatus, userId!);
 
             if (!actionSuccess) return BadRequest();
 
             return Ok();
+        }
+
+        [AllowAnonymous]
+        [HttpPost("UpdateExternalStatus/{encryptedData}")]
+        public async Task<IActionResult> UpdateExternalAttendeeStatus([FromRoute]string encryptedData, [FromBody] AttendeeStatusDto dto)
+        {
+            var unprotectedData = UnProtectUserData(encryptedData);
+
+            if (unprotectedData == null) return BadRequest();
+
+            var isModeValid = ModelState.IsValid;
+
+            if (!isModeValid) return BadRequest();
+
+            var action = await attendeeService.UpdateExternalAttendeeStatusAsync(unprotectedData.AttendeeId, dto.NewStatus);
+
+            if (!action) return BadRequest();
+
+            return Ok();
+        }
+
+        [AllowAnonymous]
+        [HttpGet("ExternalStatus/{encryptedData}")]
+        public async Task<IActionResult> GetExternalAttendeeStatus([FromRoute] string encryptedData)
+        {
+            var unprotectedData = UnProtectUserData(encryptedData);
+
+            if (unprotectedData == null) return BadRequest();
+
+            var result = await attendeeService.GetExternalAttendeeStatusAsync(unprotectedData.AttendeeId);
+
+            if (result == -1) return BadRequest();
+
+            return Ok(result);
+
         }
 
         private string ProtectUserData(EventAttendeeDto eventAttendeeDto)
@@ -87,6 +123,14 @@
             var protectedData = dataProtector.Protect(eventAttendeeDtoAsJsonString);
 
             return protectedData;
+        }
+
+        private EventAttendeeDto? UnProtectUserData(string encryptedData)
+        {
+            var unProtectedData = dataProtector.Unprotect(encryptedData);
+            var data = jsonService.Deserialize<EventAttendeeDto>(unProtectedData);
+
+            return data;
         }
     }
 }

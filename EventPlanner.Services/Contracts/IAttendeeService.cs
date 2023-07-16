@@ -12,6 +12,10 @@
 
         Task<(bool, int)> CreateAttendeeAsync(AttendeeFormDto dto);
 
-        Task<bool> UpdateAttendeeStatus(int id, int newStatus, string userId);
+        Task<bool> UpdateAttendeeStatusAsync(int id, int newStatus, string userId);
+
+        Task<bool> UpdateExternalAttendeeStatusAsync(int id, int newStatus);
+
+        Task<int> GetExternalAttendeeStatusAsync(int id);
     }
 }

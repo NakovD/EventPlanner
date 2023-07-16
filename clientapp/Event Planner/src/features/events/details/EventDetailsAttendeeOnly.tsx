@@ -1,3 +1,4 @@
+import { AttendeeStatusType } from 'features/attendees/enums/attendeeStatusType';
 import { EventProfile } from 'features/events/common/EventProfile';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
@@ -16,5 +17,25 @@ export const EventDetailsAttendeeOnly = () => {
     ),
     queryKey: [getRequestsOptions.GetEventForAttendeeOnly.queryKey],
   });
-  return event && <EventProfile event={event} canEdit={false} />;
+
+  const { data: attendeeStatus } = useReadQuery<AttendeeStatusType>({
+    endpoint: replacePlaceholderWithId(
+      getRequestsOptions.GetExternalAttendeeStatus.endpoint,
+      encryptedData,
+    ),
+    queryKey: [getRequestsOptions.GetExternalAttendeeStatus.queryKey],
+  });
+
+  const shouldShowExternalAttendeeControls =
+    attendeeStatus === AttendeeStatusType.NotResponded;
+
+  return (
+    event && (
+      <EventProfile
+        event={event}
+        shouldShowExternalAttendeeControls={shouldShowExternalAttendeeControls}
+        canEdit={false}
+      />
+    )
+  );
 };

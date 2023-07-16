@@ -55,7 +55,16 @@
             .ProjectTo<AttendeeDto>(mapper.ConfigurationProvider)
             .ToListAsync();
 
-        public async Task<bool> UpdateAttendeeStatus(int id, int newStatus, string userId)
+        public async Task<int> GetExternalAttendeeStatusAsync(int id)
+        {
+            var neededAttendee = await dbContext.Attendees.FindAsync(id);
+
+            if (neededAttendee == null) return -1;
+
+            return (int)neededAttendee.Status;
+        }
+
+        public async Task<bool> UpdateAttendeeStatusAsync(int id, int newStatus, string userId)
         {
             var neededAttendee = await dbContext.Attendees.FindAsync(id);
 
@@ -64,6 +73,29 @@
             var canUpdate = neededAttendee.UserId == userId;
 
             if (!canUpdate) return false;
+
+            try
+            {
+                neededAttendee.Status = (RSVPStatus)newStatus;
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<bool> UpdateExternalAttendeeStatusAsync(int id, int newStatus)
+        {
+            var neededAttendee = await dbContext.Attendees.FindAsync(id);
+
+            if (neededAttendee == null) return false;
+
+            var hasStatusBeenConfirmed = neededAttendee.Status != RSVPStatus.NotResponded;
+
+            if (hasStatusBeenConfirmed) return false;
 
             try
             {

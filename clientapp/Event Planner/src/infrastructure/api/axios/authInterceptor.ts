@@ -9,7 +9,7 @@ export const authInterceptor = (axiosInstance: AxiosInstance) =>
 
     const url = config.url;
 
-    const doesUrlNeedToken = checkAuthorizationURL(url as string);
+    const doesUrlNeedToken = !checkAuthorizationURL(url as string);
 
     if (!doesUrlNeedToken) return config;
 

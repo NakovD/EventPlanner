@@ -9,6 +9,7 @@ export enum GetRequestType {
   getAllUsers = 'GetAllUsers',
   getEventForAttendeeOnly = 'GetEventForAttendeeOnly',
   getAllCategories = 'GetAllCategories',
+  getExternalAttendeeStatus = 'GetExternalAttendeeStatus',
 }
 
 export const getRequestsOptions: { [keyof in GetRequestType]: IGetRequestOptions } = {
@@ -39,5 +40,9 @@ export const getRequestsOptions: { [keyof in GetRequestType]: IGetRequestOptions
   [GetRequestType.getAllCategories]: {
     endpoint: endpoints.categories.getAll,
     queryKey: 'all-categories',
+  },
+  [GetRequestType.getExternalAttendeeStatus]: {
+    endpoint: endpoints.attendees.status,
+    queryKey: 'externa-attendee-status',
   },
 };

@@ -16,7 +16,9 @@ export const endpoints = {
   attendees: {
     allByEvent: '/Attendee/AllByEvent/:id',
     createNew: '/Attendee/Create',
-    updateStatus: 'Attendee/UpdateStatus/:id',
+    updateStatus: '/Attendee/UpdateStatus/:id',
+    updateExternalStatus: '/Attendee/UpdateExternalStatus/:id',
+    status: '/Attendee/ExternalStatus/:id',
   },
   categories: {
     getAll: '/Category/All',

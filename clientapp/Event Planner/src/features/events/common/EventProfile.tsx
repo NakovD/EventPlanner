@@ -3,6 +3,7 @@ import { EventAttendeesList } from 'features/attendees/components/EventAttendees
 import { IAttendee } from 'features/attendees/models/attendee';
 import { Button } from 'features/common/button/Button';
 import { EventAttendeeControls } from 'features/events/common/EventAttendeeControls';
+import { EventAttendeeExternalControls } from 'features/events/common/EventAttendeeExternalControls';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
@@ -12,10 +13,15 @@ import { useState } from 'react';
 
 interface IEventProfileProps {
   canEdit: boolean;
+  shouldShowExternalAttendeeControls?: boolean;
   event: IAllEventsEntity;
 }
 
-export const EventProfile = ({ canEdit, event }: IEventProfileProps) => {
+export const EventProfile = ({
+  canEdit,
+  shouldShowExternalAttendeeControls = false,
+  event,
+}: IEventProfileProps) => {
   const [show2, setShow2] = useState(false);
 
   const { user } = useAppContext();
@@ -31,6 +37,8 @@ export const EventProfile = ({ canEdit, event }: IEventProfileProps) => {
   const userAttendee = attendees?.find((a) => a.userId === user?.userId);
 
   const shouldShowAttendeeActions = userAttendee !== undefined;
+
+  const isExternalAttendee = !user && !shouldShowExternalAttendeeControls;
 
   return (
     <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
@@ -106,6 +114,12 @@ export const EventProfile = ({ canEdit, event }: IEventProfileProps) => {
             to={replacePlaceholderWithId(routePaths.eventEdit.path, event?.id)}
             label="Edit this event"
           />
+        )}
+        {shouldShowExternalAttendeeControls && (
+          <EventAttendeeExternalControls eventId={event.id} />
+        )}
+        {isExternalAttendee && (
+          <p className="mt-3">You have already updated your status for this event!</p>
         )}
         <div className="mt-4">
           Event Description
