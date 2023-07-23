@@ -10,6 +10,8 @@
     {
         Task<IEnumerable<AttendeeDto>> GetAllByEventAsync(int eventId);
 
+        Task<AttendeeDto?> GetByIdAsync(int id);
+
         Task<(bool, int)> CreateAttendeeAsync(AttendeeFormDto dto);
 
         Task<bool> UpdateAttendeeStatusAsync(int id, int newStatus, string userId);

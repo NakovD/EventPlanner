@@ -1,17 +1,20 @@
 ﻿namespace EventPlanner.Services.Implementations
 {
     using Contracts;
-    using Data;
     using Models.Notification;
+    using Models.Event;
+    using Data;
+    using Data.Enums;
     using Data.Models;
+    using static Common.NotificationMessages;
 
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
 
     using System.Threading.Tasks;
-    using EventPlanner.Data.Enums;
-    using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
-    using AutoMapper.QueryableExtensions;
+    using EventPlanner.Services.Models.Attendee;
+    using Microsoft.EntityFrameworkCore;
 
     public class NotificationService : INotificationService
     {
@@ -23,6 +26,48 @@
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+        }
+
+        public async Task<bool> CreateEventInviteNotificationAsync(string userId, EventDto eventDto)
+        {
+            var notificationDto = new NotificationFormDto
+            {
+                EventId = eventDto.Id,
+                Description = string.Format(NotificationEventInviteText, eventDto.Title),
+                Type = 0,
+            };
+
+            try
+            {
+                await CreateNotificationAsync(userId, notificationDto);
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<bool> CreateEventUpdateNotificationAsync(string userId, AttendeeDto attendeeDto)
+        {
+            var notificationDto = new NotificationFormDto
+            {
+                EventId = attendeeDto.EventId,
+                Description = string.Format(NotificationEventUpdateText, attendeeDto.Name, attendeeDto.Status),
+                Type = 1,
+            };
+
+            try
+            {
+                await CreateNotificationAsync(userId, notificationDto);
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public async Task<bool> CreateNotificationAsync(string userId, NotificationFormDto dto)

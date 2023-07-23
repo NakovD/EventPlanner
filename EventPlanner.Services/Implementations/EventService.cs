@@ -68,6 +68,15 @@
             return dto;
         }
 
+        public async Task<string> GetEventCreatorIdAsync(int eventId)
+        {
+            var _event = await dbContext.Events.FindAsync(eventId);
+
+            if (_event == null) return string.Empty;
+
+            return _event.OrganizerId;
+        }
+
         public async Task<IEnumerable<EventDto>?> GetUserEventsAsync(string? userId)
         {
             var isUserIdValid = !string.IsNullOrEmpty(userId);

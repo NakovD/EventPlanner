@@ -55,6 +55,15 @@
             .ProjectTo<AttendeeDto>(mapper.ConfigurationProvider)
             .ToListAsync();
 
+        public async Task<AttendeeDto?> GetByIdAsync(int id)
+        {
+            var neededAttendee = await dbContext.Attendees.FindAsync(id);
+
+            var dto = mapper.Map<AttendeeDto>(neededAttendee);
+
+            return dto;
+        }
+
         public async Task<int> GetExternalAttendeeStatusAsync(int id)
         {
             var neededAttendee = await dbContext.Attendees.FindAsync(id);

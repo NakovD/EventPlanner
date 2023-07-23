@@ -8,7 +8,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.DataProtection;
-    using EventPlanner.Services.Models.Notification;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -67,21 +66,16 @@
 
             if (attendeeFormDto.UserId != null)
             {
-                var notificationDto = new NotificationFormDto
-                {
-                    EventId = neededEvent.Id,
-                    Description = string.Format(NotificationEventInviteText, neededEvent.Title),
-                    Type = 0,
-                };
+                var notificaitonCreationSuccess = await notificationService.CreateEventInviteNotificationAsync(attendeeFormDto.UserId, neededEvent);
 
-                await notificationService.CreateNotificationAsync(attendeeFormDto.UserId, notificationDto);
+                if (!notificaitonCreationSuccess) return StatusCode(500);
             }
 
             return Ok();
         }
 
         [HttpPost("UpdateStatus/{id}")]
-        public async Task<IActionResult> UpdateStatus([FromRoute]int id, [FromBody] AttendeeStatusDto dto)
+        public async Task<IActionResult> UpdateStatus([FromRoute] int id, [FromBody] AttendeeStatusDto dto)
         {
             if (id <= 0) return BadRequest();
 
@@ -95,12 +89,22 @@
 
             if (!actionSuccess) return BadRequest();
 
+            var attendee = await attendeeService.GetByIdAsync(id);
+
+            if (attendee == null) return BadRequest();
+
+            var eventCreatorId = await eventService.GetEventCreatorIdAsync(attendee.EventId);
+
+            var notificationCreationSuccess = await notificationService.CreateEventUpdateNotificationAsync(eventCreatorId, attendee);
+
+            if (!notificationCreationSuccess) return StatusCode(500);
+
             return Ok();
         }
 
         [AllowAnonymous]
         [HttpPost("UpdateExternalStatus/{encryptedData}")]
-        public async Task<IActionResult> UpdateExternalAttendeeStatus([FromRoute]string encryptedData, [FromBody] AttendeeStatusDto dto)
+        public async Task<IActionResult> UpdateExternalAttendeeStatus([FromRoute] string encryptedData, [FromBody] AttendeeStatusDto dto)
         {
             var unprotectedData = UnProtectUserData(encryptedData);
 
@@ -113,6 +117,16 @@
             var action = await attendeeService.UpdateExternalAttendeeStatusAsync(unprotectedData.AttendeeId, dto.NewStatus);
 
             if (!action) return BadRequest();
+
+            var attendee = await attendeeService.GetByIdAsync(unprotectedData.AttendeeId);
+
+            if (attendee == null) return BadRequest();
+
+            var eventCreatorId = await eventService.GetEventCreatorIdAsync(attendee.EventId);
+
+            var notificationCreationSuccess = await notificationService.CreateEventUpdateNotificationAsync(eventCreatorId, attendee);
+
+            if (!notificationCreationSuccess) return StatusCode(500);
 
             return Ok();
         }

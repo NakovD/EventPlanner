@@ -10,6 +10,8 @@
 
         Task<EventDto?> GetByIdAsync(int id);
 
+        Task<string> GetEventCreatorIdAsync(int eventId);
+
         Task<bool> CreateEventAsync(EventFormDto eventDto, string? userId);
 
         Task<bool> UpdateEventAsync(EventFormDto eventDto, int eventId);

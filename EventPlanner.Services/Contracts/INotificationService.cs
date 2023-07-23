@@ -1,5 +1,7 @@
 ﻿namespace EventPlanner.Services.Contracts
 {
+    using Models.Attendee;
+    using Models.Event;
     using Models.Notification;
 
     public interface INotificationService
@@ -11,5 +13,9 @@
         Task<IEnumerable<NotificationDto>> GetAllUserNotificationsAsync(string userId);
 
         Task<bool> MarkSingleNotificationAsReaded(int id, string userId);
+
+        Task<bool> CreateEventInviteNotificationAsync(string userId, EventDto eventDto);
+
+        Task<bool> CreateEventUpdateNotificationAsync(string userId, AttendeeDto eventDto);
     }
 }
