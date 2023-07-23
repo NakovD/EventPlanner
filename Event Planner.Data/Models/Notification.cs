@@ -1,10 +1,11 @@
 ﻿namespace EventPlanner.Data.Models
 {
     using Enums;
+    using EventPlanner.Data.Interfaces;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class Notification
+    public class Notification : IDeletable
     {
         [Key]
         [Required]
@@ -31,5 +32,8 @@
 
         [Required]
         public bool ReadStatus { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }

@@ -17,11 +17,18 @@ interface INotificationProps {
 export const Notification = ({ notification }: INotificationProps) => {
   const invalidate = useInvalidateQueries();
 
-  const { mutate } = useAppMutation({
+  const { mutate: markSingleAsReaded } = useAppMutation({
     endpoint: replacePlaceholderWithId(
       endpoints.notifications.markSingleAsReaded,
       notification.id,
     ),
+    queryKey: [getRequestsOptions.GetAllNotifications.queryKey],
+    onSuccess: () =>
+      invalidate([getRequestsOptions.GetUnreadNotificationsCount.queryKey]),
+  });
+
+  const { mutate: deleteNotification } = useAppMutation({
+    endpoint: replacePlaceholderWithId(endpoints.notifications.delete, notification.id),
     queryKey: [getRequestsOptions.GetAllNotifications.queryKey],
     onSuccess: () =>
       invalidate([getRequestsOptions.GetUnreadNotificationsCount.queryKey]),
@@ -49,7 +56,18 @@ export const Notification = ({ notification }: INotificationProps) => {
         <p className="text-end text-sm">
           Notification created at: {notification.createdAt}
         </p>
-        <Button className="max-w-xs" label="Mark as readed" onClick={() => mutate({})} />
+        {!notification.isReaded && (
+          <Button
+            className="max-w-xs"
+            label="Mark as readed"
+            onClick={() => markSingleAsReaded({})}
+          />
+        )}
+        <Button
+          className="max-w-xs mt-2"
+          label="Delete"
+          onClick={() => deleteNotification({})}
+        />
         <Link className="text-right font-medium text-primary-light" to={eventLink}>
           Go to the event
         </Link>

@@ -99,7 +99,7 @@
         {
             var allUserNotifications = await dbContext.Notifications
                 .AsNoTracking()
-                .Where(n => n.UserId == userId)
+                .Where(n => n.UserId == userId && !n.IsDeleted)
                 .ProjectTo<NotificationDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -108,7 +108,27 @@
 
         public async Task<int> GetUnreadNotificationsCount(string userId) => await dbContext.Notifications
                 .AsNoTracking()
-                .CountAsync(n => n.UserId == userId && n.ReadStatus == false);
+                .CountAsync(n => n.UserId == userId && n.ReadStatus == false && !n.IsDeleted);
+
+        public async Task<bool> MarkNotificationAsDeleted(int id)
+        {
+            var neededNotification = await dbContext.Notifications.FindAsync(id);
+
+            if (neededNotification == null) return false;
+
+            neededNotification.IsDeleted = true;
+
+            try
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         public async Task<bool> MarkSingleNotificationAsReaded(int id, string userId)
         {

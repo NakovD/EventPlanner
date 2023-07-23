@@ -17,5 +17,7 @@
         Task<bool> CreateEventInviteNotificationAsync(string userId, EventDto eventDto);
 
         Task<bool> CreateEventUpdateNotificationAsync(string userId, AttendeeDto eventDto);
+
+        Task<bool> MarkNotificationAsDeleted(int id);
     }
 }

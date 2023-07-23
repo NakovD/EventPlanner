@@ -27,5 +27,6 @@ export const endpoints = {
     unreadCount: '/Notification/UnreadCount',
     getAll: '/Notification/All',
     markSingleAsReaded: '/Notification/MarkSingleAsRead/:id',
+    delete: 'Notification/DeleteNotification/:id',
   },
 };

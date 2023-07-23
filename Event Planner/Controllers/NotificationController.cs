@@ -51,5 +51,17 @@
 
             return Ok();
         }
+
+        [HttpPost("DeleteNotification/{id}")]
+        public async Task<IActionResult> DeleteNotification(int id)
+        {
+            if (id <= 0) return BadRequest();
+
+            var actionSuccess = await notificationService.MarkNotificationAsDeleted(id);
+
+            if (!actionSuccess) return BadRequest();
+
+            return Ok();
+        }
     }
 }
