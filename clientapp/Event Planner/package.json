@@ -8,7 +8,9 @@
     "lint:fix": "eslint ./src --ext .jsx,.js,.ts,.tsx --quiet --fix --ignore-path ./.gitignore",
     "lint:format": "prettier  --loglevel warn --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\" ",
     "lint": "yarn lint:format && yarn lint:fix ",
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "gen-comp": "npx generate-react-cli component",
+    "gen-hook": "npx generate-react-cli component --type=hook"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
