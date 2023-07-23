@@ -303,5 +303,25 @@ namespace EventPlanner.Test
 
             Assert.IsNull(expected);
         }
+
+        [Test]
+        public async Task GetEventCreatorIDReturnsCorrectData()
+        {
+            var expected = "2";
+
+            var result = await eventService.GetEventCreatorIdAsync(1);
+
+            Assert.IsTrue(expected == result);
+        }
+
+        [Test]
+        public async Task GetEventOrganizerIdReturnsEmptyStringWithInvalidId()
+        {
+            var expected = string.Empty;
+
+            var result = await eventService.GetEventCreatorIdAsync(123);
+
+            Assert.IsTrue(expected == result);
+        }
     }
 }
