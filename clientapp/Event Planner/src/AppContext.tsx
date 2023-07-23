@@ -16,7 +16,7 @@ type AppContext = {
   isReady: boolean;
   isAuthenticated: boolean;
   user: IUser | undefined;
-  setIsAuthenticated: (token?: string) => void;
+  setIsAuthenticated: (token?: string, user?: IUser) => void;
 };
 
 const AppContextValue = createContext<AppContext | null>(null);
@@ -53,7 +53,7 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
 
   const [isAuthenticated, setIsAuthenticated] = useState(hasValue(token));
 
-  const authCallback = useCallback((token?: string) => {
+  const authCallback = useCallback((token?: string, user?: IUser) => {
     const isTokenValid = hasValue(token);
     if (!isTokenValid) {
       setIsAuthenticated(false);
@@ -62,6 +62,7 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
     }
     setItem(constants.localStorageTokenKey, token);
     setIsAuthenticated(true);
+    setUser(user);
   }, []);
 
   const context: AppContext = {

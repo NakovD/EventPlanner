@@ -7,7 +7,9 @@ interface IAuthOutletProps {
 }
 
 export const AuthOutlet = ({ children }: IAuthOutletProps) => {
-  const { isAuthenticated } = useAppContext();
+  const { isAuthenticated, user } = useAppContext();
 
-  return isAuthenticated ? children : <Navigate to={routePaths.login.path} />;
+  const canAccess = isAuthenticated && user;
+
+  return canAccess ? children : <Navigate to={routePaths.login.path} />;
 };

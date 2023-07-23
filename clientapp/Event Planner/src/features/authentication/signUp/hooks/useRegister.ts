@@ -60,7 +60,12 @@ export const useRegister = () => {
     if (isAuthenticated) navigate(routePaths.allEvents.path);
     if (!isSuccess || !data) return;
 
-    setIsAuthenticated(data.token);
+    setIsAuthenticated(data.token, {
+      userId: data.userId,
+      userName: data.userName,
+      userEmail: data.userEmail,
+      userRoles: data.roles,
+    });
     navigate(routePaths.allEvents.path);
   }, [isSuccess]);
 

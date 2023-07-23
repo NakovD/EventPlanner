@@ -12,8 +12,6 @@ export const AuthorizeOutlet = ({ children }: IAuthorizeOutletProps) => {
 
   const canAccess = user?.userRoles.includes(UserRoleType.Admin);
 
-  console.log(canAccess);
-
   if (canAccess) return children;
 
   return <Navigate to={routePaths.userEvents.path} />;

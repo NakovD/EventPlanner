@@ -54,7 +54,7 @@ export const router = createBrowserRouter([
         path: routePaths.administration.path,
         element: (
           <AuthorizeOutlet>
-            <Administration />,
+            <Administration />
           </AuthorizeOutlet>
         ),
       },
@@ -62,7 +62,7 @@ export const router = createBrowserRouter([
         path: routePaths.administrationCategories.path,
         element: (
           <AuthorizeOutlet>
-            <AdministrationCategories />,
+            <AdministrationCategories />
           </AuthorizeOutlet>
         ),
       },
