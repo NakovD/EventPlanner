@@ -11,6 +11,8 @@
     using Microsoft.EntityFrameworkCore;
     using System;
     using EventPlanner.Data.Enums;
+    using EventPlanner.Services.Models.Attendee;
+    using EventPlanner.Services.Models.Event;
 
     public class NotificationServiceTest
     {
@@ -118,7 +120,6 @@
         {
             var expected = new Notification()
             {
-                Id = 4,
                 Description = "description",
                 CreatedAt = DateTime.Now.AddMinutes(3),
                 EventId = 1,
@@ -136,7 +137,7 @@
 
             Assert.IsTrue(result);
 
-            var createdNotification = await db.Notifications.FindAsync(expected.Id);
+            var createdNotification = await db.Notifications.FindAsync(1);
 
             Assert.IsNotNull(createdNotification);
 
@@ -219,6 +220,61 @@
             var result = await notificationService.MarkSingleNotificationAsReaded(1, userId);
 
             Assert.IsFalse(result);
+        }
+
+        [Test]
+        public async Task MarkNotificationAsDeletedMarksNotificationAsDeleted()
+        {
+            var notificationId = 1;
+
+            var result = await notificationService.MarkNotificationAsDeleted(notificationId);
+
+
+            var expected = await db.Notifications.FindAsync(notificationId);
+
+            Assert.IsNotNull(expected);
+
+            Assert.IsTrue(result);
+
+            Assert.IsTrue(expected.IsDeleted);
+        }
+
+        [Test]
+        public async Task MarkNotificationAsDeletedReturnsFalseWithInvalidId()
+        {
+            var notificationid = 123;
+
+            var result = await notificationService.MarkNotificationAsDeleted(notificationid);
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public async Task CreateEventUpdateNotificationCreatesEventUpdateNotification()
+        {
+            var result = await notificationService.CreateEventUpdateNotificationAsync("1", new AttendeeDto { EventId = 1, Name = "Some Name", Status = "status" });
+
+            var expected = await db.Notifications.LastAsync();
+
+            Assert.IsTrue(result);
+
+            Assert.IsNotNull(expected);
+
+            Assert.IsTrue(expected.Type == NotificationType.EventUpdate);
+        }
+
+        [Test]
+        public async Task CreateEventInviteNotificationCreatesEventInviteNotification()
+        {
+            var result = await notificationService.CreateEventInviteNotificationAsync("1", new EventDto { Id = 1, Title = "Hello"});
+
+            var expected = await db.Notifications.LastAsync();
+
+            Assert.IsTrue(result);
+
+            Assert.IsNotNull(expected);
+
+            Assert.IsTrue(expected.Type == NotificationType.EventInvite);
         }
     }
 }
