@@ -101,7 +101,7 @@ namespace EventPlanner.Test
                 {
                     Id = 1,
                     Title = "First event",
-                    CategoryId = 1,
+                    CategoryId = 10,
                     Image = "some img soruce",
                     Location = "Sliven",
                     Description = "some desc",
@@ -113,7 +113,7 @@ namespace EventPlanner.Test
                 {
                     Id = 2,
                     Title = "Second event",
-                    CategoryId = 2,
+                    CategoryId = 20,
                     Image = "another img soruce",
                     Location = "Pernik",
                     Description = "some desc",
@@ -125,7 +125,7 @@ namespace EventPlanner.Test
                 {
                     Id = 3,
                     Title = "Third event",
-                    CategoryId = 3,
+                    CategoryId = 30,
                     Image = "yeah, yeah img soruce",
                     Location = "Sungulare",
                     Description = "some desc",
@@ -141,19 +141,19 @@ namespace EventPlanner.Test
             categories = new List<Category>() {
                 new Category
                 {
-                    Id = 1,
+                    Id = 10,
                     Name = "First Category",
                     LastUpdated = DateTime.Now,
                 },
                 new Category
                 {
-                    Id = 2,
+                    Id = 20,
                     Name = "Second Category",
                     LastUpdated = DateTime.Now,
                 },
                 new Category
                 {
-                    Id = 3,
+                    Id = 30,
                     Name = "Third Category",
                     LastUpdated = DateTime.Now,
                 }
