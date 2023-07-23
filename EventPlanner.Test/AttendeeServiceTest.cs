@@ -269,5 +269,23 @@
 
             Assert.IsFalse(result);
         }
+
+        [Test]
+        public async Task GetByIdAsyncReturnsCorrectAttendee()
+        {
+            var attendeeId = 1;
+
+            var result = await attendeeService.GetByIdAsync(attendeeId);
+
+            Assert.IsTrue(result.Id! == attendeeId);
+        }
+
+        [Test]
+        public async Task GetByIdReturnNullWithNonExistentId()
+        {
+            var result = await attendeeService.GetByIdAsync(1331);
+
+            Assert.IsNull(result);
+        }
     }
 }
