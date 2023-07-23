@@ -32,6 +32,7 @@ export const useLogin = () => {
     if (!isSuccess || !data) return;
 
     setIsAuthenticated(data.token);
+
     navigate(routePaths.allEvents.path);
   }, [isSuccess]);
 

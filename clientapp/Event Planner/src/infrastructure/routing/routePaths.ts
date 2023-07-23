@@ -14,7 +14,7 @@ export const routePaths = {
   },
   eventEdit: {
     path: '/event-edit/:id',
-    name: 'Edit Evetnt',
+    name: 'Edit Event',
   },
   eventDetailsInvitedAttendee: {
     path: '/event-attendee-only/:id',
@@ -39,5 +39,13 @@ export const routePaths = {
   notifications: {
     path: '/notifications',
     name: 'Notifications',
+  },
+  administration: {
+    path: '/administration',
+    name: 'Administration',
+  },
+  administrationCategories: {
+    path: '/administration/categories',
+    name: 'Categories',
   },
 };

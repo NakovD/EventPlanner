@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { routePaths } from 'infrastructure/routing/routePaths';
 import { Link } from 'react-router-dom';
 
 interface IHeaderAdminDropdownProps {
@@ -16,18 +17,18 @@ export const HeaderAdminDropdown = ({ isVisible }: IHeaderAdminDropdownProps) =>
     <>
       <div className={styles}>
         <Link
-          className="flex top items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-          to={''}
+          className="flex items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+          to={routePaths.administration.path}
         >
-          About
+          Admin Home page
+        </Link>
+        <Link
+          className="flex top items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
+          to={routePaths.administrationCategories.path}
+        >
+          Categories
         </Link>
 
-        <Link
-          className="flex items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
-          to={''}
-        >
-          Downloads
-        </Link>
         <Link
           className="flex items-center gap-x-3.5 py-2 px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300"
           to={''}

@@ -39,12 +39,13 @@
             };
 
         }
-        public AuthResponse CreateToken(User user)
+
+        public AuthResponse CreateToken(User user, IEnumerable<string> roles)
         {
             var expiration = DateTime.UtcNow.AddHours(EXPIRATION_HOURS);
 
             var token = CreateJwtToken(
-                CreateClaims(user),
+                CreateClaims(user, roles),
                 CreateSigningCredentials(),
                 expiration
             );
@@ -56,10 +57,11 @@
                 UserName = user.UserName,
                 UserEmail = user.Email,
                 UserId = user.Id,
+                Roles = roles,
             };
         }
 
-        private JwtSecurityToken CreateJwtToken(Claim[] claims, SigningCredentials credentials, DateTime expiration) =>
+        private JwtSecurityToken CreateJwtToken(IEnumerable<Claim> claims, SigningCredentials credentials, DateTime expiration) =>
             new JwtSecurityToken(
                 configuration["Jwt:Issuer"],
                 configuration["Jwt:Audience"],
@@ -68,15 +70,36 @@
                 signingCredentials: credentials
             );
 
-        private Claim[] CreateClaims(User user) =>
-          new[] {
+        private IEnumerable<Claim> CreateClaims(User user, IEnumerable<string> roles)
+        {
+
+            var rolesClaims = GetRolesClaims(roles);
+
+            var otherClaims = new List<Claim> {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
           };
+
+            otherClaims.AddRange(rolesClaims);
+
+            return otherClaims;
+        }
+
+        private IEnumerable<Claim> GetRolesClaims(IEnumerable<string> roles)
+        {
+            var rolesClaims = new List<Claim>();
+
+            foreach (var role in roles)
+            {
+                rolesClaims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            return rolesClaims;
+        }
 
         private SigningCredentials CreateSigningCredentials() =>
             new SigningCredentials(

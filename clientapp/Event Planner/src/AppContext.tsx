@@ -44,6 +44,7 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
         userEmail: data.userEmail,
         userName: data.userName,
         userId: data.userId,
+        userRoles: data.roles,
       });
 
     if (isFetched) setIsReady(isFetched);

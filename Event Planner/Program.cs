@@ -113,7 +113,7 @@ namespace EventPlanner
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
-                {
+                { 
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
@@ -125,6 +125,8 @@ namespace EventPlanner
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(validKey))
                     };
                 });
+
+            services.AddAuthorization();
         }
 
         private static void ConfigureServices(IServiceCollection services)

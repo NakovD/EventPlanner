@@ -6,7 +6,7 @@
 
     public interface IAuthService
     {
-        AuthResponse CreateToken(User user);
+        AuthResponse CreateToken(User user, IEnumerable<string> roles);
 
         Task<bool> ValidateTokenAsync(string token);
 

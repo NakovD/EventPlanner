@@ -44,9 +44,9 @@
 
             var newUser = await userManager.FindByNameAsync(user.UserName);
 
-            var response = authService.CreateToken(newUser);
-
             await userManager.AddToRoleAsync(newUser, "User");
+
+            var response = authService.CreateToken(newUser, new List<string> { "User" });
 
             return Ok(response);
         }
@@ -66,7 +66,9 @@
 
             if (!isPasswordValid) return BadRequest("Bad credentials!");
 
-            var response = authService.CreateToken(user);
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            var response = authService.CreateToken(user, userRoles);
 
             return Ok(response);
         }
@@ -85,7 +87,9 @@
 
             if (user == null) return BadRequest();
 
-            var authResponse = authService.CreateToken(user);
+            var roles = await userManager.GetRolesAsync(user);
+
+            var authResponse = authService.CreateToken(user, roles);
 
             return Ok(authResponse);
         }

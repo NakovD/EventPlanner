@@ -29,6 +29,7 @@ export const TextField = <TFormValues extends FieldValues>({
       helperText={helperText}
       onChange={field.onChange}
       onBlur={field.onBlur}
+      className="w-full"
       ref={field.ref}
       name={field.name}
       color="warning"

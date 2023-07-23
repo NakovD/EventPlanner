@@ -22,6 +22,9 @@ export const endpoints = {
   },
   categories: {
     getAll: '/Category/All',
+    update: '/Category/Edit',
+    delete: '/Category/Delete/:id',
+    add: '/Category/Add',
   },
   notifications: {
     unreadCount: '/Notification/UnreadCount',
@@ -29,4 +32,5 @@ export const endpoints = {
     markSingleAsReaded: '/Notification/MarkSingleAsRead/:id',
     delete: 'Notification/DeleteNotification/:id',
   },
+  administration: {},
 };

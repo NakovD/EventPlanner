@@ -1,6 +1,9 @@
+import { Administration } from 'features/administration/Administration';
+import { AdministrationCategories } from 'features/administration/categories/AdministrationCategories';
 import { ManageAttendees } from 'features/attendees/manage/ManageAttendees';
 import { LogIn } from 'features/authentication/logIn/LogIn';
 import { SignUp } from 'features/authentication/signUp/SignUp';
+import { AuthorizeOutlet } from 'features/authorization/AuthorizeOutlet';
 import { Layout } from 'features/common/layout/Layout';
 import { AllEvents } from 'features/events/all/AllEvents';
 import { EventCreate } from 'features/events/create/EventCreate';
@@ -46,6 +49,22 @@ export const router = createBrowserRouter([
       {
         path: routePaths.notifications.path,
         element: <Notifications />,
+      },
+      {
+        path: routePaths.administration.path,
+        element: (
+          <AuthorizeOutlet>
+            <Administration />,
+          </AuthorizeOutlet>
+        ),
+      },
+      {
+        path: routePaths.administrationCategories.path,
+        element: (
+          <AuthorizeOutlet>
+            <AdministrationCategories />,
+          </AuthorizeOutlet>
+        ),
       },
     ],
   },
