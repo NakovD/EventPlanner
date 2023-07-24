@@ -1,4 +1,4 @@
-import { CircularProgress, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useLogin } from 'features/authentication/logIn/hooks/useLogin';
 import { ILoginForm } from 'features/authentication/logIn/models/loginForm';
 import { Button } from 'features/common/button/Button';
@@ -8,7 +8,7 @@ import { propertyOf } from 'infrastructure/utilities/propertyOf';
 import { Link } from 'react-router-dom';
 
 export const LogIn = () => {
-  const { isLoading, isError, error, control, onSubmit } = useLogin();
+  const { isError, error, control, onSubmit } = useLogin();
 
   return (
     <div className="h-full min-h-screen flex bg-gradient-to-l from-light-blue to-background-light to-blue-500">
@@ -36,7 +36,6 @@ export const LogIn = () => {
             </Link>
           </p>
           <Button label="Login" isSubmit={true} />
-          {isLoading && <CircularProgress color="secondary" />}
           {isError && error && <Typography color={'red'}>{error}</Typography>}
         </form>
       </div>

@@ -17,7 +17,7 @@ export const eventValidationSchema = yup.object({
   date: yup
     .string()
     .required()
-    .matches(new RegExp(/^[0-9]{2}[/\-\\.]+[\d]{2}[/\-\\.][\d]{4}$/g), {
+    .matches(new RegExp(/^[0-9]{2}[/]+[\d]{2}[/][\d]{4}$/g), {
       message: 'The date field should match the following pattern: dd/MM/yyyy',
     }),
   image: yup.string().required().url().max(200),

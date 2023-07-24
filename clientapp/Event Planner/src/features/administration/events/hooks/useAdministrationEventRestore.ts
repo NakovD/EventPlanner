@@ -1,6 +1,6 @@
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
+import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 
 interface IUseAdministrationEventRestoreOptions {
@@ -10,7 +10,7 @@ interface IUseAdministrationEventRestoreOptions {
 export const useAdministrationEventRestore = ({
   eventId,
 }: IUseAdministrationEventRestoreOptions) => {
-  const { mutate } = useAppMutation({
+  const { mutate } = useBlockingMutation({
     endpoint: replacePlaceholderWithId(endpoints.events.restore, eventId),
     queryKey: [getRequestsOptions.GetAllEventsForAdmins.queryKey],
   });

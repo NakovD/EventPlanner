@@ -6,7 +6,7 @@ import { IRegisterForm } from 'features/authentication/signUp/models/registerFor
 import { IRegisterRequest } from 'features/authentication/signUp/models/registerRequest';
 import { signUpValidationSchema } from 'features/authentication/signUp/validators/signupFormValidator';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
-import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
+import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { propertyOf } from 'infrastructure/utilities/propertyOf';
 import { useEffect } from 'react';
@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const useRegister = () => {
   const { isAuthenticated, setIsAuthenticated } = useAppContext();
-  const { mutate, isError, error, isSuccess, data } = useAppMutation<
+  const { mutate, isError, error, isSuccess, data } = useBlockingMutation<
     IRegisterRequest,
     IAuthResponse,
     IRegisterErrorResponse[]

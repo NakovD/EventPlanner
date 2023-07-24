@@ -8,7 +8,7 @@ import { useSnackBar } from 'features/common/snackbar/hooks/useSnackBar';
 import { SnackBar } from 'features/common/snackbar/Snackbar';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
+import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { constants } from 'infrastructure/constants';
 import { propertyOf } from 'infrastructure/utilities/propertyOf';
 import { useEffect } from 'react';
@@ -25,7 +25,7 @@ export const ExternalAttendeeForm = ({ eventId }: IExternalAttendeeFormProps) =>
     resolver: yupResolver(externalAttendeeFormValidationSchema),
   });
 
-  const { mutate, isSuccess, isError } = useAppMutation<IExternalAttendeeRequest>({
+  const { mutate, isSuccess, isError } = useBlockingMutation<IExternalAttendeeRequest>({
     endpoint: endpoints.attendees.createNew,
     queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, eventId],
   });

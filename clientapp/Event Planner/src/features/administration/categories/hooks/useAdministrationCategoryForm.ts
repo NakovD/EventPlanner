@@ -3,7 +3,7 @@ import { ICategoryRequest } from 'features/administration/categories/models/cate
 import { ICategory } from 'features/events/form/models/category';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
+import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useForm } from 'react-hook-form';
 
@@ -26,7 +26,7 @@ export const useAdministrationCategoryForm = ({
     ? replacePlaceholderWithId(endpoints.categories.update, category?.id)
     : endpoints.categories.add;
 
-  const { mutate } = useAppMutation<ICategoryRequest>({
+  const { mutate } = useBlockingMutation<ICategoryRequest>({
     endpoint,
     queryKey: [getRequestsOptions.GetAllCategories.queryKey],
   });

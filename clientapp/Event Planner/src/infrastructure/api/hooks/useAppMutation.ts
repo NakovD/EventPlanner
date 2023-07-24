@@ -1,16 +1,7 @@
-import {
-  QueryKey,
-  useMutation,
-  UseMutationOptions,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { API } from 'infrastructure/api';
-
-interface IUseAppMutationOptions {
-  endpoint: string;
-  queryKey?: QueryKey;
-}
+import { IUseAppMutationOptions } from 'infrastructure/api/models/mutationOptions';
 
 export const useAppMutation = <TRequest, TResponse = void, TError = void>(
   options: IUseAppMutationOptions &
@@ -27,6 +18,7 @@ export const useAppMutation = <TRequest, TResponse = void, TError = void>(
       options?.onSuccess?.(data, request, context);
       options.queryKey && queryClient.invalidateQueries(options.queryKey);
     },
+    ...options,
   });
 
   return mutation;

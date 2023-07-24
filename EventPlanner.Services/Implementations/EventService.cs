@@ -65,6 +65,7 @@
         public async Task<IEnumerable<EventDto>> GetAllAsync() =>
                 await dbContext.Events
                 .AsNoTracking()
+                .Where(e => !e.IsDeleted)
                 .Include(e => e.Category)
                 .ProjectTo<EventDto>(mapper.ConfigurationProvider)
                 .ToListAsync();

@@ -5,7 +5,7 @@ import { useSnackBar } from 'features/common/snackbar/hooks/useSnackBar';
 import { SnackBar } from 'features/common/snackbar/Snackbar';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
+import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { useInvalidateQueries } from 'infrastructure/api/hooks/useInvalidateQueries';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useEffect } from 'react';
@@ -23,7 +23,7 @@ export const EventAttendeeExternalControls = ({
 
   const invalidate = useInvalidateQueries();
 
-  const { mutate, isSuccess, isError } = useAppMutation<IAttendeeStatusRequest>({
+  const { mutate, isSuccess, isError } = useBlockingMutation<IAttendeeStatusRequest>({
     endpoint: replacePlaceholderWithId(
       endpoints.attendees.updateExternalStatus,
       encryptedData,

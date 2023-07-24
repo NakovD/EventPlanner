@@ -1,7 +1,7 @@
 import { ICategory } from 'features/events/form/models/category';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
+import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useState } from 'react';
 
@@ -18,7 +18,7 @@ export const useAdministrationCategory = ({
 
   const editModeOn = () => setIsEditMode(true);
 
-  const { mutate: deleteCategory } = useAppMutation({
+  const { mutate: deleteCategory } = useBlockingMutation({
     endpoint: replacePlaceholderWithId(endpoints.categories.delete, category.id),
     queryKey: [getRequestsOptions.GetAllCategories.queryKey],
   });

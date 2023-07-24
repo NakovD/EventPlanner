@@ -32,6 +32,7 @@ export const EventForm = ({ title, eventId, formData }: IEventFormProps) => {
           info="Some brief explanation(250 chars) about your event."
         />
         <ESelect
+          label="Category"
           control={control}
           options={categories}
           name={propertyOf<IEventForm>('category')}

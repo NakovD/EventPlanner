@@ -4,7 +4,7 @@ import { notificationTypeTextMapper } from 'features/notifications/data/notifica
 import { INotification } from 'features/notifications/models/notification';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
+import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { useInvalidateQueries } from 'infrastructure/api/hooks/useInvalidateQueries';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
@@ -17,7 +17,7 @@ interface INotificationProps {
 export const Notification = ({ notification }: INotificationProps) => {
   const invalidate = useInvalidateQueries();
 
-  const { mutate: markSingleAsReaded } = useAppMutation({
+  const { mutate: markSingleAsReaded } = useBlockingMutation({
     endpoint: replacePlaceholderWithId(
       endpoints.notifications.markSingleAsReaded,
       notification.id,
@@ -27,7 +27,7 @@ export const Notification = ({ notification }: INotificationProps) => {
       invalidate([getRequestsOptions.GetUnreadNotificationsCount.queryKey]),
   });
 
-  const { mutate: deleteNotification } = useAppMutation({
+  const { mutate: deleteNotification } = useBlockingMutation({
     endpoint: replacePlaceholderWithId(endpoints.notifications.delete, notification.id),
     queryKey: [getRequestsOptions.GetAllNotifications.queryKey],
     onSuccess: () =>

@@ -1,5 +1,7 @@
 import { IAuthResponse } from 'features/authentication/models/authResponse';
 import { IUser } from 'features/authentication/models/user';
+import { useBlocker } from 'features/common/blocker/hooks/useBlocker';
+import { IBlocker } from 'features/common/blocker/models/blocker';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 import { constants } from 'infrastructure/constants';
@@ -17,6 +19,7 @@ type AppContext = {
   isAuthenticated: boolean;
   user: IUser | undefined;
   setIsAuthenticated: (token?: string, user?: IUser) => void;
+  blocker: IBlocker;
 };
 
 const AppContextValue = createContext<AppContext | null>(null);
@@ -65,11 +68,14 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
     setUser(user);
   }, []);
 
+  const blocker = useBlocker();
+
   const context: AppContext = {
     isReady,
     user,
     isAuthenticated,
     setIsAuthenticated: authCallback,
+    blocker,
   };
 
   return <AppContextValue.Provider value={context}>{children}</AppContextValue.Provider>;

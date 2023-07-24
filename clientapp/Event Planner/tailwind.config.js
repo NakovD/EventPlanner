@@ -15,6 +15,7 @@ module.exports = {
       'accent-dark': '#832a80',
       'light-blue': '#5887FF',
       'shadow-color': 'black',
+      'blocker-color': 'rgba(0, 0, 0, 0.3)',
       transparent: 'transparent',
     },
     extend: {},

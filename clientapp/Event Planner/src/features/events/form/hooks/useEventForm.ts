@@ -5,7 +5,7 @@ import { IEventForm } from 'features/events/form/models/eventForm';
 import { IEventRequest } from 'features/events/form/models/eventRequest';
 import { eventValidationSchema } from 'features/events/form/validators/eventValidationSchema';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
-import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
+import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useEffect } from 'react';
@@ -39,7 +39,7 @@ export const useEventForm = (formData?: IEventForm, eventId?: string) => {
       ? replacePlaceholderWithId(endpoints.events.edit, eventId)
       : endpoints.events.create;
 
-  const { mutate, isSuccess } = useAppMutation<IEventRequest>({
+  const { mutate, isSuccess } = useBlockingMutation<IEventRequest>({
     endpoint: endpoint,
   });
 

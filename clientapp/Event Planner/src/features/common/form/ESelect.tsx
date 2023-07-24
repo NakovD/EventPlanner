@@ -15,6 +15,7 @@ interface ISelectProps<TFormValues extends FieldValues, TOption extends number |
   control: Control<TFormValues>;
   options: IOption<TOption>[];
   disabled?: boolean;
+  label: string;
 }
 
 export const ESelect = <
@@ -25,6 +26,7 @@ export const ESelect = <
   control,
   disabled = false,
   options,
+  label,
 }: ISelectProps<TFormValues, TOption>) => {
   const { field, fieldState } = useController({ control, name });
 
@@ -42,7 +44,7 @@ export const ESelect = <
         }
         value={field.value}
         onBlur={field.onBlur}
-        renderInput={(params) => <TextField {...params} label="Movie" />}
+        renderInput={(params) => <TextField {...params} label={label} />}
       />
       {fieldState.error && (
         <p className="text-accent-light">{fieldState.error?.message}</p>
