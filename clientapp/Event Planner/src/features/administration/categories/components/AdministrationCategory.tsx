@@ -2,28 +2,16 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { AdministrationCategoryForm } from 'features/administration/categories/components/AdministrationCategoryForm';
+import { useAdministrationCategory } from 'features/administration/categories/hooks/useAdministrationCategory';
 import { ICategory } from 'features/events/form/models/category';
-import { endpoints } from 'infrastructure/api/endpoints/endpoints';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useAppMutation } from 'infrastructure/api/hooks/useAppMutation';
-import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
-import { useState } from 'react';
 
 interface IAdministrationCategoryProps {
   category: ICategory;
 }
 
 export const AdministrationCategory = ({ category }: IAdministrationCategoryProps) => {
-  const [isEditMode, setIsEditMode] = useState(false);
-
-  const editModeOff = () => setIsEditMode(false);
-
-  const editModeOn = () => setIsEditMode(true);
-
-  const { mutate: deleteCategory } = useAppMutation({
-    endpoint: replacePlaceholderWithId(endpoints.categories.delete, category.id),
-    queryKey: [getRequestsOptions.GetAllCategories.queryKey],
-  });
+  const { isEditMode, editModeOff, editModeOn, deleteCategory } =
+    useAdministrationCategory({ category });
 
   return (
     <div className="p-4 cursor-pointer w-2/4 flex justify-between mb-3 border-4 border-primary-light">
@@ -45,7 +33,7 @@ export const AdministrationCategory = ({ category }: IAdministrationCategoryProp
           <button className="ml-auto mr-4" onClick={editModeOn}>
             <ModeEditIcon />
           </button>
-          <button onClick={() => deleteCategory({})}>
+          <button onClick={deleteCategory}>
             <DeleteIcon />
           </button>
         </>

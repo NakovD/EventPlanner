@@ -5,7 +5,6 @@
     using Microsoft.AspNetCore.Mvc;
     using EventPlanner.Services.Models.Category;
     using Microsoft.AspNetCore.Authorization;
-    using System.Data;
 
     [Route("api/[controller]")]
     [ApiController]
