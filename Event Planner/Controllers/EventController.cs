@@ -30,6 +30,10 @@
         [HttpGet("All")]
         public async Task<IActionResult> All() => Ok(await eventService.GetAllAsync());
 
+        [HttpGet("All-Administration")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AllAdmin() => Ok(await eventService.GetAllAdministrationAsync());
+
         [HttpGet("User")]
         public async Task<IActionResult> AllUserEvents()
         {
@@ -100,6 +104,32 @@
             if (neededEvent.OrganizerId == dto.AttendeeId.ToString()) return BadRequest();
 
             return Ok(neededEvent);
+        }
+
+        [HttpPost("Delete/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> MarkAsDeleted([FromRoute]int id)
+        {
+            if (id <= 0) return BadRequest();
+
+            var actionSuccess = await eventService.MarkAsDeletedAsync(id);
+
+            if (!actionSuccess) return BadRequest();
+
+            return Ok();
+        }
+
+        [HttpPost("Restore/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UnmarkAsDeleted([FromRoute] int id)
+        {
+            if (id <= 0) return BadRequest();
+
+            var actionSuccess = await eventService.UnmarkAsDeletedAsync(id);
+
+            if (!actionSuccess) return BadRequest();
+
+            return Ok();
         }
     }
 }

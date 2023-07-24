@@ -1,5 +1,6 @@
 import { Administration } from 'features/administration/Administration';
 import { AdministrationCategories } from 'features/administration/categories/AdministrationCategories';
+import { AdministrationEvents } from 'features/administration/events/AdministrationEvents';
 import { ManageAttendees } from 'features/attendees/manage/ManageAttendees';
 import { LogIn } from 'features/authentication/logIn/LogIn';
 import { SignUp } from 'features/authentication/signUp/SignUp';
@@ -63,6 +64,14 @@ export const router = createBrowserRouter([
         element: (
           <AuthorizeOutlet>
             <AdministrationCategories />
+          </AuthorizeOutlet>
+        ),
+      },
+      {
+        path: routePaths.administrationEvents.path,
+        element: (
+          <AuthorizeOutlet>
+            <AdministrationEvents />
           </AuthorizeOutlet>
         ),
       },

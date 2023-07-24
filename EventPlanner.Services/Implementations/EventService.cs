@@ -50,6 +50,18 @@
             return true;
         }
 
+        public async Task<IEnumerable<EventAdministrationDto>> GetAllAdministrationAsync()
+        {
+            var allEvents = await dbContext.Events
+                .AsNoTracking()
+                .Include(e => e.Organizer)
+                .Include(e => e.Category)
+                .ProjectTo<EventAdministrationDto>(mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            return allEvents;
+        }
+
         public async Task<IEnumerable<EventDto>> GetAllAsync() =>
                 await dbContext.Events
                 .AsNoTracking()
@@ -90,6 +102,46 @@
                 .ToListAsync();
 
             return userEvents;
+        }
+
+        public async Task<bool> MarkAsDeletedAsync(int eventId)
+        {
+            var neededEvent = await dbContext.Events.FindAsync(eventId);
+
+            if (neededEvent == null) return false;
+
+            neededEvent.IsDeleted = true;
+
+            try
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<bool> UnmarkAsDeletedAsync(int eventId)
+        {
+            var neededEvent = await dbContext.Events.FindAsync(eventId);
+
+            if (neededEvent == null) return false;
+
+            neededEvent.IsDeleted = false;
+
+            try
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public async Task<bool> UpdateEventAsync(EventFormDto eventDto, int eventId)

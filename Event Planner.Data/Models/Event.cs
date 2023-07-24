@@ -1,10 +1,11 @@
 ﻿namespace EventPlanner.Data.Models
 {
+    using EventPlanner.Data.Interfaces;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class Event
+    public class Event : IDeletable
     {
 
         [Key]
@@ -42,5 +43,8 @@
         public string Image { get; set; } = null!;
 
         public ICollection<Attendee> Attendees { get; set; } = new List<Attendee>();
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }

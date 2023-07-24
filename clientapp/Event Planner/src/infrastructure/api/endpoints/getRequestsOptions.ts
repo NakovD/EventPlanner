@@ -12,6 +12,7 @@ export enum GetRequestType {
   getExternalAttendeeStatus = 'GetExternalAttendeeStatus',
   getUnreadNotificationsCount = 'GetUnreadNotificationsCount',
   getAllNotifications = 'GetAllNotifications',
+  getAllEventsForAdmins = 'GetAllEventsForAdmins',
 }
 
 export const getRequestsOptions: { [keyof in GetRequestType]: IGetRequestOptions } = {
@@ -54,5 +55,9 @@ export const getRequestsOptions: { [keyof in GetRequestType]: IGetRequestOptions
   [GetRequestType.getAllNotifications]: {
     endpoint: endpoints.notifications.getAll,
     queryKey: 'all-notifications',
+  },
+  [GetRequestType.getAllEventsForAdmins]: {
+    endpoint: endpoints.events.getAllAdmin,
+    queryKey: 'all-events-admin',
   },
 };

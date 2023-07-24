@@ -18,6 +18,12 @@
 
             CreateMap<EventFormDto, Event>()
                 .ForMember(x => x.Date, y => y.MapFrom(x => DateTime.ParseExact(x.Date, DateFormat, CultureInfo.InvariantCulture)));
+
+            CreateMap<Event, EventAdministrationDto>()
+                .ForMember(x => x.Date, y => y.MapFrom(x => x.Date.ToString(DateFormat, CultureInfo.InvariantCulture)))
+                .ForMember(x => x.Attendees, y => y.MapFrom(x => x.Attendees.Count))
+                .ForMember(x => x.Category, y => y.MapFrom(x => x.Category.Name))
+                .ForMember(x => x.OrganizerName, y => y.MapFrom(x => x.Organizer.UserName));
         }
     }
 }

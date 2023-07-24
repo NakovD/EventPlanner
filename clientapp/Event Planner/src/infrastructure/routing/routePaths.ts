@@ -48,4 +48,8 @@ export const routePaths = {
     path: '/administration/categories',
     name: 'Categories',
   },
+  administrationEvents: {
+    path: '/administration/events',
+    name: 'Events',
+  },
 };

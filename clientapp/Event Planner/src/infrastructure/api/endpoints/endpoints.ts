@@ -6,6 +6,9 @@ export const endpoints = {
     edit: '/Event/Edit/:id',
     getAllUserEvents: '/Event/User',
     attendeeOnly: '/Event/AttendeeOnly/:id',
+    getAllAdmin: '/Event/All-Administration',
+    delete: '/Event/Delete/:id',
+    restore: '/Event/Restore/:id',
   },
   user: {
     login: '/User/login',
