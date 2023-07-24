@@ -2,13 +2,12 @@
 {
     using Data.Models;
     using Services.Contracts;
-    using Services.Models;
+    using Services.Models.Auth;
+    using static Common.RoleNamesConstants;
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using EventPlanner.Services.Models.Auth;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.EntityFrameworkCore;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -16,15 +15,15 @@
     {
         private readonly UserManager<User> userManager;
 
-        private readonly RoleManager<IdentityRole> roleManager;
-
         private readonly IAuthService authService;
 
-        public UserController(UserManager<User> userManager, IAuthService authService, RoleManager<IdentityRole> roleManager)
+        private readonly IUserService userService;
+
+        public UserController(UserManager<User> userManager, IAuthService authService, IUserService userService)
         {
             this.userManager = userManager;
             this.authService = authService;
-            this.roleManager = roleManager;
+            this.userService = userService;
         }
 
         [HttpPost("Register")]
@@ -95,14 +94,23 @@
         }
 
         [HttpGet("All")]
+        [Authorize(Roles = Admin)]
         public async Task<IActionResult> GetAllUsers()
         {
-            var allUsers = await userManager.Users
-                .AsNoTracking()
-                .Select(u => new { Username = u.UserName, u.Email, u.Id })
-                .ToListAsync();
+            var allUsers = await userService.GetAllUsersAsync();
 
             return Ok(allUsers);
+        }
+
+        [HttpPost("Delete/{id}")]
+        [Authorize(Roles = Admin)]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var actionSuccess = await userService.DeleteUserAsync(id);
+
+            if (!actionSuccess) return BadRequest();
+
+            return Ok();
         }
     }
 }

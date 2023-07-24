@@ -1,11 +1,12 @@
-﻿namespace EventPlanner.Controllers
+﻿using EventPlanner.Common;
+
+namespace EventPlanner.Controllers
 {
-    using Data.Models;
     using Services.Models.Event;
     using Services.Contracts;
     using static WebConstants;
+    using static Common.RoleNamesConstants;
 
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.DataProtection;
     using Microsoft.AspNetCore.Authorization;
@@ -31,7 +32,7 @@
         public async Task<IActionResult> All() => Ok(await eventService.GetAllAsync());
 
         [HttpGet("All-Administration")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Admin)]
         public async Task<IActionResult> AllAdmin() => Ok(await eventService.GetAllAdministrationAsync());
 
         [HttpGet("User")]
@@ -107,7 +108,7 @@
         }
 
         [HttpPost("Delete/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Admin)]
         public async Task<IActionResult> MarkAsDeleted([FromRoute]int id)
         {
             if (id <= 0) return BadRequest();
@@ -120,7 +121,7 @@
         }
 
         [HttpPost("Restore/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = Admin)]
         public async Task<IActionResult> UnmarkAsDeleted([FromRoute] int id)
         {
             if (id <= 0) return BadRequest();

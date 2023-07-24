@@ -1,4 +1,6 @@
-﻿namespace EventPlanner.Controllers
+﻿using EventPlanner.Common;
+
+namespace EventPlanner.Controllers
 {
     using Services.Contracts;
     using Services.Models.Attendee;

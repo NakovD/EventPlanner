@@ -52,4 +52,8 @@ export const routePaths = {
     path: '/administration/events',
     name: 'Events',
   },
+  administrationUsers: {
+    path: '/administration/users',
+    name: 'Users',
+  },
 };

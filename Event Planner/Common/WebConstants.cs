@@ -1,4 +1,4 @@
-﻿namespace EventPlanner
+﻿namespace EventPlanner.Common
 {
     public static class WebConstants
     {

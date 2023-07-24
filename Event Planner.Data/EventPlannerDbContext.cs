@@ -21,6 +21,10 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<User>()
+                .Property(u => u.RegistrationDate)
+                .HasDefaultValueSql("getdate()");
+
             base.OnModelCreating(builder);
         }
     }

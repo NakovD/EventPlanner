@@ -8,6 +8,7 @@ namespace EventPlanner
     using EmailSender;
     using EmailSender.Contracts;
     using EmailService = Services.Implementations.EmailService;
+    using Common;
 
     using System.Text;
 
@@ -140,6 +141,8 @@ namespace EventPlanner
                 configAction.AddProfile<CategoryProfile>();
 
                 configAction.AddProfile<NotificationProfile>();
+
+                configAction.AddProfile<UserProfile>();
             });
 
             services.AddDataProtection();
@@ -160,6 +163,7 @@ namespace EventPlanner
 
             services.AddScoped<INotificationService, NotificationService>();
 
+            services.AddScoped<IUserService, UserService>();
         }
 
         private static void ConfigureDbContext(IServiceCollection services, string? connectionString)

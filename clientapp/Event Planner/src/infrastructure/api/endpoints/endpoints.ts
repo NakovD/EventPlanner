@@ -15,6 +15,7 @@ export const endpoints = {
     register: '/User/register',
     authenticate: '/User/authenticate/:id',
     getAll: '/User/All',
+    delete: '/User/Delete/:id',
   },
   attendees: {
     allByEvent: '/Attendee/AllByEvent/:id',
