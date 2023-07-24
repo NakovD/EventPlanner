@@ -14,6 +14,8 @@
 
         public string OrganizerName { get; set; } = null!;
 
+        public string Description { get; set; } = null!;
+
         public int Attendees { get; set; }
 
         public bool IsDeleted { get; set; }

@@ -12,6 +12,12 @@ export const Administration = () => {
       >
         {routePaths.administrationCategories.name}
       </Link>
+      <Link
+        className="text-lg text-light-blue font-semibold"
+        to={routePaths.administrationEvents.path}
+      >
+        {routePaths.administrationEvents.name}
+      </Link>
     </>
   );
 };

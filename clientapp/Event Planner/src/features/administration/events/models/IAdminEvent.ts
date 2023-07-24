@@ -5,6 +5,7 @@ export interface IAdminEvent {
   time: string;
   category: string;
   organizerName: string;
+  description: string;
   attendees: number;
   isDeleted: boolean;
 }

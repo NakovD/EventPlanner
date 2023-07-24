@@ -17,8 +17,9 @@ export const AdministrationEvents = () => {
       {isLoading && <p>Loading, please wait</p>}
       {hasEvents && (
         <div className="flex gap-6 mb-5">
-          <p className="truncate font-bold w-44">Title</p>
-          <p className="truncate font-bold w-44">Category</p>
+          <p className="truncate font-bold w-40">Title</p>
+          <p className="truncate font-bold w-40">Category</p>
+          <p className="truncate font-bold w-26">Description</p>
           <p className="truncate font-bold w-24">Date</p>
           <p className="truncate font-bold w-12">Time</p>
           <p className="truncate font-bold w-44">Organizer</p>
