@@ -13,6 +13,8 @@
             CreateMap<User, UserAdminDto>()
                 .ForMember(x => x.RegistrationDate, y => y.MapFrom(x => x.RegistrationDate.ToString(DateFormats.DateTimeFormat)))
                 .ForMember(x => x.EventsCount, y => y.MapFrom(x => x.Events.Count));
+
+            CreateMap<User, UserDto>();
         }
     }
 }

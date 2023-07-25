@@ -1,6 +1,7 @@
 ﻿namespace EventPlanner.Data.Models
 {
-    using EventPlanner.Data.Interfaces;
+    using Interfaces;
+
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -24,6 +25,7 @@
         public string Time { get; set; } = null!;
 
         [Required]
+        [ForeignKey(nameof(Organizer))]
         public string OrganizerId { get; set; } = null!;
 
         [Required]
@@ -43,6 +45,8 @@
         public string Image { get; set; } = null!;
 
         public ICollection<Attendee> Attendees { get; set; } = new List<Attendee>();
+
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         [Required]
         public bool IsDeleted { get; set; }

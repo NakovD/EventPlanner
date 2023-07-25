@@ -8,6 +8,7 @@ export const checkAuthorizationURL = (url: string) => {
     endpoints.attendees.updateExternalStatus,
     endpoints.attendees.status,
     endpoints.attendees.allByEvent,
+    endpoints.comments.getAll,
   ];
 
   const isRouteWithoutAuth = routesWithoutAuth.some((r) => {

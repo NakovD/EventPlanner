@@ -34,6 +34,11 @@
             return true;
         }
 
+        public async Task<IEnumerable<UserDto>> GetAllAttendeeUsersAsync() => await userManager.Users
+            .AsNoTracking()
+            .ProjectTo<UserDto>(mapper.ConfigurationProvider)
+            .ToListAsync();
+
         public async Task<IEnumerable<UserAdminDto>> GetAllUsersAsync() => await userManager.Users
                 .AsNoTracking()
                 .Include(u => u.Events)

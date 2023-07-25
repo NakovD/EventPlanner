@@ -46,6 +46,8 @@ namespace EventPlanner
 
             ConfigureServices(builder.Services);
 
+            ConfigureAutoMapper(builder.Services);
+
             #endregion
 
             #region Identity Setup
@@ -132,19 +134,6 @@ namespace EventPlanner
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(configAction =>
-            {
-                configAction.AddProfile<EventProfile>();
-
-                configAction.AddProfile<AttendeeProfile>();
-
-                configAction.AddProfile<CategoryProfile>();
-
-                configAction.AddProfile<NotificationProfile>();
-
-                configAction.AddProfile<UserProfile>();
-            });
-
             services.AddDataProtection();
 
             services.AddScoped<IEventService, EventService>();
@@ -164,6 +153,26 @@ namespace EventPlanner
             services.AddScoped<INotificationService, NotificationService>();
 
             services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<ICommentService, CommentService>();
+        }
+
+        private static void ConfigureAutoMapper(IServiceCollection services)
+        {
+            services.AddAutoMapper(configAction =>
+            {
+                configAction.AddProfile<EventProfile>();
+
+                configAction.AddProfile<AttendeeProfile>();
+
+                configAction.AddProfile<CategoryProfile>();
+
+                configAction.AddProfile<NotificationProfile>();
+
+                configAction.AddProfile<UserProfile>();
+
+                configAction.AddProfile<CommentProfile>();
+            });
         }
 
         private static void ConfigureDbContext(IServiceCollection services, string? connectionString)

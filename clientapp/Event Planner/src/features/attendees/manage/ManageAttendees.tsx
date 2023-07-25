@@ -22,8 +22,8 @@ export const ManageAttendees = () => {
   });
 
   const { data: internalUsers } = useReadQuery<IAttendeeUser[]>({
-    endpoint: getRequestsOptions.GetAllUsers.endpoint,
-    queryKey: [getRequestsOptions.GetAllUsers.queryKey],
+    endpoint: getRequestsOptions.GetAllAttendeeUsers.endpoint,
+    queryKey: [getRequestsOptions.GetAllAttendeeUsers.queryKey],
   });
 
   const { user } = useAppContext();

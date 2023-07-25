@@ -21,8 +21,10 @@
         [Required]
         public string Description { get; set; } = null!;
 
-        [Required]
-        public int EventId { get; set; }
+        [ForeignKey(nameof(Event))]
+        public int? EventId { get; set; }
+
+        public Event? Event { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }

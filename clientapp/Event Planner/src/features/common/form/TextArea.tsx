@@ -25,6 +25,7 @@ export const TextArea = <TFormValues extends FieldValues>({
   return (
     <MUITextFIeld
       multiline
+      className="w-full"
       autoComplete="off"
       error={!!fieldState.error}
       helperText={helperText}

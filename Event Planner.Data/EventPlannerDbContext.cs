@@ -15,6 +15,8 @@
 
         public DbSet<Notification> Notifications { get; set; } = null!;
 
+        public DbSet<Comment> Comments { get; set; } = null!;
+
         public EventPlannerDbContext(DbContextOptions<EventPlannerDbContext> options) : base(options)
         {
         }
@@ -24,6 +26,11 @@
             builder.Entity<User>()
                 .Property(u => u.RegistrationDate)
                 .HasDefaultValueSql("getdate()");
+
+            builder.Entity<Event>()
+                .HasMany(e => e.Comments)
+                .WithOne(c => c.Event)
+                .OnDelete(DeleteBehavior.NoAction);
 
             base.OnModelCreating(builder);
         }

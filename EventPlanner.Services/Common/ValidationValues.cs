@@ -12,5 +12,12 @@
 
             public const int ImageLinkMaxLength = 200;
         }
+
+        public static class CommentValidationsValues
+        {
+            public const int CommentMinLength = 3;
+
+            public const int CommentMaxLength = 250;
+        }
     }
 }

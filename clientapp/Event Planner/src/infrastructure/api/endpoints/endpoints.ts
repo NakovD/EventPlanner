@@ -15,6 +15,7 @@ export const endpoints = {
     register: '/User/register',
     authenticate: '/User/authenticate/:id',
     getAll: '/User/All',
+    getAllAttendee: '/User/Attendee-Users',
     delete: '/User/Delete/:id',
   },
   attendees: {
@@ -36,5 +37,9 @@ export const endpoints = {
     markSingleAsReaded: '/Notification/MarkSingleAsRead/:id',
     delete: 'Notification/DeleteNotification/:id',
   },
-  administration: {},
+  comments: {
+    getAll: '/Comment/All/:id',
+    create: '/Comment/Create',
+    edit: '/Comment/Edit/:id',
+  },
 };

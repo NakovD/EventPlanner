@@ -4,7 +4,9 @@
 
     public interface IUserService
     {
-        public Task<IEnumerable<UserAdminDto>> GetAllUsersAsync();
+        Task<IEnumerable<UserDto>> GetAllAttendeeUsersAsync();
+
+        Task<IEnumerable<UserAdminDto>> GetAllUsersAsync();
 
         Task<bool> DeleteUserAsync(string userId);
     }

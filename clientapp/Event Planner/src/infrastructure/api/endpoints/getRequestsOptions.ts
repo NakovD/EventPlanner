@@ -7,12 +7,14 @@ export enum GetRequestType {
   getAllUserEvents = 'GetAllUserEvents',
   getAllEventAttendees = 'GetAllEventAttendees',
   getAllUsers = 'GetAllUsers',
+  getAllAttendeeUsers = 'GetAllAttendeeUsers',
   getEventForAttendeeOnly = 'GetEventForAttendeeOnly',
   getAllCategories = 'GetAllCategories',
   getExternalAttendeeStatus = 'GetExternalAttendeeStatus',
   getUnreadNotificationsCount = 'GetUnreadNotificationsCount',
   getAllNotifications = 'GetAllNotifications',
   getAllEventsForAdmins = 'GetAllEventsForAdmins',
+  getAllComments = 'GetAllComments',
 }
 
 export const getRequestsOptions: { [keyof in GetRequestType]: IGetRequestOptions } = {
@@ -59,5 +61,13 @@ export const getRequestsOptions: { [keyof in GetRequestType]: IGetRequestOptions
   [GetRequestType.getAllEventsForAdmins]: {
     endpoint: endpoints.events.getAllAdmin,
     queryKey: 'all-events-admin',
+  },
+  [GetRequestType.getAllComments]: {
+    endpoint: endpoints.comments.getAll,
+    queryKey: 'all-comments',
+  },
+  [GetRequestType.getAllAttendeeUsers]: {
+    endpoint: endpoints.user.getAllAttendee,
+    queryKey: 'attendee-users',
   },
 };

@@ -93,6 +93,9 @@
             return Ok(authResponse);
         }
 
+        [HttpGet("Attendee-Users")]
+        public async Task<IActionResult> GetAllAttendeeUsers() => Ok(await userService.GetAllAttendeeUsersAsync());
+
         [HttpGet("All")]
         [Authorize(Roles = Admin)]
         public async Task<IActionResult> GetAllUsers()

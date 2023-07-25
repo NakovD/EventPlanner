@@ -2,6 +2,7 @@ import { useAppContext } from 'AppContext';
 import { EventAttendeesList } from 'features/attendees/components/EventAttendeesList';
 import { IAttendee } from 'features/attendees/models/attendee';
 import { Button } from 'features/common/button/Button';
+import { EventComments } from 'features/events/common/comment/EventComments';
 import { EventAttendeeControls } from 'features/events/common/EventAttendeeControls';
 import { EventAttendeeExternalControls } from 'features/events/common/EventAttendeeExternalControls';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
@@ -9,7 +10,6 @@ import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOpti
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
-import { useState } from 'react';
 
 interface IEventProfileProps {
   canEdit: boolean;
@@ -22,8 +22,6 @@ export const EventProfile = ({
   shouldShowExternalAttendeeControls = false,
   event,
 }: IEventProfileProps) => {
-  const [show2, setShow2] = useState(false);
-
   const { user } = useAppContext();
 
   const { data: attendees } = useReadQuery<IAttendee[]>({
@@ -81,7 +79,7 @@ export const EventProfile = ({
       </div>
       <div className="xl:w-2/5 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
         <div className="border-b border-gray-200 pb-6">
-          <p className="text-sm leading-none text-gray-600">{event?.location}</p>
+          <p className="text-sm leading-none text-gray-600">{event?.date}</p>
           <h1
             className="
                 lg:text-2xl
@@ -103,14 +101,15 @@ export const EventProfile = ({
           </div>
         </div>
         <div className="py-4 border-b border-gray-200 flex items-center justify-between">
-          <p className="text-base leading-4 text-gray-800">Day</p>
+          <p className="text-base leading-4 text-gray-800">Time</p>
           <div className="flex items-center justify-center">
             <p className="text-sm leading-none text-gray-600 mr-3">{event?.time}</p>
           </div>
         </div>
+
         {canEdit && (
           <Button
-            className="mx-3"
+            className="m-3"
             to={replacePlaceholderWithId(routePaths.eventEdit.path, event?.id)}
             label="Edit this event"
           />
@@ -142,50 +141,7 @@ export const EventProfile = ({
           canEdit={canEdit}
           eventId={event?.id ?? 0}
         />
-        <div>
-          <div className="border-b py-4 border-gray-200">
-            <div
-              onClick={() => setShow2(!show2)}
-              className="flex justify-between items-center cursor-pointer"
-            >
-              <p className="text-base leading-4 text-gray-800">Discussion</p>
-              <button
-                className="
-                    cursor-pointer
-                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400
-                    rounded
-                  "
-                aria-label="show or hide"
-              >
-                <svg
-                  className={'transform ' + (show2 ? 'rotate-180' : 'rotate-0')}
-                  width="10"
-                  height="6"
-                  viewBox="0 0 10 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M9 1L5 5L1 1"
-                    stroke="#4B5563"
-                    strokeWidth="1.25"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-            </div>
-            <div
-              className={
-                'pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 ' +
-                (show2 ? 'block' : 'hidden')
-              }
-              id="sect"
-            >
-              the Discussion will be here
-            </div>
-          </div>
-        </div>
+        <EventComments eventId={event.id} />
       </div>
     </div>
   );
