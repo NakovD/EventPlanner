@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IOption } from 'features/common/form/models/option';
 import { useEventCategories } from 'features/events/form/hooks/useEventCategories';
+import { ICategory } from 'features/events/form/models/category';
 import { IEventForm } from 'features/events/form/models/eventForm';
 import { IEventRequest } from 'features/events/form/models/eventRequest';
 import { eventValidationSchema } from 'features/events/form/validators/eventValidationSchema';
@@ -15,8 +16,12 @@ import { useNavigate } from 'react-router-dom';
 export const useEventForm = (formData?: IEventForm, eventId?: string) => {
   const navigate = useNavigate();
 
-  const defaultValues: IEventForm = formData
-    ? formData
+  const categories = useEventCategories();
+
+  const eventFormData = formData ? mapCategoryToForm(formData, categories) : void 0;
+
+  const defaultValues: IEventForm = eventFormData
+    ? eventFormData
     : {
         title: '',
         description: '',
@@ -26,8 +31,6 @@ export const useEventForm = (formData?: IEventForm, eventId?: string) => {
         category: { label: '', value: 0 },
         date: '',
       };
-
-  const categories = useEventCategories();
 
   const { control, handleSubmit } = useForm<IEventForm>({
     defaultValues,
@@ -66,4 +69,17 @@ export const useEventForm = (formData?: IEventForm, eventId?: string) => {
     control,
     onSubmit,
   };
+};
+
+const mapCategoryToForm = (formData: IEventForm, categories: ICategory[]) => {
+  const currentCategory = categories.find(
+    (c) => c.name === formData.category.label,
+  ) as ICategory;
+
+  const newFormData: IEventForm = {
+    ...formData,
+    category: { label: currentCategory?.name, value: currentCategory?.id },
+  };
+
+  return newFormData;
 };

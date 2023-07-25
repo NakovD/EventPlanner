@@ -36,7 +36,10 @@ export const EventEdit = () => {
 const getEventFormData = (event: IAllEventsEntity | undefined, isLoading: boolean) => {
   if (isLoading || !event) return undefined;
 
-  const eventFormData: IEventForm = { ...event };
+  const eventFormData: IEventForm = {
+    ...event,
+    category: { label: event.category, value: 0 },
+  };
 
   return eventFormData;
 };

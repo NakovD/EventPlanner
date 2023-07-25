@@ -18,6 +18,12 @@ export const Administration = () => {
       >
         {routePaths.administrationEvents.name}
       </Link>
+      <Link
+        className="text-lg text-light-blue font-semibold"
+        to={routePaths.administrationUsers.path}
+      >
+        {routePaths.administrationUsers.name}
+      </Link>
     </>
   );
 };

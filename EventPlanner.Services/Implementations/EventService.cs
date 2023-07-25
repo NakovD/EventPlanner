@@ -98,7 +98,7 @@
 
             var userEvents = await dbContext.Events
                 .AsNoTracking()
-                .Where(e => e.OrganizerId == userId)
+                .Where(e => e.OrganizerId == userId && !e.IsDeleted)
                 .ProjectTo<EventDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
 
