@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppContext } from 'AppContext';
 import { ILoginForm } from 'features/authentication/logIn/models/loginForm';
 import { ILoginRequest } from 'features/authentication/logIn/models/loginRequest';
@@ -8,6 +9,12 @@ import { routePaths } from 'infrastructure/routing/routePaths';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
+
+const validationSchema = yup.object({
+  userName: yup.string().required(),
+  password: yup.string().required(),
+});
 
 export const useLogin = () => {
   const { isAuthenticated, setIsAuthenticated } = useAppContext();
@@ -23,6 +30,7 @@ export const useLogin = () => {
 
   const { control, handleSubmit } = useForm<ILoginForm>({
     defaultValues: { userName: '', password: '' },
+    resolver: yupResolver(validationSchema),
   });
 
   const onValid = (data: ILoginForm) => mutate(data);

@@ -1,10 +1,9 @@
 ﻿namespace EventPlanner.Services.Contracts
 {
-    using Models;
+    using Models.Auth;
     using Data.Models;
-    using EventPlanner.Services.Models.Auth;
 
-    public interface IAuthService
+    public interface IJwtService
     {
         AuthResponse CreateToken(User user, IEnumerable<string> roles);
 

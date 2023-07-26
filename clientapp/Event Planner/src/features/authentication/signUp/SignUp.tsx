@@ -1,3 +1,4 @@
+import { FacebookAuth } from 'features/authentication/facebook/FacebookAuth';
 import { useRegister } from 'features/authentication/signUp/hooks/useRegister';
 import { IRegisterForm } from 'features/authentication/signUp/models/registerForm';
 import { Button } from 'features/common/button/Button';
@@ -34,6 +35,7 @@ export const SignUp = () => {
           />
           <Button label="Register" isSubmit={true} />
         </form>
+        <FacebookAuth />
       </div>
     </div>
   );

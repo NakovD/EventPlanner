@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>EventPlanner</RootNamespace>
+    <UserSecretsId>ff7e2fd3-cfc6-4a9a-aff1-cd48d545c7a4</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

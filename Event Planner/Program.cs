@@ -62,6 +62,7 @@ namespace EventPlanner
 
             #endregion
 
+
             var app = builder.Build();
 
             #region Configure Cors
@@ -140,7 +141,7 @@ namespace EventPlanner
 
             services.AddScoped<IEmailSender, EmailSender.Implementations.EmailSender>();
 
-            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IJwtService, JwtService>();
 
             services.AddScoped<IAttendeeService, AttendeeService>();
 
@@ -154,7 +155,13 @@ namespace EventPlanner
 
             services.AddScoped<IUserService, UserService>();
 
+            services.AddScoped<IIdentityService, IdentityService>();
+
             services.AddScoped<ICommentService, CommentService>();
+
+            services.AddScoped<IFacebookAuthService, FacebookAuthService>();
+
+            services.AddHttpClient();
         }
 
         private static void ConfigureAutoMapper(IServiceCollection services)

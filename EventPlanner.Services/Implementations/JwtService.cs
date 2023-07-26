@@ -13,7 +13,7 @@
     using Microsoft.IdentityModel.Tokens;
     using System.Threading.Tasks;
 
-    public class AuthService : IAuthService
+    public class JwtService : IJwtService
     {
         private const int EXPIRATION_HOURS = 12;
 
@@ -23,7 +23,7 @@
 
         private readonly TokenValidationParameters validationParameters;
 
-        public AuthService(IConfiguration configuration)
+        public JwtService(IConfiguration configuration)
         {
             this.configuration = configuration;
             tokenHandler = new JwtSecurityTokenHandler();

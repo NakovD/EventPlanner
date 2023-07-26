@@ -1,4 +1,5 @@
 import { Typography } from '@mui/material';
+import { FacebookAuth } from 'features/authentication/facebook/FacebookAuth';
 import { useLogin } from 'features/authentication/logIn/hooks/useLogin';
 import { ILoginForm } from 'features/authentication/logIn/models/loginForm';
 import { Button } from 'features/common/button/Button';
@@ -36,6 +37,7 @@ export const LogIn = () => {
             </Link>
           </p>
           <Button label="Login" isSubmit={true} />
+          <FacebookAuth />
           {isError && error && <Typography color={'red'}>{error}</Typography>}
         </form>
       </div>

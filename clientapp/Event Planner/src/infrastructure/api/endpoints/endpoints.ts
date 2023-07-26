@@ -12,6 +12,7 @@ export const endpoints = {
   },
   user: {
     login: '/User/login',
+    loginWithFacebook: '/User/LoginWithFacebook',
     register: '/User/register',
     authenticate: '/User/authenticate/:id',
     getAll: '/User/All',

@@ -8,89 +8,84 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.IdentityModel.Tokens;
 
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BasicController
     {
         private readonly UserManager<User> userManager;
 
-        private readonly IAuthService authService;
+        private readonly IJwtService jwtService;
 
         private readonly IUserService userService;
 
-        public UserController(UserManager<User> userManager, IAuthService authService, IUserService userService)
+        private readonly IIdentityService identityService;
+
+        public UserController(UserManager<User> userManager, IJwtService jwtService, IUserService userService, IIdentityService identityService)
         {
             this.userManager = userManager;
-            this.authService = authService;
+            this.jwtService = jwtService;
             this.userService = userService;
+            this.identityService = identityService;
         }
 
+        [AllowAnonymous]
         [HttpPost("Register")]
-        public async Task<ActionResult<UserDto>> CreateUser(UserDto user)
+        public async Task<IActionResult> CreateUser(RegisterDto dto)
         {
             var isValid = ModelState.IsValid;
 
             if (!isValid) return BadRequest(ModelState);
 
-            var result = await userManager.CreateAsync(new User
-            {
-                UserName = user.UserName,
-                Email = user.Email
-            }, user.Password);
+            var result = await identityService.RegisterAsync(dto);
 
-            if (!result.Succeeded) return BadRequest(result.Errors);
-
-            var newUser = await userManager.FindByNameAsync(user.UserName);
-
-            await userManager.AddToRoleAsync(newUser, "User");
-
-            var response = authService.CreateToken(newUser, new List<string> { "User" });
-
-            return Ok(response);
+            return GenerateActionResult(result);
         }
 
+        [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<ActionResult<AuthResponse>> CreateBearerToken(AuthUserDto userDto)
+        public async Task<IActionResult> Login(LoginDto dto)
         {
             var isValid = ModelState.IsValid;
 
             if (!isValid) return BadRequest("Bad credentials!");
 
-            var user = await userManager.FindByNameAsync(userDto.UserName);
+            var result = await identityService.LoginAsync(dto);
 
-            if (user == null) return BadRequest("Bad credentials!");
-
-            var isPasswordValid = await userManager.CheckPasswordAsync(user, userDto.Password);
-
-            if (!isPasswordValid) return BadRequest("Bad credentials!");
-
-            var userRoles = await userManager.GetRolesAsync(user);
-
-            var response = authService.CreateToken(user, userRoles);
-
-            return Ok(response);
+            return GenerateActionResult(result);
         }
 
         [AllowAnonymous]
         [HttpGet("Authenticate/{token}")]
-        public async Task<ActionResult<AuthResponse>> AuthenticateUser([FromRoute] string token)
+        public async Task<IActionResult> AuthenticateUser([FromRoute] string token)
         {
-            var isTokenValid = await authService.ValidateTokenAsync(token);
+            var isTokenValid = await jwtService.ValidateTokenAsync(token);
 
             if (!isTokenValid) return Unauthorized();
 
-            var userId = authService.GetUserIdFromToken(token);
+            var userId = jwtService.GetUserIdFromToken(token);
 
             var user = await userManager.FindByIdAsync(userId);
 
             if (user == null) return BadRequest();
 
-            var roles = await userManager.GetRolesAsync(user);
+            var result = await identityService.GenerateTokenForUserAsync(user);
 
-            var authResponse = authService.CreateToken(user, roles);
+            return GenerateActionResult(result);
+        }
 
-            return Ok(authResponse);
+        [AllowAnonymous]
+        [HttpPost("LoginWithFacebook")]
+        public async Task<IActionResult> LoginWithFacebook([FromBody] FacebookDto dto)
+        {
+            var isModelValid = ModelState.IsValid;
+
+            if (!isModelValid) return BadRequest();
+
+            var result = await identityService.LoginWithFacebookAsync(dto.AccessToken);
+
+            return GenerateActionResult(result);
         }
 
         [HttpGet("Attendee-Users")]
