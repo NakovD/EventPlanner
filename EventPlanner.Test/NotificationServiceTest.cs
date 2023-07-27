@@ -16,8 +16,6 @@
 
     public class NotificationServiceTest
     {
-        private IEnumerable<NotificationDto> notificationDtos;
-
         private IEnumerable<Notification> notifications;
 
         private EventPlannerDbContext db;
@@ -26,12 +24,10 @@
 
         private INotificationService notificationService;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void Setup()
         {
             SeedNotifications();
-
-            SeedNotificationDtos();
 
             var dbOptions = new DbContextOptionsBuilder<EventPlannerDbContext>()
                 .UseInMemoryDatabase(databaseName: "EventPlannerInMemory")
@@ -50,35 +46,10 @@
             db.SaveChanges();
         }
 
-        private void SeedNotificationDtos()
+        [TearDown]
+        public void TearDown()
         {
-            notificationDtos = new List<NotificationDto>()
-            {
-                new NotificationDto() {
-                    Id = 1,
-                    CreatedAt = DateTime.Now.AddDays(3).ToString(),
-                    Description = "Very fun description",
-                    EventId = 2,
-                    IsReaded = false,
-                    Type = (int)NotificationType.EventInvite,
-                },
-                new NotificationDto() {
-                    Id = 1,
-                    CreatedAt = DateTime.Now.AddDays(2).ToString(),
-                    Description = "Very fun description",
-                    EventId = 3,
-                    IsReaded = false,
-                    Type = (int)NotificationType.EventInvite,
-                },
-                new NotificationDto() {
-                    Id = 1,
-                    CreatedAt = DateTime.Now.AddDays(1).ToString(),
-                    Description = "Very fun description",
-                    EventId = 1,
-                    IsReaded = true,
-                    Type = (int)NotificationType.EventInvite,
-                }
-            };
+            db.Database.EnsureDeleted();
         }
 
         private void SeedNotifications()
@@ -266,7 +237,7 @@
         [Test]
         public async Task CreateEventInviteNotificationCreatesEventInviteNotification()
         {
-            var result = await notificationService.CreateEventInviteNotificationAsync("1", new EventDto { Id = 1, Title = "Hello"});
+            var result = await notificationService.CreateEventInviteNotificationAsync("1", new EventDto { Id = 1, Title = "Hello" });
 
             var expected = await db.Notifications.LastAsync();
 

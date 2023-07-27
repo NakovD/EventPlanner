@@ -23,19 +23,15 @@
     {
         private IEnumerable<Attendee> attendees;
 
-        private IEnumerable<AttendeeDto> attendeeDtos;
-
         private EventPlannerDbContext db;
 
         private IMapper mapper;
 
         private IAttendeeService attendeeService;
 
-        [OneTimeSetUp]
-        public void OneTimeSetup()
+        [SetUp]
+        public void Setup()
         {
-            SeedAttendeeDtos();
-
             SeedAttendees();
 
             var dbOptions = new DbContextOptionsBuilder<EventPlannerDbContext>()
@@ -66,6 +62,12 @@
             db.Events.Add(eventt);
             db.Attendees.AddRange(attendees);
             db.SaveChanges();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            db.Database.EnsureDeleted();
         }
 
         private void SeedAttendees()
@@ -99,34 +101,6 @@
                 },
             };
 
-        }
-
-        private void SeedAttendeeDtos()
-        {
-            attendeeDtos = new List<AttendeeDto>
-            {
-                new AttendeeDto
-                {
-                Id = 1,
-                EventId = 1,
-                Name = "Milana",
-                Status = RSVPStatus.NotResponded.ToString()
-                },
-                new AttendeeDto
-                {
-                Id = 2,
-                EventId = 2,
-                Name = "Silviq",
-                Status = RSVPStatus.Attending.ToString()
-                },
-                new AttendeeDto
-                {
-                Id = 3,
-                EventId = 3,
-                Name = "Hristina",
-                Status = RSVPStatus.NotAttending.ToString()
-                },
-            };
         }
 
         [Test]

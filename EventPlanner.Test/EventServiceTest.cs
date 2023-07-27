@@ -17,8 +17,6 @@ namespace EventPlanner.Test
     [TestFixture]
     public class EventServiceTest
     {
-        private IEnumerable<EventDto> eventDtos;
-
         private IEnumerable<Event> events;
 
         private IEnumerable<Category> categories;
@@ -29,12 +27,10 @@ namespace EventPlanner.Test
 
         private IEventService eventService;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void Setup()
         {
             SeedCategories();
-
-            SeedEventDtos();
 
             SeedEvents();
 
@@ -50,54 +46,25 @@ namespace EventPlanner.Test
             //Prepare service
             eventService = new EventService(db, mapper);
 
+            SeedUsers(db);
+
             //Fill Db
             db.AddRange(events);
             db.Categories.AddRange(categories);
             db.SaveChanges();
-
         }
 
-        private void SeedEventDtos()
+        [TearDown]
+        public void Teardown()
         {
-            eventDtos = new List<EventDto>
-            {
-                new EventDto
-                {
-                    Id = 1,
-                    Title = "First event",
-                    Category = "wedding",
-                    Description = "some desc",
-                    Image = "some img soruce",
-                    Location = "Sliven",
-                    Time = "12:23",
-                },
-                new EventDto
-                {
-                    Id = 2,
-                    Title = "Second event",
-                    Category = "birthday party",
-                    Image = "another img soruce",
-                    Location = "Pernik",
-                    Time = "12:21",
-                },
-                new EventDto
-                {
-                    Id = 3,
-                    Title = "Third event",
-                    Category = "Dance show off",
-                    Description = "some desc",
-                    Image = "yeah, yeah img soruce",
-                    Location = "Sungulare",
-                    Time = "12:13",
-                }
-            };
+            db.Database.EnsureDeleted();
         }
 
         private void SeedEvents()
         {
             events = new List<Event>
             {
-                    new Event
+                new Event
                 {
                     Id = 1,
                     Title = "First event",
@@ -108,6 +75,7 @@ namespace EventPlanner.Test
                     OrganizerId = "2",
                     Date = new DateTime(2023, 12, 11),
                     Time = "12:23",
+                    Attendees = new List<Attendee>(),
                 },
                 new Event
                 {
@@ -120,6 +88,8 @@ namespace EventPlanner.Test
                     OrganizerId = "1",
                     Date = new DateTime(2023, 3, 11),
                     Time = "12:21",
+                    IsDeleted = true,
+                    Attendees = new List<Attendee>(),
                 },
                 new Event
                 {
@@ -132,8 +102,29 @@ namespace EventPlanner.Test
                     OrganizerId = "2",
                     Date = new DateTime(2023, 3, 11),
                     Time = "12:13",
+                    Attendees = new List<Attendee>(),
                 }
             };
+        }
+
+        private void SeedUsers(EventPlannerDbContext db)
+        {
+            db.Users.AddRange(new List<User>
+            {
+                new User
+                {
+                    Id = "1",
+                    UserName = "Pesho"
+                },
+                    new User {
+                        Id = "2",
+                        UserName = "Gosho"
+                    }
+                ,new User
+                {
+                    Id = "3", UserName = "Tosho"
+                }
+            });
         }
 
         private void SeedCategories()
@@ -163,10 +154,11 @@ namespace EventPlanner.Test
         [Test]
         public async Task GetAllReturnsCorrectData()
         {
-
             var result = await eventService.GetAllAsync();
 
-            Assert.That(result.Count(), Is.EqualTo(db.Events.Count()));
+            var expected = db.Events.Where(e => !e.IsDeleted);
+
+            Assert.That(result.Count(), Is.EqualTo(expected.Count()));
         }
 
         [Test]
@@ -176,7 +168,7 @@ namespace EventPlanner.Test
 
             var result = await eventService.GetByIdAsync(id);
 
-            var expected = eventDtos.SingleOrDefault(e => e.Id == id);
+            var expected = db.Events.Find(id);
 
             Assert.That(result?.Id, Is.EqualTo(expected?.Id));
         }
@@ -261,7 +253,6 @@ namespace EventPlanner.Test
             Assert.IsTrue(updatedEvent.Location == expected.Location);
             Assert.IsTrue(updatedEvent.CategoryId == expected.CategoryId);
             Assert.IsTrue(updatedEvent.Image == expected.Image);
-
         }
 
         [Test]
@@ -282,7 +273,7 @@ namespace EventPlanner.Test
         {
             var actual = await eventService.GetUserEventsAsync(userId);
 
-            var expected = await db.Events.Where(e => e.OrganizerId == userId)
+            var expected = await db.Events.Where(e => e.OrganizerId == userId && !e.IsDeleted)
                 .ProjectTo<EventDto>(mapper.ConfigurationProvider).ToListAsync();
 
             var actualIds = actual.Select(e => e.Id).ToList();
@@ -322,6 +313,64 @@ namespace EventPlanner.Test
             var result = await eventService.GetEventCreatorIdAsync(123);
 
             Assert.IsTrue(expected == result);
+        }
+
+        [Test]
+        public async Task MarkAsDeletedWorksCorrectly()
+        {
+            var eventId = 1;
+
+            var result = await eventService.MarkAsDeletedAsync(eventId);
+
+            Assert.IsTrue(result);
+
+            var neededEvent = db.Events.Find(eventId);
+
+            Assert.IsTrue(neededEvent!.IsDeleted);
+        }
+
+        [Test]
+        public async Task MarkAsDeletedReturnsFalseWithInvalidEvent()
+        {
+            var eventId = 100;
+
+            var result = await eventService.MarkAsDeletedAsync(eventId);
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public async Task UnmarkAsDeletedWorksCorrectly()
+        {
+            var eventId = 2;
+
+            var result = await eventService.UnmarkAsDeletedAsync(eventId);
+
+            Assert.IsTrue(result);
+
+            var actual = db.Events.Find(eventId);
+
+            Assert.IsFalse(actual.IsDeleted);
+        }
+
+        [Test]
+        public async Task UnmarkAsDeletedReturnsFalseWithInvalidId()
+        {
+            var eventId = 13123;
+
+            var result = await eventService.UnmarkAsDeletedAsync(eventId);
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public async Task Someth()
+        {
+            var result = await eventService.GetAllAdministrationAsync();
+
+            var actual = db.Events.AsNoTracking();
+
+            Assert.IsTrue(result.Count() == actual.Count());
         }
     }
 }

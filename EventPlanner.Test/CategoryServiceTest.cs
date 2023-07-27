@@ -27,7 +27,7 @@
 
         private ICategoryService categoryService;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void Setup()
         {
             SeedCategories();
@@ -47,6 +47,12 @@
             //Fill Db
             db.AddRange(categories);
             db.SaveChanges();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            db.Database.EnsureDeleted();
         }
 
         private void SeedCategories()

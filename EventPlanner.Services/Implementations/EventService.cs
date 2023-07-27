@@ -50,17 +50,13 @@
             return true;
         }
 
-        public async Task<IEnumerable<EventAdministrationDto>> GetAllAdministrationAsync()
-        {
-            var allEvents = await dbContext.Events
+        public async Task<IEnumerable<EventAdministrationDto>> GetAllAdministrationAsync() => await dbContext.Events
                 .AsNoTracking()
                 .Include(e => e.Organizer)
                 .Include(e => e.Category)
                 .ProjectTo<EventAdministrationDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            return allEvents;
-        }
 
         public async Task<IEnumerable<EventDto>> GetAllAsync() =>
                 await dbContext.Events
