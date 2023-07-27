@@ -13,6 +13,8 @@
     {
         private FacebookConfiguration facebookConfiguration;
 
+        private FacebookAuthUrls authUrls;
+
         private readonly IConfiguration configuration;
 
         private readonly IJsonService jsonService;
@@ -25,11 +27,12 @@
             this.jsonService = jsonService;
             this.configuration = configuration;
             AddFacebookConfiguration();
+            AddFacebookUrls();
         }
 
         public async Task<FacebookUserInfoResult> GetUserInfoAsync(string accessToken)
         {
-            var formattedUrl = string.Format(facebookConfiguration.UserInfoUrl, accessToken);
+            var formattedUrl = string.Format(authUrls.UserInfoUrl, accessToken);
 
             var result = await httpClient.GetAsync(formattedUrl);
 
@@ -42,7 +45,7 @@
 
         public async Task<FacebookTokenValidationResult> ValidateAccessTokenAsync(string accessToken)
         {
-            var formattedUrl = string.Format(facebookConfiguration.TokenValidationUrl, accessToken, "", "");
+            var formattedUrl = string.Format(authUrls.TokenValidationUrl, accessToken, facebookConfiguration.AppId, facebookConfiguration.AppSecret);
 
             var result = await httpClient.GetAsync(formattedUrl);
 
@@ -55,10 +58,34 @@
 
         private void AddFacebookConfiguration()
         {
-            var tokenValidationUrl = configuration.GetSection(nameof(FacebookConfiguration))[nameof(FacebookConfiguration.TokenValidationUrl)];
-            var userInfoUrl = configuration.GetSection(nameof(FacebookConfiguration))[nameof(FacebookConfiguration.UserInfoUrl)];
+            var secretsSection = configuration.GetSection(nameof(FacebookConfiguration));
 
-            facebookConfiguration = new FacebookConfiguration { TokenValidationUrl = tokenValidationUrl, UserInfoUrl = userInfoUrl };
+            if (secretsSection == null) throw new ArgumentException(nameof(secretsSection), "Facebook secrets section not found!");
+
+            var appId = secretsSection[nameof(FacebookConfiguration.AppId)];
+            var appSecret = secretsSection[nameof(FacebookConfiguration.AppSecret)];
+
+            facebookConfiguration = new FacebookConfiguration
+            { 
+                AppId = appId!,
+                AppSecret = appSecret!,
+            };
+        }
+
+        private void AddFacebookUrls()
+        {
+            var configurationSection = configuration.GetSection(nameof(FacebookAuthUrls));
+
+            if (configurationSection == null) throw new ArgumentException(nameof(configurationSection), "Facebook configuration section not found!");
+
+            var tokenValidationUrl = configurationSection[nameof(FacebookAuthUrls.TokenValidationUrl)];
+            var userInfoUrl = configurationSection[nameof(FacebookAuthUrls.UserInfoUrl)];
+
+            authUrls = new FacebookAuthUrls
+            {
+                TokenValidationUrl = tokenValidationUrl!,
+                UserInfoUrl = userInfoUrl!,
+            };
         }
     }
 }
