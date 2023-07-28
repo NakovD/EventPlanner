@@ -10,6 +10,7 @@ namespace EventPlanner.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.DataProtection;
+    using EventPlanner.Data.Models;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -62,11 +63,13 @@ namespace EventPlanner.Controllers
 
             var neededEvent = await eventService.GetByIdAsync(attendeeFormDto.EventId);
 
-            var protectedUserData = ProtectUserData(new EventAttendeeDto { AttendeeId = attendeeId, EventId = neededEvent!.Id });
+            var isExternal = attendeeFormDto.UserId == null;
+
+            var protectedUserData = isExternal ? ProtectUserData(new EventAttendeeDto { AttendeeId = attendeeId, EventId = neededEvent!.Id }) : neededEvent.Id.ToString();
 
             await emailService.SendEmailInviteAsync(attendeeFormDto.Email, attendeeFormDto.Name, neededEvent.Title, attendeeFormDto.EmailUrl, protectedUserData);
 
-            if (attendeeFormDto.UserId != null)
+            if (!isExternal)
             {
                 var notificaitonCreationSuccess = await notificationService.CreateEventInviteNotificationAsync(attendeeFormDto.UserId, neededEvent);
 

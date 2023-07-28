@@ -4,7 +4,7 @@ import { Button } from 'features/common/button/Button';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useSnackbarBlockingMutation } from 'infrastructure/api/hooks/useSnackbarBlockingMutation';
-import { constants } from 'infrastructure/constants';
+import { routePaths } from 'infrastructure/routing/routePaths';
 
 interface IEventPotentialAttendeelProps {
   userData: IAttendeeUser;
@@ -20,6 +20,8 @@ export const EventPotentialAttendee = ({
     queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, eventId],
   });
 
+  const eventPath = `${window.location.origin}${routePaths.eventDetails.path}`;
+
   return (
     <div className="my-2 flex w-96 justify-between">
       <p>{userData.username}</p>
@@ -31,7 +33,7 @@ export const EventPotentialAttendee = ({
             email: userData.email,
             name: userData.username,
             eventId,
-            emailUrl: constants.invitedAttendeeEmailUrl,
+            emailUrl: eventPath,
           })
         }
       />
