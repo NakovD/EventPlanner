@@ -4,16 +4,17 @@ import { TextArea } from 'features/common/form/TextArea';
 import { TextField } from 'features/common/form/TextField';
 import { useEventForm } from 'features/events/form/hooks/useEventForm';
 import { IEventForm } from 'features/events/form/models/eventForm';
+import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
 import { propertyOf } from 'infrastructure/utilities/propertyOf';
 
 interface IEventFormProps {
   title: string;
   eventId?: string;
-  formData?: IEventForm;
+  event?: IAllEventsEntity;
 }
 
-export const EventForm = ({ title, eventId, formData }: IEventFormProps) => {
-  const { categories, control, onSubmit } = useEventForm(formData, eventId);
+export const EventForm = ({ title, eventId, event }: IEventFormProps) => {
+  const { categories, control, onSubmit } = useEventForm(event, eventId);
 
   return (
     <>

@@ -4,8 +4,8 @@ import { notificationTypeTextMapper } from 'features/notifications/data/notifica
 import { INotification } from 'features/notifications/models/notification';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { useInvalidateQueries } from 'infrastructure/api/hooks/useInvalidateQueries';
+import { useSnackbarBlockingMutation } from 'infrastructure/api/hooks/useSnackbarBlockingMutation';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { Link } from 'react-router-dom';
@@ -17,7 +17,7 @@ interface INotificationProps {
 export const Notification = ({ notification }: INotificationProps) => {
   const invalidate = useInvalidateQueries();
 
-  const { mutate: markSingleAsReaded } = useBlockingMutation({
+  const { mutate: markSingleAsReaded } = useSnackbarBlockingMutation({
     endpoint: replacePlaceholderWithId(
       endpoints.notifications.markSingleAsReaded,
       notification.id,
@@ -27,7 +27,7 @@ export const Notification = ({ notification }: INotificationProps) => {
       invalidate([getRequestsOptions.GetUnreadNotificationsCount.queryKey]),
   });
 
-  const { mutate: deleteNotification } = useBlockingMutation({
+  const { mutate: deleteNotification } = useSnackbarBlockingMutation({
     endpoint: replacePlaceholderWithId(endpoints.notifications.delete, notification.id),
     queryKey: [getRequestsOptions.GetAllNotifications.queryKey],
     onSuccess: () =>

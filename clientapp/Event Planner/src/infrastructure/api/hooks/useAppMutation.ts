@@ -14,11 +14,11 @@ export const useAppMutation = <TRequest, TResponse = void, TError = void>(
   const mutate = (data: TRequest) => API.POST<TRequest, TResponse>(endpoint, data);
 
   const mutation = useMutation<TResponse, AxiosError<TError>, TRequest>(mutate, {
+    ...options,
     onSuccess: (data, request, context) => {
       options?.onSuccess?.(data, request, context);
       options.queryKey && queryClient.invalidateQueries(options.queryKey);
     },
-    ...options,
   });
 
   return mutation;

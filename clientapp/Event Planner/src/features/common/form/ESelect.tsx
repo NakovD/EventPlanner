@@ -1,5 +1,4 @@
-import { Autocomplete, MenuItem, TextField } from '@mui/material';
-import Select from '@mui/material/Select';
+import { Autocomplete, TextField } from '@mui/material';
 import { IOption } from 'features/common/form/models/option';
 import {
   Control,
@@ -44,6 +43,10 @@ export const ESelect = <
         }
         value={field.value}
         onBlur={field.onBlur}
+        getOptionLabel={(option) => {
+          console.log(option);
+          return option.label;
+        }}
         renderInput={(params) => <TextField {...params} label={label} />}
       />
       {fieldState.error && (

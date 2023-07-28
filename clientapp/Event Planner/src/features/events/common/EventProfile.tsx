@@ -101,6 +101,12 @@ export const EventProfile = ({
           </div>
         </div>
         <div className="py-4 border-b border-gray-200 flex items-center justify-between">
+          <p className="text-base leading-4 text-gray-800">Category</p>
+          <div className="flex items-center justify-center">
+            <p className="text-sm leading-none text-gray-600">{event?.category}</p>
+          </div>
+        </div>
+        <div className="py-4 border-b border-gray-200 flex items-center justify-between">
           <p className="text-base leading-4 text-gray-800">Time</p>
           <div className="flex items-center justify-center">
             <p className="text-sm leading-none text-gray-600 mr-3">{event?.time}</p>

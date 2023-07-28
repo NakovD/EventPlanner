@@ -67,7 +67,9 @@
 
         public async Task<EventDto?> GetByIdAsync(int id)
         {
-            var neededEvent = await dbContext.Events.FindAsync(id);
+            var neededEvent = await dbContext.Events
+                .Include(e => e.Category)
+                .SingleOrDefaultAsync(e => e.Id == id);
 
             if (neededEvent == null) return null;
 

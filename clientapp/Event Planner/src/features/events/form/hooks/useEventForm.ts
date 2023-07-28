@@ -5,6 +5,7 @@ import { ICategory } from 'features/events/form/models/category';
 import { IEventForm } from 'features/events/form/models/eventForm';
 import { IEventRequest } from 'features/events/form/models/eventRequest';
 import { eventValidationSchema } from 'features/events/form/validators/eventValidationSchema';
+import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { routePaths } from 'infrastructure/routing/routePaths';
@@ -13,12 +14,12 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-export const useEventForm = (formData?: IEventForm, eventId?: string) => {
+export const useEventForm = (event?: IAllEventsEntity, eventId?: string) => {
   const navigate = useNavigate();
 
   const categories = useEventCategories();
 
-  const eventFormData = formData ? mapCategoryToForm(formData, categories) : void 0;
+  const eventFormData = event ? mapCategoryToForm(event, categories) : void 0;
 
   const defaultValues: IEventForm = eventFormData
     ? eventFormData
@@ -38,7 +39,7 @@ export const useEventForm = (formData?: IEventForm, eventId?: string) => {
   });
 
   const endpoint =
-    formData && eventId
+    event && eventId
       ? replacePlaceholderWithId(endpoints.events.edit, eventId)
       : endpoints.events.create;
 
@@ -71,13 +72,11 @@ export const useEventForm = (formData?: IEventForm, eventId?: string) => {
   };
 };
 
-const mapCategoryToForm = (formData: IEventForm, categories: ICategory[]) => {
-  const currentCategory = categories.find(
-    (c) => c.name === formData.category.label,
-  ) as ICategory;
+const mapCategoryToForm = (event: IAllEventsEntity, categories: ICategory[]) => {
+  const currentCategory = categories.find((c) => c.name === event.category) as ICategory;
 
   const newFormData: IEventForm = {
-    ...formData,
+    ...event,
     category: { label: currentCategory?.name, value: currentCategory?.id },
   };
 

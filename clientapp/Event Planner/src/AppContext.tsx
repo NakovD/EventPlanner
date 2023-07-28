@@ -2,6 +2,9 @@ import { IAuthResponse } from 'features/authentication/models/authResponse';
 import { IUser } from 'features/authentication/models/user';
 import { useBlocker } from 'features/common/blocker/hooks/useBlocker';
 import { IBlocker } from 'features/common/blocker/models/blocker';
+import { useSnackbarSetup } from 'features/common/snackbar/hooks/useSnackbarSetup';
+import { ISnackBarProps } from 'features/common/snackbar/models/snackbarProps';
+import { SnackBarType } from 'features/common/snackbar/models/snackBarType';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 import { constants } from 'infrastructure/constants';
@@ -14,12 +17,18 @@ interface IAppContextProps {
   children: React.ReactNode;
 }
 
+interface ISnackbar {
+  openSnackBar: (type: SnackBarType, message?: string) => void;
+  snackBarProps: ISnackBarProps;
+}
+
 type AppContext = {
   isReady: boolean;
   isAuthenticated: boolean;
   user: IUser | undefined;
   setIsAuthenticated: (token?: string, user?: IUser) => void;
   blocker: IBlocker;
+  snackBar: ISnackbar;
 };
 
 const AppContextValue = createContext<AppContext | null>(null);
@@ -70,12 +79,18 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
 
   const blocker = useBlocker();
 
+  const { snackBarProps, openSnackBar } = useSnackbarSetup();
+
   const context: AppContext = {
     isReady,
     user,
     isAuthenticated,
     setIsAuthenticated: authCallback,
     blocker,
+    snackBar: {
+      snackBarProps,
+      openSnackBar,
+    },
   };
 
   return <AppContextValue.Provider value={context}>{children}</AppContextValue.Provider>;

@@ -1,12 +1,13 @@
 import { ICategory } from 'features/events/form/models/category';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
+import { useGetQueryData } from 'infrastructure/api/hooks/useGetQueryData';
 
 export const useEventCategories = () => {
-  const { data } = useReadQuery<ICategory[]>({
-    endpoint: getRequestsOptions.GetAllCategories.endpoint,
-    queryKey: [getRequestsOptions.GetAllCategories.queryKey],
-  });
+  const getFreshData = useGetQueryData<ICategory[]>([
+    getRequestsOptions.GetAllCategories.queryKey,
+  ]);
 
-  return data ?? [];
+  const categories = getFreshData() ?? [];
+
+  return categories;
 };

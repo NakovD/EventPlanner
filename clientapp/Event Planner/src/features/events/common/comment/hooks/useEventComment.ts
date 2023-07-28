@@ -3,7 +3,7 @@ import { useAppDialog } from 'features/common/dialog/hooks/useAppDialog';
 import { IComment } from 'features/events/common/comment/models/comment';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
+import { useSnackbarBlockingMutation } from 'infrastructure/api/hooks/useSnackbarBlockingMutation';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useState } from 'react';
 
@@ -27,7 +27,7 @@ export const useEventComment = ({ comment, eventId }: IUseEventCommentOptions) =
 
   const { dialogProps, openDialog, closeDialog } = useAppDialog();
 
-  const { mutate } = useBlockingMutation({
+  const { mutate } = useSnackbarBlockingMutation({
     endpoint: replacePlaceholderWithId(endpoints.comments.delete, comment.id),
     queryKey: [getRequestsOptions.GetAllComments.queryKey, eventId],
   });

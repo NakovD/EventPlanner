@@ -18,13 +18,17 @@ export const useSnackBar = ({
 }: IUseSnackBarOptions): IUseSnackBarResult => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const openSnackBar = () => setIsOpen(true);
+
+  const closeSnackBar = () => setIsOpen(false);
+
   return {
-    openSnackBar: () => setIsOpen(true),
+    openSnackBar,
     snackBarProps: {
       open: isOpen,
       message,
       type,
-      onClose: () => setIsOpen(false),
+      onClose: closeSnackBar,
     },
   };
 };

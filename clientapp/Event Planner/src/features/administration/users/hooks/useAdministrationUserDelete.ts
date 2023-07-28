@@ -1,6 +1,6 @@
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
+import { useSnackbarBlockingMutation } from 'infrastructure/api/hooks/useSnackbarBlockingMutation';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 
 interface IUseAdministrationUserDeleteOptions {
@@ -10,7 +10,7 @@ interface IUseAdministrationUserDeleteOptions {
 export const useAdministrationUserDelete = ({
   userId,
 }: IUseAdministrationUserDeleteOptions) => {
-  const { mutate } = useBlockingMutation({
+  const { mutate } = useSnackbarBlockingMutation({
     endpoint: replacePlaceholderWithId(endpoints.user.delete, userId),
     queryKey: [getRequestsOptions.GetAllUsers.queryKey],
   });

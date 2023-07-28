@@ -3,7 +3,7 @@ import { IEventCommentForm } from 'features/events/common/comment/form/models/ev
 import { IComment } from 'features/events/common/comment/models/comment';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
+import { useSnackbarBlockingMutation } from 'infrastructure/api/hooks/useSnackbarBlockingMutation';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -41,7 +41,7 @@ export const useEventCommentForm = ({
     ? replacePlaceholderWithId(endpoints.comments.edit, comment.id)
     : endpoints.comments.create;
 
-  const { mutate } = useBlockingMutation<IEventCommentRequest>({
+  const { mutate } = useSnackbarBlockingMutation<IEventCommentRequest>({
     endpoint,
     queryKey: [getRequestsOptions.GetAllComments.queryKey, eventId],
     onSettled: () => {

@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material';
 import { EventForm } from 'features/events/form/EventForm';
-import { IEventForm } from 'features/events/form/models/eventForm';
+import { ICategory } from 'features/events/form/models/category';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
@@ -16,7 +16,10 @@ export const EventEdit = () => {
     queryKey: [getRequestsOptions.GetSingleEvent.queryKey],
   });
 
-  const eventFormData = getEventFormData(event, isLoading);
+  useReadQuery<ICategory[]>({
+    endpoint: getRequestsOptions.GetAllCategories.endpoint,
+    queryKey: [getRequestsOptions.GetAllCategories.queryKey],
+  });
 
   return (
     <div className="my-10">
@@ -24,22 +27,11 @@ export const EventEdit = () => {
         <CircularProgress color="secondary" />
       ) : (
         <EventForm
-          formData={eventFormData}
+          event={event}
           eventId={event?.id.toString()}
           title="Edit your special event"
         />
       )}
     </div>
   );
-};
-
-const getEventFormData = (event: IAllEventsEntity | undefined, isLoading: boolean) => {
-  if (isLoading || !event) return undefined;
-
-  const eventFormData: IEventForm = {
-    ...event,
-    category: { label: event.category, value: 0 },
-  };
-
-  return eventFormData;
 };

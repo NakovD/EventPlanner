@@ -4,14 +4,11 @@ import { IExternalAttendeeRequest } from 'features/attendees/form/models/externa
 import { externalAttendeeFormValidationSchema } from 'features/attendees/form/validators/externalAttendeeFormValidationSchema';
 import { Button } from 'features/common/button/Button';
 import { TextField } from 'features/common/form/TextField';
-import { useSnackBar } from 'features/common/snackbar/hooks/useSnackBar';
-import { SnackBar } from 'features/common/snackbar/Snackbar';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
+import { useSnackbarBlockingMutation } from 'infrastructure/api/hooks/useSnackbarBlockingMutation';
 import { constants } from 'infrastructure/constants';
 import { propertyOf } from 'infrastructure/utilities/propertyOf';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface IExternalAttendeeFormProps {
@@ -25,21 +22,11 @@ export const ExternalAttendeeForm = ({ eventId }: IExternalAttendeeFormProps) =>
     resolver: yupResolver(externalAttendeeFormValidationSchema),
   });
 
-  const { mutate, isSuccess, isError } = useBlockingMutation<IExternalAttendeeRequest>({
+  const { mutate } = useSnackbarBlockingMutation<IExternalAttendeeRequest>({
     endpoint: endpoints.attendees.createNew,
     queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, eventId],
+    onSuccess: () => reset(defaultValues),
   });
-
-  const snackbarType = isSuccess && !isError ? 'success' : 'error';
-
-  const { snackBarProps, openSnackBar } = useSnackBar({ type: snackbarType });
-
-  useEffect(() => {
-    if (isSuccess) {
-      reset(defaultValues);
-      openSnackBar();
-    }
-  }, [isSuccess]);
 
   const onSubmit = handleSubmit((data) =>
     mutate({
@@ -62,7 +49,6 @@ export const ExternalAttendeeForm = ({ eventId }: IExternalAttendeeFormProps) =>
         control={control}
         label="Attendee Email"
       />
-      <SnackBar {...snackBarProps} />
       <Button className="mt-3" isSubmit={true} label="Submit" />
     </form>
   );
