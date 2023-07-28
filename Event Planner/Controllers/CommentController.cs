@@ -57,6 +57,22 @@
             return Ok();
         }
 
+        [HttpPost("Delete/{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            if (id <= 0) return BadRequest();
+
+            var userId = GetUserId();
+
+            if (userId == null) return Unauthorized();
+
+            var actionResult = await commentService.DeleteAsync(id, userId);
+
+            if (!actionResult) return BadRequest();
+
+            return Ok();
+        }
+
 
     }
 }

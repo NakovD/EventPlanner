@@ -52,6 +52,31 @@
             return true;
         }
 
+        public async Task<bool> DeleteAsync(int commentId, string userId)
+        {
+            var comment = await dbContext.Comments.FindAsync(commentId);
+
+            if (comment == null) return false;
+
+            var canDelete = comment.UserId == userId;
+
+            if (!canDelete) return false;
+
+            comment.IsDeleted = true;
+            comment.LastUpdated = DateTime.Now;
+
+            try
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public async Task<bool> EditAsync(int commentId, string userId, CommentFormDto dto)
         {
             var comment = await dbContext.Comments.FindAsync(commentId);

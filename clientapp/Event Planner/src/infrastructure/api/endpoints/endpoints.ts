@@ -42,5 +42,6 @@ export const endpoints = {
     getAll: '/Comment/All/:id',
     create: '/Comment/Create',
     edit: '/Comment/Edit/:id',
+    delete: '/Comment/Delete/:id',
   },
 };

@@ -57,7 +57,6 @@
                 .ProjectTo<EventAdministrationDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
 
-
         public async Task<IEnumerable<EventDto>> GetAllAsync() =>
                 await dbContext.Events
                 .AsNoTracking()

@@ -5,6 +5,7 @@ export const useAppDialog = () => {
 
   return {
     openDialog: () => setIsDialogOpen(true),
+    closeDialog: () => setIsDialogOpen(false),
     dialogProps: {
       isOpen: isDialogOpen,
       onClose: () => setIsDialogOpen(false),

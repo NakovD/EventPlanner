@@ -10,11 +10,11 @@ interface IAdministrationUserProps {
 
 export const AdministrationUser = ({ user }: IAdministrationUserProps) => {
   const { deleteUser } = useAdministrationUserDelete({ userId: user.id });
-  const { dialogProps, openDialog } = useAppDialog();
+  const { dialogProps, openDialog, closeDialog } = useAppDialog();
   const dialogActions = (
     <>
       <Button className="mb-2" label="Delete User?" onClick={deleteUser} />
-      <Button label="No take me back" onClick={() => dialogProps.onClose()} />
+      <Button label="No take me back" onClick={closeDialog} />
     </>
   );
   return (
