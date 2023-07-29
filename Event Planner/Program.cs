@@ -17,6 +17,7 @@ namespace EventPlanner
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.IdentityModel.Tokens;
+    using Amazon.S3;
 
     public class Program
     {
@@ -46,6 +47,8 @@ namespace EventPlanner
 
             ConfigureServices(builder.Services);
 
+            ConfigureS3Bucket(builder.Services, builder.Configuration);
+
             ConfigureAutoMapper(builder.Services);
 
             #endregion
@@ -61,7 +64,6 @@ namespace EventPlanner
             ConfigureEmailService(builder);
 
             #endregion
-
 
             var app = builder.Build();
 
@@ -162,6 +164,13 @@ namespace EventPlanner
             services.AddScoped<IFacebookAuthService, FacebookAuthService>();
 
             services.AddHttpClient();
+        }
+
+        private static void ConfigureS3Bucket(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDefaultAWSOptions(configuration.GetAWSOptions())
+                .AddAWSService<IAmazonS3>()
+                .AddScoped<IObjectService, ObjectService>();
         }
 
         private static void ConfigureAutoMapper(IServiceCollection services)

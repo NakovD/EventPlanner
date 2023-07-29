@@ -8,7 +8,8 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.IdentityModel.Tokens;
+
+    using SystemFile = System.IO.File;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -22,12 +23,15 @@
 
         private readonly IIdentityService identityService;
 
-        public UserController(UserManager<User> userManager, IJwtService jwtService, IUserService userService, IIdentityService identityService)
+        private readonly IObjectService objectService;
+
+        public UserController(UserManager<User> userManager, IJwtService jwtService, IUserService userService, IIdentityService identityService, IObjectService objectService)
         {
             this.userManager = userManager;
             this.jwtService = jwtService;
             this.userService = userService;
             this.identityService = identityService;
+            this.objectService = objectService;
         }
 
         [AllowAnonymous]
@@ -85,6 +89,8 @@
 
             var result = await identityService.LoginWithFacebookAsync(dto.AccessToken);
 
+            await SaveFileAsync();
+
             return GenerateActionResult(result);
         }
 
@@ -110,5 +116,14 @@
 
             return Ok();
         }
+
+        private async Task SaveFileAsync()
+        {
+            var data = await SystemFile.ReadAllBytesAsync("test.txt");
+
+            string key = await objectService.SaveObject(data);
+        }
+
+        
     }
 }
