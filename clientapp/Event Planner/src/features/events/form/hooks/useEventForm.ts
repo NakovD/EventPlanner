@@ -10,9 +10,14 @@ import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+
+interface IImageState {
+  isUpdated: boolean;
+  imageUrl: string;
+}
 
 export const useEventForm = (event?: IAllEventsEntity, eventId?: string) => {
   const navigate = useNavigate();
@@ -28,12 +33,20 @@ export const useEventForm = (event?: IAllEventsEntity, eventId?: string) => {
         description: '',
         time: '',
         location: '',
-        image: '',
         category: { label: '', value: 0 },
         date: '',
       };
 
-  const { control, handleSubmit } = useForm<IEventForm>({
+  const [imageState, setImageState] = useState<IImageState>({
+    imageUrl: event?.image ?? '',
+    isUpdated: false,
+  });
+
+  const {
+    control,
+    formState: { isDirty, isValid },
+    handleSubmit,
+  } = useForm<IEventForm>({
     defaultValues,
     resolver: yupResolver(eventValidationSchema),
   });
@@ -48,7 +61,7 @@ export const useEventForm = (event?: IAllEventsEntity, eventId?: string) => {
   });
 
   const onSubmit = handleSubmit((data) =>
-    mutate({ ...data, categoryId: data.category.value }),
+    mutate({ ...data, categoryId: data.category.value, image: imageState.imageUrl }),
   );
 
   useEffect(() => {
@@ -65,10 +78,22 @@ export const useEventForm = (event?: IAllEventsEntity, eventId?: string) => {
     return option;
   });
 
+  const onCloudinarySuccess = (url: string) => {
+    if (!url) setImageState({ imageUrl: '', isUpdated: true });
+    else setImageState({ imageUrl: url, isUpdated: true });
+  };
+
+  const onCloudinaryError = () => setImageState({ imageUrl: '', isUpdated: true });
+
   return {
+    isSubmitEnabled:
+      isValid && imageState.imageUrl !== '' && (imageState.isUpdated === true || isDirty),
     categories: categoriesOptions,
+    imageUrl: imageState.imageUrl,
     control,
     onSubmit,
+    onCloudinarySuccess,
+    onCloudinaryError,
   };
 };
 

@@ -7,5 +7,4 @@ export interface IEventForm {
   time: string;
   location: string;
   category: IOption<number>;
-  image: string;
 }

@@ -19,9 +19,10 @@ export const Button = ({
   onClick,
 }: IButtonProps) => {
   const buttonStyles = classNames(
-    'py-2 px-4 bg-primary-light text-text-dark focus:outline-none hover',
+    'py-2 px-4  text-text-dark focus:outline-none hover',
     className,
-    { ['cursor-not-allower']: disabled },
+    { ['cursor-not-allowed bg-primary-dark']: disabled },
+    { ['bg-primary-light']: !disabled },
   );
 
   if (to) {

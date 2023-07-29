@@ -44,7 +44,6 @@ export const ESelect = <
         value={field.value}
         onBlur={field.onBlur}
         getOptionLabel={(option) => {
-          console.log(option);
           return option.label;
         }}
         renderInput={(params) => <TextField {...params} label={label} />}

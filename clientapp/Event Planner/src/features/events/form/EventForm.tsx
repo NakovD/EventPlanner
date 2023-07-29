@@ -1,3 +1,4 @@
+import { CloudinaryWidget } from 'features/cloudinaryWidget/CloudinaryWidget';
 import { Button } from 'features/common/button/Button';
 import { ESelect } from 'features/common/form/ESelect';
 import { TextArea } from 'features/common/form/TextArea';
@@ -14,7 +15,15 @@ interface IEventFormProps {
 }
 
 export const EventForm = ({ title, eventId, event }: IEventFormProps) => {
-  const { categories, control, onSubmit } = useEventForm(event, eventId);
+  const {
+    isSubmitEnabled,
+    imageUrl,
+    categories,
+    control,
+    onSubmit,
+    onCloudinarySuccess,
+    onCloudinaryError,
+  } = useEventForm(event, eventId);
 
   return (
     <>
@@ -38,12 +47,13 @@ export const EventForm = ({ title, eventId, event }: IEventFormProps) => {
           options={categories}
           name={propertyOf<IEventForm>('category')}
         />
-        <TextField
-          control={control}
-          name={propertyOf<IEventForm>('image')}
-          label="Image Link"
-          info="Under contruction."
-        />
+        <div className="flex flex-col gap-2">
+          <span>Image Link: </span>
+          <span className="truncate" title={imageUrl}>
+            {imageUrl}
+          </span>
+          <CloudinaryWidget onError={onCloudinaryError} onSuccess={onCloudinarySuccess} />
+        </div>
         <TextField
           control={control}
           name={propertyOf<IEventForm>('location')}
@@ -60,9 +70,14 @@ export const EventForm = ({ title, eventId, event }: IEventFormProps) => {
           control={control}
           name={propertyOf<IEventForm>('date')}
           label="Date"
-          info="The date for your epic event in format: dd/MM/yyyy."
+          info="The date for your epic event in format: dd/MM/yyyy and should be after today."
         />
-        <Button className="place-self-center w-28" isSubmit={true} label="Submit" />
+        <Button
+          className="place-self-center w-28"
+          isSubmit={true}
+          disabled={!isSubmitEnabled}
+          label="Submit"
+        />
       </form>
     </>
   );
