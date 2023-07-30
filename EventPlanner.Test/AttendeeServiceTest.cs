@@ -1,21 +1,21 @@
 ﻿namespace EventPlanner.Test
 {
+    using Data;
+    using Data.Enums;
+    using Data.Models;
+    using Services.Contracts;
+    using Services.Implementations;
+    using Services.Models.Attendee;
+    using Services.Profiles;
+
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
-    using EventPlanner.Data;
-    using EventPlanner.Data.Enums;
-    using EventPlanner.Data.Models;
-    using EventPlanner.Services.Contracts;
-    using EventPlanner.Services.Implementations;
-    using EventPlanner.Services.Models.Attendee;
-    using EventPlanner.Services.Profiles;
     using Microsoft.EntityFrameworkCore;
-    using Moq;
     using NUnit.Framework;
+
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
 
     [TestFixture]
@@ -34,6 +34,8 @@
         {
             SeedAttendees();
 
+            var events = SeedEvents();
+
             var dbOptions = new DbContextOptionsBuilder<EventPlannerDbContext>()
                 .UseInMemoryDatabase(databaseName: "EventPlannerInMemory")
                 .Options;
@@ -46,20 +48,7 @@
             //Prepare service
             attendeeService = new AttendeeService(db, mapper);
 
-            var eventt = new Event
-            {
-                Id = 50,
-                CategoryId = 1,
-                Date = DateTime.Now,
-                Title = "Title",
-                Description = "Description",
-                Image = "image:url",
-                Time = "12:30",
-                OrganizerId = "1",
-                Location = "Sliven"
-            };
-
-            db.Events.Add(eventt);
+            db.Events.AddRange(events);
             db.Attendees.AddRange(attendees);
             db.SaveChanges();
         }
@@ -102,6 +91,33 @@
             };
 
         }
+
+        private IEnumerable<Event> SeedEvents() => new List<Event> {
+            new Event
+        {
+            Id = 1,
+            CategoryId = 1,
+            Date = DateTime.Now,
+            Description = "desc",
+            Image = "image",
+            Location = "location",
+            Time = "12:30",
+            Title = "title",
+            OrganizerId = "organizer-id"
+        },
+            new Event
+            {
+                Id = 50,
+                CategoryId = 1,
+                Date = DateTime.Now,
+                Title = "Title",
+                Description = "Description",
+                Image = "image:url",
+                Time = "12:30",
+                OrganizerId = "1",
+                Location = "Sliven"
+            }
+        };
 
         [Test]
         public async Task GetAllReturnsValidCollection()
@@ -260,6 +276,45 @@
             var result = await attendeeService.GetByIdAsync(1331);
 
             Assert.IsNull(result);
+        }
+
+        [Test]
+        public async Task MarkAsDeletedWorksCorrectly()
+        {
+            var id = 1;
+
+            var userId = "organizer-id";
+
+            var result = await attendeeService.MarkAsDeletedAsync(id, userId);
+
+            Assert.IsTrue(result);
+
+            var actual = db.Attendees.Find(id);
+
+            Assert.IsNotNull(actual);
+
+            Assert.IsTrue(actual.IsDeleted);
+        }
+
+        [Test]
+        public async Task MarkAsDeletedFailsWithInvalidId()
+        {
+            var id = 123;
+
+            var result = await attendeeService.MarkAsDeletedAsync(id, "userid");
+
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public async Task MarkAsDeletedFailsIfUserCannotDelete()
+        {
+            var id = 1;
+            var userId = "some invalid user id";
+
+            var result = await attendeeService.MarkAsDeletedAsync(id, userId);
+
+            Assert.IsFalse(result);
         }
     }
 }

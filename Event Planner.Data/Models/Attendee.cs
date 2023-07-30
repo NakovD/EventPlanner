@@ -1,11 +1,11 @@
 ﻿namespace EventPlanner.Data.Models
 {
     using Enums;
-
+    using EventPlanner.Data.Interfaces;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class Attendee
+    public class Attendee : IDeletable
     {
         [Key]
         public int Id { get; set; }
@@ -28,6 +28,10 @@
 
         public User? User { get; set; }
 
+        [Required]
         public RSVPStatus Status { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }

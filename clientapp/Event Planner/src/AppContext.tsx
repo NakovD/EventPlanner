@@ -40,17 +40,19 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
 
   const [user, setUser] = useState<IUser | undefined>(undefined);
 
+  const isQueryEnabled = user === undefined && hasValue(token);
+
   const { data, isError, isSuccess, isFetched } = useReadQuery<IAuthResponse>({
     endpoint: replacePlaceholderWithId(endpoints.user.authenticate, token ?? ''),
     queryKey: ['authenticate-user'],
-    enabled: user === undefined && hasValue(token),
+    enabled: isQueryEnabled,
   });
 
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
+    isQueryEnabled ? setIsReady(isFetched) : setIsReady(true);
     if (isError) return authCallback();
-    if (data) authCallback(data.token);
     if (isSuccess && data)
       setUser({
         userEmail: data.userEmail,
@@ -58,9 +60,6 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
         userId: data.userId,
         userRoles: data.roles,
       });
-
-    if (isFetched) setIsReady(isFetched);
-    if (!token) setIsReady(true);
   }, [isError, isSuccess]);
 
   const [isAuthenticated, setIsAuthenticated] = useState(hasValue(token));

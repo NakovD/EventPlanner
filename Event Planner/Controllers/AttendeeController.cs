@@ -79,6 +79,22 @@ namespace EventPlanner.Controllers
             return Ok();
         }
 
+        [HttpPost("Delete/{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            if (id <= 0) return BadRequest();
+
+            var userId = GetUserId();
+
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
+            var actionSuccess = await attendeeService.MarkAsDeletedAsync(id, userId);
+
+            if (!actionSuccess) return BadRequest();
+
+            return Ok();
+        }
+
         [HttpPost("UpdateStatus/{id}")]
         public async Task<IActionResult> UpdateStatus([FromRoute] int id, [FromBody] AttendeeStatusDto dto)
         {

@@ -2,6 +2,7 @@
 {
     using Data;
     using Data.Models;
+    using Data.Enums;
     using Models.Attendee;
     using Contracts;
 
@@ -11,7 +12,6 @@
     using AutoMapper.QueryableExtensions;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore;
-    using EventPlanner.Data.Enums;
 
     public class AttendeeService : IAttendeeService
     {
@@ -51,7 +51,7 @@
         public async Task<IEnumerable<AttendeeDto>> GetAllByEventAsync(int eventId) => await dbContext
             .Attendees
             .AsNoTracking()
-            .Where(a => a.EventId == eventId)
+            .Where(a => a.EventId == eventId && !a.IsDeleted)
             .ProjectTo<AttendeeDto>(mapper.ConfigurationProvider)
             .ToListAsync();
 
@@ -71,6 +71,32 @@
             if (neededAttendee == null) return -1;
 
             return (int)neededAttendee.Status;
+        }
+
+        public async Task<bool> MarkAsDeletedAsync(int id, string userId)
+        {
+            var attendee = await dbContext.Attendees.FindAsync(id);
+
+            if (attendee == null) return false;
+
+            var eventt = await dbContext.Events.FindAsync(attendee.EventId);
+
+            var canDelete = eventt!.OrganizerId == userId;
+
+            if (!canDelete) return false;
+
+            attendee.IsDeleted = true;
+
+            try
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public async Task<bool> UpdateAttendeeStatusAsync(int id, int newStatus, string userId)

@@ -1,6 +1,5 @@
 ﻿namespace EventPlanner.Services.Contracts
 {
-    using Data.Enums;
     using Models.Attendee;
 
     using System.Collections.Generic;
@@ -19,5 +18,7 @@
         Task<bool> UpdateExternalAttendeeStatusAsync(int id, int newStatus);
 
         Task<int> GetExternalAttendeeStatusAsync(int id);
+
+        Task<bool> MarkAsDeletedAsync(int id, string userId);
     }
 }

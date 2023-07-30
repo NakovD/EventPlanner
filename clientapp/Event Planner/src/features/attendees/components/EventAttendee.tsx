@@ -1,4 +1,5 @@
 import { Card, CardContent } from '@mui/material';
+import { useDeleteAttendee } from 'features/attendees/hooks/useDeleteAttendee';
 import { IAttendee } from 'features/attendees/models/attendee';
 import { Button } from 'features/common/button/Button';
 
@@ -7,6 +8,10 @@ interface IEventAttendeeProps {
 }
 
 export const EventAttendee = ({ attendee }: IEventAttendeeProps) => {
+  const { deleteAttendee } = useDeleteAttendee({
+    id: attendee.id,
+    eventId: attendee.eventId,
+  });
   return (
     <Card className="border border-gray-200 rounded-lg shadow">
       <CardContent>
@@ -18,7 +23,7 @@ export const EventAttendee = ({ attendee }: IEventAttendeeProps) => {
         </p>
         <p className="text-sm text-center my-3">Status: {attendee.status}</p>
         <p className="text-sm mt-3 text-right">
-          Action: <Button label="Remove" className="ml-3" />
+          Action: <Button label="Remove" onClick={deleteAttendee} className="ml-3" />
         </p>
       </CardContent>
     </Card>

@@ -22,6 +22,7 @@ export const endpoints = {
   attendees: {
     allByEvent: '/Attendee/AllByEvent/:id',
     createNew: '/Attendee/Create',
+    delete: '/Attendee/Delete/:id',
     updateStatus: '/Attendee/UpdateStatus/:id',
     updateExternalStatus: '/Attendee/UpdateExternalStatus/:id',
     status: '/Attendee/ExternalStatus/:id',
