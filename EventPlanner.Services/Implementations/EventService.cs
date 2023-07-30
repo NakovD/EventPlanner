@@ -14,6 +14,9 @@
 
     using Microsoft.EntityFrameworkCore;
     using System.Globalization;
+    using EventPlanner.Services.Queries.Event;
+    using EventPlanner.Services.Queries.Enums;
+    using System.Linq;
 
     public class EventService : IEventService
     {
@@ -57,13 +60,38 @@
                 .ProjectTo<EventAdministrationDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
 
-        public async Task<IEnumerable<EventDto>> GetAllAsync() =>
-                await dbContext.Events
+        public async Task<IEnumerable<EventDto>> GetAllAsync(AllEventsQuery query)
+        {
+            var filtered = dbContext.Events
                 .AsNoTracking()
-                .Where(e => !e.IsDeleted)
                 .Include(e => e.Category)
-                .ProjectTo<EventDto>(mapper.ConfigurationProvider)
+                .Where(e => !e.IsDeleted)
+                .Where(e => e.Title.Contains(query.SearchString!) || e.Location.Contains(query.SearchString) || e.Description.Contains(query.SearchString))
+                .AsQueryable();
+
+            var filteredByCategory = FilteredByCategory( filtered, query.CategoryId);
+
+            var sorted = GetSortedEvents(filteredByCategory, query.SortDirection);
+
+            return await sorted.
+                ProjectTo<EventDto>(mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        private IQueryable<Event> FilteredByCategory(IQueryable<Event> events, int? categoryId)
+        {
+            if (categoryId == null) return events;
+            return events.Where(e => e.CategoryId == categoryId);
+        }
+
+        private bool GetCategoryFilter(int? categoryidFilter, int categoryId) => categoryidFilter == null ? categoryId > 0 : categoryidFilter == categoryId;
+
+        private IQueryable<Event> GetSortedEvents(IQueryable<Event> filtered, EventTitleSortType sortDirection)
+        {
+            if (sortDirection == EventTitleSortType.Ascending) return filtered.OrderBy(e => e.Title);
+
+            return filtered.OrderByDescending(e => e.Title);
+        }
 
         public async Task<EventDto?> GetByIdAsync(int id)
         {

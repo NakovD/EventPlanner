@@ -1,10 +1,11 @@
 ﻿namespace EventPlanner.Services.Contracts
 {
     using Models.Event;
+    using Queries.Event;
 
     public interface IEventService
     {
-        Task<IEnumerable<EventDto>> GetAllAsync();
+        Task<IEnumerable<EventDto>> GetAllAsync(AllEventsQuery query);
 
         Task<IEnumerable<EventAdministrationDto>> GetAllAdministrationAsync();
 

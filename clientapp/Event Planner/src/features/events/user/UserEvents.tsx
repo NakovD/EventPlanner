@@ -6,7 +6,7 @@ import { routePaths } from 'infrastructure/routing/routePaths';
 import { Link } from 'react-router-dom';
 
 export const UserEvents = () => {
-  const { data } = useReadQuery<IAllEventsEntity[]>({
+  const { data, isLoading } = useReadQuery<IAllEventsEntity[]>({
     endpoint: getRequestsOptions.GetAllUserEvents.endpoint,
     queryKey: [getRequestsOptions.GetAllUserEvents.queryKey],
   });
@@ -17,7 +17,7 @@ export const UserEvents = () => {
     <>
       <div className="my-10 flex flex-wrap gap-7 justify-center text-secondary-light ">
         {data?.map((e) => (
-          <EventCard key={e.id} event={e} />
+          <EventCard isLoading={isLoading} key={e.id} event={e} />
         ))}
         {shouldShowEmpty && (
           <p className="text-text-light">

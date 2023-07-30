@@ -9,8 +9,8 @@
     "lint:format": "prettier  --loglevel warn --write \"./**/*.{js,jsx,ts,tsx,css,md,json}\" ",
     "lint": "yarn lint:format && yarn lint:fix ",
     "type-check": "tsc",
-    "gen-comp": "npx generate-react-cli component",
-    "gen-hook": "npx generate-react-cli component --type=hook"
+    "gen-comp": "npx generate-react-cli component --flat",
+    "gen-hook": "npx generate-react-cli component --type=hook --flat"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -28,6 +28,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.1",
     "react-router-dom": "^6.14.0",
+    "usehooks-ts": "^2.9.1",
     "uuid": "^9.0.0",
     "yup": "^1.2.0"
   },

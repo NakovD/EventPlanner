@@ -10,6 +10,7 @@ namespace EventPlanner.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.DataProtection;
     using Microsoft.AspNetCore.Authorization;
+    using EventPlanner.Services.Queries.Event;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -29,7 +30,11 @@ namespace EventPlanner.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<IActionResult> All() => Ok(await eventService.GetAllAsync());
+        public async Task<IActionResult> All([FromQuery]AllEventsQuery query)
+        {
+            var result = await eventService.GetAllAsync(query);
+            return Ok(result);
+        }
 
         [HttpGet("All-Administration")]
         [Authorize(Roles = Admin)]
@@ -57,7 +62,7 @@ namespace EventPlanner.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create([FromBody]EventFormDto eventDto)
+        public async Task<IActionResult> Create([FromBody] EventFormDto eventDto)
         {
             var isDtoValid = ModelState.IsValid;
 
@@ -73,7 +78,7 @@ namespace EventPlanner.Controllers
         }
 
         [HttpPost("Edit/{id}")]
-        public async Task<IActionResult> Edit([FromBody] EventFormDto eventDto, [FromRoute]int id)
+        public async Task<IActionResult> Edit([FromBody] EventFormDto eventDto, [FromRoute] int id)
         {
             var isDtoValid = ModelState.IsValid;
 
@@ -109,7 +114,7 @@ namespace EventPlanner.Controllers
 
         [HttpPost("Delete/{id}")]
         [Authorize(Roles = Admin)]
-        public async Task<IActionResult> MarkAsDeleted([FromRoute]int id)
+        public async Task<IActionResult> MarkAsDeleted([FromRoute] int id)
         {
             if (id <= 0) return BadRequest();
 

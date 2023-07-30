@@ -13,6 +13,7 @@ namespace EventPlanner.Test
     using Microsoft.EntityFrameworkCore;
     using System.Globalization;
     using AutoMapper.QueryableExtensions;
+    using EventPlanner.Services.Queries.Event;
 
     [TestFixture]
     public class EventServiceTest
@@ -154,7 +155,9 @@ namespace EventPlanner.Test
         [Test]
         public async Task GetAllReturnsCorrectData()
         {
-            var result = await eventService.GetAllAsync();
+            var query = new AllEventsQuery();
+
+            var result = await eventService.GetAllAsync(query);
 
             var expected = db.Events.Where(e => !e.IsDeleted);
 

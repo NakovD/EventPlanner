@@ -1,6 +1,5 @@
 import { CircularProgress } from '@mui/material';
 import { EventForm } from 'features/events/form/EventForm';
-import { ICategory } from 'features/events/form/models/category';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
@@ -14,11 +13,6 @@ export const EventEdit = () => {
   const { data: event, isLoading } = useReadQuery<IAllEventsEntity>({
     endpoint: replacePlaceholderWithId(getRequestsOptions.GetSingleEvent.endpoint, id),
     queryKey: [getRequestsOptions.GetSingleEvent.queryKey],
-  });
-
-  useReadQuery<ICategory[]>({
-    endpoint: getRequestsOptions.GetAllCategories.endpoint,
-    queryKey: [getRequestsOptions.GetAllCategories.queryKey],
   });
 
   return (
