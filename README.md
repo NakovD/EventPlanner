@@ -73,22 +73,78 @@ For the Back end:
 
 The backend API provides the following endpoints:
 
-- `GET /api/events`: Get a list of all events.
-- `GET /api/events/{eventId}`: Get details of a specific event.
-- `POST /api/events`: Create a new event.
-- `PUT /api/events/{eventId}`: Update an existing event.
-- `DELETE /api/events/{eventId}`: Delete an event.
-- ... (add other endpoints as needed)
+# EventPlanner API Documentation
 
-For more details on API usage, check the API documentation (if available).
+This repository contains the documentation for the EventPlanner API, which provides endpoints for managing events, attendees, categories, comments, notifications, and users.
 
-## Contributing
+## API Endpoints
 
-We welcome contributions to the Event Planner project. To contribute, follow these steps:
+### Attendee
 
-1. Fork the repository and create a new branch.
-2. Make your changes and test thoroughly.
-3. Submit a pull request describing your changes and why they should be merged.
+- `GET /api/Attendee/AllByEvent/{id}`: Retrieve all attendees by event ID.
+- `POST /api/Attendee/Create`: Create a new attendee.
+- `POST /api/Attendee/Delete/{id}`: Delete an attendee by ID.
+- `POST /api/Attendee/UpdateStatus/{id}`: Update the status of an attendee.
+- `POST /api/Attendee/UpdateExternalStatus/{encryptedData}`: Update the status of an external attendee using encrypted data.
+- `GET /api/Attendee/ExternalStatus/{encryptedData}`: Retrieve the status of an external attendee using encrypted data.
+
+### Category
+
+- `GET /api/Category/All`: Retrieve all categories.
+- `GET /api/Category/Categories`: Retrieve categories.
+- `POST /api/Category/Add`: Add a new category.
+- `POST /api/Category/Edit`: Edit an existing category.
+- `POST /api/Category/Delete/{id}`: Delete a category by ID.
+
+### Comment
+
+- `GET /api/Comment/All/{eventId}`: Retrieve all comments by event ID.
+- `POST /api/Comment/Create`: Create a new comment.
+- `POST /api/Comment/Edit/{id}`: Edit a comment by ID.
+- `POST /api/Comment/Delete/{id}`: Delete a comment by ID.
+
+### Event
+
+- `GET /api/Event/All`: Retrieve all events with optional search parameters.
+- `GET /api/Event/All-Administration`: Retrieve all events for administration.
+- `GET /api/Event/User`: Retrieve events for the current user.
+- `GET /api/Event/{id}`: Retrieve an event by ID.
+- `POST /api/Event/Create`: Create a new event.
+- `POST /api/Event/Edit/{id}`: Edit an existing event by ID.
+- `GET /api/Event/AttendeeOnly/{encryptedData}`: Retrieve events for attendee-only access using encrypted data.
+- `POST /api/Event/Delete/{id}`: Delete an event by ID.
+- `POST /api/Event/Restore/{id}`: Restore a previously deleted event.
+
+### Notification
+
+- `GET /api/Notification/UnreadCount`: Get the count of unread notifications.
+- `GET /api/Notification/All`: Retrieve all notifications.
+- `POST /api/Notification/MarkSingleAsRead/{id}`: Mark a single notification as read by ID.
+- `POST /api/Notification/DeleteNotification/{id}`: Delete a notification by ID.
+
+### User
+
+- `POST /api/User/Register`: Register a new user.
+- `POST /api/User/Login`: Authenticate a user login.
+- `GET /api/User/Authenticate/{token}`: Authenticate a user using a token.
+- `POST /api/User/LoginWithFacebook`: Login using Facebook credentials.
+- `GET /api/User/Attendee-Users`: Get attendee users.
+- `GET /api/User/All`: Retrieve all users.
+- `POST /api/User/Delete/{id}`: Delete a user by ID.
+
+## Data Models
+
+The API uses the following data models:
+
+- `AttendeeFormDto`: Represents attendee form data.
+- `AttendeeStatusDto`: Represents attendee status data.
+- `CategoryFormDto`: Represents category form data.
+- `CommentFormDto`: Represents comment form data.
+- `EventFormDto`: Represents event form data.
+- `EventTitleSortType`: Represents event title sort type.
+- `FacebookDto`: Represents Facebook login data.
+- `LoginDto`: Represents login data.
+- `RegisterDto`: Represents registration data.
 
 ## License
 
