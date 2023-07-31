@@ -44,6 +44,8 @@ To get started with the Event Planner project, follow the steps below:
 1. Clone this repository to your local machine.
 2. Install the required dependencies for both the backend and frontend.
 
+## Configuration
+
 For the Front End:
 1. Run `npm install` in the Event Planner Folder(not in the client app folder).
 2. In the same folder create a file with a name: `.env.local` (its ignored by git) and it you should paste the following(without quotes around the keys or values):
@@ -56,16 +58,11 @@ For the Front End:
 
 For the Back end:
 1. Run build so the nuget manager restores all nuget packages.
-2. Press Ctrl + F5 to start the application.
-3. In `secrets.json` you should add
+2. In `secrets.json` you should add
     + `FacebookConfiguration` section which includes the followind properties `AppId` and `AppSecret`
     + `Jwt` section which should include the following properties: `Key`, `Issuer`, `Audience`, `Subject`
     + `ConnectionStrings` section with properties `DefaultConnection`
-
-## Configuration
-
-1. Set up your database connection string in the `appsettings.json` and `secrets.json` file.
-2. Configure any necessary API keys for services like email service.
+3. Press Ctrl + F5 to start the application.
 
 ## Running the Application
 
