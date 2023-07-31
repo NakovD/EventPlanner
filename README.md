@@ -4,8 +4,8 @@ Welcome to the Event Planner project! This web application provides a user-frien
 
 ## Table of Contents
 
-- [Introduction](#Introduction)
-- [Features](#Features)
+- [Introduction](#introduction)
+- [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Getting Started](#getting-started)
 - [Installation](#installation)
@@ -43,6 +43,24 @@ To get started with the Event Planner project, follow the steps below:
 
 1. Clone this repository to your local machine.
 2. Install the required dependencies for both the backend and frontend.
+
+For the Front End:
+1. Run `npm install` in the Event Planner Folder(not in the client app folder).
+2. In the same folder create a file with a name: `.env.local` (its ignored by git) and it you should paste the following(without quotes around the keys or values):
+   + VITE_API_KEY=https://... - the path which the API is listening for requests
+   + VITE_FACEBOOK_APP_ID=123456 - Facebook Id for developer app
+   + VITE_CLOUDINARY_UPLOAD_PRESET=preset - Cloudinary Developer Account upload preset
+   + VITE_CLOUDINARY_CLOUD_NAME=cloud name - Your cloudinary cloud name
+   + VITE_CLOUDINARY_API_KEY=api key = Your cloudinary API-KEY
+3. Run `npm start` so the FE should start and open the app on `https://localhost:5173`
+
+For the Back end:
+1. Run build so the nuget manager restores all nuget packages.
+2. Press Ctrl + F5 to start the application.
+3. In `secrets.json` you should add
+    + `FacebookConfiguration` section which includes the followind properties `AppId` and `AppSecret`
+    + `Jwt` section which should include the following properties: `Key`, `Issuer`, `Audience`, `Subject`
+    + `ConnectionStrings` section with properties `DefaultConnection`
 
 ## Configuration
 
