@@ -36,8 +36,8 @@ export const SignUp = () => {
             label="Repeat password"
           />
           <Button label="Register" isSubmit={true} />
+          <FacebookAuth />
         </form>
-        <FacebookAuth />
       </div>
     </div>
   );
