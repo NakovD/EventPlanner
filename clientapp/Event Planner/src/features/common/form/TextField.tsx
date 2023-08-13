@@ -8,6 +8,7 @@ interface ITextFieldProps<TFormValues extends FieldValues> {
   disabled?: boolean;
   placeholder?: string;
   info?: string;
+  type?: React.HTMLInputTypeAttribute;
 }
 
 export const TextField = <TFormValues extends FieldValues>({
@@ -17,6 +18,7 @@ export const TextField = <TFormValues extends FieldValues>({
   placeholder,
   disabled,
   info,
+  type = 'text',
 }: ITextFieldProps<TFormValues>) => {
   const { field, fieldState } = useController({ control, name });
 
@@ -33,6 +35,7 @@ export const TextField = <TFormValues extends FieldValues>({
       ref={field.ref}
       name={field.name}
       color="warning"
+      type={type}
       value={field.value}
       placeholder={placeholder}
       disabled={disabled}

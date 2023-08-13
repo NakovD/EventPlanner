@@ -26,6 +26,7 @@ export const LogIn = () => {
             control={control}
             name={propertyOf<ILoginForm>('password')}
             label="Password"
+            type="password"
           />
           <p className="shadow-text-light">
             Dont have an account?{' '}
