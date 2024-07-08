@@ -8,7 +8,6 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.IdentityModel.Tokens;
 
     [Route("api/[controller]")]
     [ApiController]
