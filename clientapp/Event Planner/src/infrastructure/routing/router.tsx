@@ -1,6 +1,6 @@
 import { ManageAttendees } from 'features/attendees/manage/ManageAttendees';
 import { LogIn } from 'features/authentication/logIn/LogIn';
-import { SignUp } from 'features/authentication/signUp/SignUp';
+import { Register } from 'features/authentication/register/Register';
 import { Layout } from 'features/common/layout/Layout';
 import { EventDetailsAttendeeOnly } from 'features/events/details/EventDetailsAttendeeOnly';
 import { Home } from 'features/home/Home';
@@ -38,6 +38,6 @@ export const router = createBrowserRouter([
   },
   {
     path: routePaths.signup.path,
-    element: <SignUp />,
+    element: <Register />,
   },
 ]);

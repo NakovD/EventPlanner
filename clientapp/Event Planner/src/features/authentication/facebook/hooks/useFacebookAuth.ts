@@ -1,5 +1,5 @@
 import { useAppContext } from 'AppContext';
-import { IAuthResponse } from 'features/authentication/models/authResponse';
+import { IAuthResponse } from 'features/authentication/common/models/authResponse';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { routePaths } from 'infrastructure/routing/routePaths';
@@ -28,7 +28,7 @@ export const useFacebookAuth = () => {
     IFacebookAuthRequest,
     IAuthResponse
   >({
-    endpoint: endpoints.user.loginWithFacebook,
+    endpoint: endpoints.identity.loginWithFacebook,
   });
 
   useEffect(() => {

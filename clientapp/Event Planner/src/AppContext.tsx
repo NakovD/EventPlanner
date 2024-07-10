@@ -1,5 +1,5 @@
-import { IAuthResponse } from 'features/authentication/models/authResponse';
-import { IUser } from 'features/authentication/models/user';
+import { IAuthResponse } from 'features/authentication/common/models/authResponse';
+import { IUser } from 'features/authentication/common/models/user';
 import { useBlocker } from 'features/common/blocker/hooks/useBlocker';
 import { IBlocker } from 'features/common/blocker/models/blocker';
 import { useSnackbarSetup } from 'features/common/snackbar/hooks/useSnackbarSetup';
@@ -43,7 +43,7 @@ export const AppContextProvider = ({ children }: IAppContextProps) => {
   const isQueryEnabled = user === undefined && hasValue(token);
 
   const { data, isError, isSuccess, isFetched } = useReadQuery<IAuthResponse>({
-    endpoint: replacePlaceholderWithId(endpoints.user.authenticate, token ?? ''),
+    endpoint: replacePlaceholderWithId(endpoints.identity.authenticate, token ?? ''),
     queryKey: ['authenticate-user'],
     enabled: isQueryEnabled,
   });

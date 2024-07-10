@@ -1,4 +1,10 @@
 export const endpoints = {
+  identity: {
+    login: '/Identity/login',
+    loginWithFacebook: '/Identity/LoginWithFacebook',
+    register: '/Identity/register',
+    authenticate: '/Identity/authenticate/:id',
+  },
   events: {
     getAll: '/Event/All',
     getSingle: '/Event/:id',
@@ -11,10 +17,6 @@ export const endpoints = {
     restore: '/Event/Restore/:id',
   },
   user: {
-    login: '/User/login',
-    loginWithFacebook: '/User/LoginWithFacebook',
-    register: '/User/register',
-    authenticate: '/User/authenticate/:id',
     getAll: '/User/All',
     getAllAttendee: '/User/Attendee-Users',
     delete: '/User/Delete/:id',

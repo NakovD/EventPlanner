@@ -1,11 +1,11 @@
 import { FacebookAuth } from 'features/authentication/facebook/FacebookAuth';
-import { useRegister } from 'features/authentication/signUp/hooks/useRegister';
-import { IRegisterForm } from 'features/authentication/signUp/models/registerForm';
+import { useRegister } from 'features/authentication/register/hooks/useRegister';
+import { IRegisterForm } from 'features/authentication/register/models/registerForm';
 import { Button } from 'features/common/button/Button';
 import { TextField } from 'features/common/form/TextField';
 import { propertyOf } from 'infrastructure/utilities/propertyOf';
 
-export const SignUp = () => {
+export const Register = () => {
   const { control, onSubmit } = useRegister();
   return (
     <div className="h-full min-h-screen flex bg-gradient-to-l from-light-blue to-background-light to-blue-500">

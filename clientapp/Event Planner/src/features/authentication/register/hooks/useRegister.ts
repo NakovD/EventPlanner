@@ -1,10 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppContext } from 'AppContext';
-import { IAuthResponse } from 'features/authentication/models/authResponse';
-import { IRegisterErrorResponse } from 'features/authentication/signUp/models/registerErrorResponse';
-import { IRegisterForm } from 'features/authentication/signUp/models/registerForm';
-import { IRegisterRequest } from 'features/authentication/signUp/models/registerRequest';
-import { signUpValidationSchema } from 'features/authentication/signUp/validators/signupFormValidator';
+import { IAuthResponse } from 'features/authentication/common/models/authResponse';
+import { IRegisterErrorResponse } from 'features/authentication/register/models/registerErrorResponse';
+import { IRegisterForm } from 'features/authentication/register/models/registerForm';
+import { IRegisterRequest } from 'features/authentication/register/models/registerRequest';
+import { registerValidationSchema } from 'features/authentication/register/validators/registerFormValidator';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { routePaths } from 'infrastructure/routing/routePaths';
@@ -20,14 +20,14 @@ export const useRegister = () => {
     IAuthResponse,
     IRegisterErrorResponse[]
   >({
-    endpoint: endpoints.user.register,
+    endpoint: endpoints.identity.register,
   });
 
   const navigate = useNavigate();
 
   const { control, handleSubmit, setError } = useForm<IRegisterForm>({
     defaultValues: { userName: '', password: '', repeatPassword: '', email: '' },
-    resolver: yupResolver(signUpValidationSchema),
+    resolver: yupResolver(registerValidationSchema),
   });
 
   const onValid = (data: IRegisterForm) => {

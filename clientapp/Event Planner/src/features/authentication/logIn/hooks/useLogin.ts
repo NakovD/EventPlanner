@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppContext } from 'AppContext';
+import { IAuthResponse } from 'features/authentication/common/models/authResponse';
 import { ILoginForm } from 'features/authentication/logIn/models/loginForm';
 import { ILoginRequest } from 'features/authentication/logIn/models/loginRequest';
-import { IAuthResponse } from 'features/authentication/models/authResponse';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { routePaths } from 'infrastructure/routing/routePaths';
@@ -25,7 +25,7 @@ export const useLogin = () => {
     IAuthResponse,
     AuthError[]
   >({
-    endpoint: endpoints.user.login,
+    endpoint: endpoints.identity.login,
   });
 
   const navigate = useNavigate();

@@ -2,8 +2,8 @@ import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 
 export const checkAuthorizationURL = (url: string) => {
   const routesWithoutAuth = [
-    endpoints.user.login,
-    endpoints.user.register,
+    endpoints.identity.login,
+    endpoints.identity.register,
     endpoints.events.attendeeOnly,
     endpoints.attendees.updateExternalStatus,
     endpoints.attendees.status,
