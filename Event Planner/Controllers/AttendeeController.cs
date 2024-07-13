@@ -40,7 +40,7 @@ namespace EventPlanner.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet(AttendeeActionConstants.GetAllByEventId)]
+        [HttpGet(AttendeeActionsConstants.GetAllByEventId)]
         public async Task<IActionResult> GetAllByEventId(int id)
         {
             if (id <= 0) return BadRequest();
@@ -50,7 +50,7 @@ namespace EventPlanner.Controllers
             return Ok(result);
         }
 
-        [HttpPost(AttendeeActionConstants.Create)]
+        [HttpPost(AttendeeActionsConstants.Create)]
         public async Task<IActionResult> CreateAttendee([FromBody] AttendeeFormDto attendeeFormDto)
         {
             var isModelValid = ModelState.IsValid;
@@ -79,7 +79,7 @@ namespace EventPlanner.Controllers
             return Ok();
         }
 
-        [HttpPost(AttendeeActionConstants.Delete)]
+        [HttpPost(AttendeeActionsConstants.Delete)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (id <= 0) return BadRequest();
@@ -95,7 +95,7 @@ namespace EventPlanner.Controllers
             return Ok();
         }
 
-        [HttpPost(AttendeeActionConstants.UpdateStatus)]
+        [HttpPost(AttendeeActionsConstants.UpdateStatus)]
         public async Task<IActionResult> UpdateStatus([FromRoute] int id, [FromBody] AttendeeStatusDto dto)
         {
             if (id <= 0) return BadRequest();
@@ -124,7 +124,7 @@ namespace EventPlanner.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost(AttendeeActionConstants.UpdateStatusExternal)]
+        [HttpPost(AttendeeActionsConstants.UpdateStatusExternal)]
         public async Task<IActionResult> UpdateExternalAttendeeStatus([FromRoute] string encryptedData, [FromBody] AttendeeStatusDto dto)
         {
             var unprotectedData = UnProtectUserData(encryptedData);
@@ -153,7 +153,7 @@ namespace EventPlanner.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet(AttendeeActionConstants.GetStatusExternal)]
+        [HttpGet(AttendeeActionsConstants.GetStatusExternal)]
         public async Task<IActionResult> GetExternalAttendeeStatus([FromRoute] string encryptedData)
         {
             var unprotectedData = UnProtectUserData(encryptedData);

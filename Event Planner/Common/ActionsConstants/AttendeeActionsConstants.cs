@@ -1,6 +1,6 @@
 ﻿namespace EventPlanner.Common.ActionsConstants
 {
-    public static class AttendeeActionConstants
+    public static class AttendeeActionsConstants
     {
         public const string GetAllByEventId = "AllByEvent/{id}";
 

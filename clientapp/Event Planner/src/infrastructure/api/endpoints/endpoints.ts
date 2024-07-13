@@ -36,8 +36,8 @@ export const endpoints = {
   notifications: {
     unreadCount: '/Notification/UnreadCount',
     getAll: '/Notification/All',
-    markSingleAsReaded: '/Notification/MarkSingleAsRead/:id',
-    delete: 'Notification/DeleteNotification/:id',
+    markSingleAsReaded: '/Notification/MarkAsRead/:id',
+    delete: 'Notification/Delete/:id',
   },
   comments: {
     getAll: '/Comment/All/:id',
