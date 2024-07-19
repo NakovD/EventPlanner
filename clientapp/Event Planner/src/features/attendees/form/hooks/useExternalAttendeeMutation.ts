@@ -11,6 +11,6 @@ export const useExternalAttendeeMutation = ({
   eventId,
 }: IUseExternalAttendeeMutationOptions) =>
   useSnackbarBlockingMutation<IExternalAttendeeRequest>({
-    endpoint: endpoints.attendees.createNew,
+    endpoint: endpoints.attendees.create,
     queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, eventId],
   });

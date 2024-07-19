@@ -23,8 +23,8 @@ export const useAdministrationCategoryForm = ({
   });
 
   const endpoint = category
-    ? replacePlaceholderWithId(endpoints.categories.update, category?.id)
-    : endpoints.categories.add;
+    ? replacePlaceholderWithId(endpoints.categories.edit, category?.id)
+    : endpoints.categories.create;
 
   const { mutate } = useSnackbarBlockingMutation<ICategoryRequest>({
     endpoint,

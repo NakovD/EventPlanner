@@ -6,7 +6,7 @@
 
         public const string GetAllForAdmin = "Categories";
 
-        public const string Add = "Add";
+        public const string Create = "Create";
 
         public const string Edit = "Edit";
 

@@ -29,7 +29,7 @@
             return Ok(await categoryService.GetAllAsync());
         }
 
-        [HttpPost(CategoryActionsConstants.Add)]
+        [HttpPost(CategoryActionsConstants.Create)]
         [Authorize(Roles = RoleNamesConstants.Admin)]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryFormDto dto)
         {
