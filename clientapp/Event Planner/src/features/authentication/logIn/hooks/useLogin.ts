@@ -11,6 +11,8 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 
+type AuthError = { code: string; description: string };
+
 const validationSchema = yup.object({
   userName: yup.string().required(),
   password: yup.string().required(),
@@ -21,7 +23,7 @@ export const useLogin = () => {
   const { mutate, isSuccess, data, error, isError } = useBlockingMutation<
     ILoginRequest,
     IAuthResponse,
-    string
+    AuthError[]
   >({
     endpoint: endpoints.user.login,
   });
@@ -51,5 +53,5 @@ export const useLogin = () => {
 
   const onSubmit = handleSubmit(onValid);
 
-  return { isError, error: error?.response?.data, control, onSubmit };
+  return { isError, errors: error?.response?.data, control, onSubmit };
 };

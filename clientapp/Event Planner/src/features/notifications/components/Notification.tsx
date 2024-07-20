@@ -1,13 +1,8 @@
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import { Button } from 'features/common/button/Button';
 import { notificationTypeTextMapper } from 'features/notifications/data/notificationTypeTextMapper';
+import { useNotificationsNotification } from 'features/notifications/hooks/useNotificationsNotification';
 import { INotification } from 'features/notifications/models/notification';
-import { endpoints } from 'infrastructure/api/endpoints/endpoints';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useInvalidateQueries } from 'infrastructure/api/hooks/useInvalidateQueries';
-import { useSnackbarBlockingMutation } from 'infrastructure/api/hooks/useSnackbarBlockingMutation';
-import { routePaths } from 'infrastructure/routing/routePaths';
-import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { Link } from 'react-router-dom';
 
 interface INotificationProps {
@@ -15,29 +10,9 @@ interface INotificationProps {
 }
 
 export const Notification = ({ notification }: INotificationProps) => {
-  const invalidate = useInvalidateQueries();
-
-  const { mutate: markSingleAsReaded } = useSnackbarBlockingMutation({
-    endpoint: replacePlaceholderWithId(
-      endpoints.notifications.markSingleAsReaded,
-      notification.id,
-    ),
-    queryKey: [getRequestsOptions.GetAllNotifications.queryKey],
-    onSuccess: () =>
-      invalidate([getRequestsOptions.GetUnreadNotificationsCount.queryKey]),
+  const { eventLink, handleDelete, handleMarkAsRead } = useNotificationsNotification({
+    notification,
   });
-
-  const { mutate: deleteNotification } = useSnackbarBlockingMutation({
-    endpoint: replacePlaceholderWithId(endpoints.notifications.delete, notification.id),
-    queryKey: [getRequestsOptions.GetAllNotifications.queryKey],
-    onSuccess: () =>
-      invalidate([getRequestsOptions.GetUnreadNotificationsCount.queryKey]),
-  });
-
-  const eventLink = replacePlaceholderWithId(
-    routePaths.eventDetails.path,
-    notification.eventId,
-  );
 
   return (
     <div className="flex gap-10 shadow-2xl p-5 relative">
@@ -47,7 +22,10 @@ export const Notification = ({ notification }: INotificationProps) => {
       <NotificationsActiveIcon
         className="ml-3 place-self-center"
         color="success"
-        sx={{ width: '60px', height: '60px' }}
+        sx={{
+          width: '60px',
+          height: '60px',
+        }}
       />
       <div className="grid w-full">
         <p className="mb-6">{notificationTypeTextMapper[notification.type]}</p>
@@ -60,14 +38,10 @@ export const Notification = ({ notification }: INotificationProps) => {
           <Button
             className="max-w-xs"
             label="Mark as readed"
-            onClick={() => markSingleAsReaded({})}
+            onClick={() => handleMarkAsRead()}
           />
         )}
-        <Button
-          className="max-w-xs mt-2"
-          label="Delete"
-          onClick={() => deleteNotification({})}
-        />
+        <Button className="max-w-xs mt-2" label="Delete" onClick={() => handleDelete} />
         <Link className="text-right font-medium text-primary-light" to={eventLink}>
           Go to the event
         </Link>

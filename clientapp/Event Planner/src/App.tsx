@@ -11,6 +11,7 @@ export const App = () => {
   const {
     blocker: { isBlocking },
     snackBar: { snackBarProps },
+    isAuthenticated,
   } = useAppContext();
 
   useReadQuery<ICategory[]>({
@@ -18,6 +19,7 @@ export const App = () => {
     queryKey: [getRequestsOptions.GetAllCategories.queryKey],
     cacheTime: 18_00_000,
     staleTime: 18_000_000,
+    enabled: isAuthenticated,
   });
 
   return (

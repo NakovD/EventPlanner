@@ -16,7 +16,7 @@ export const EventPotentialAttendee = ({
   eventId,
 }: IEventPotentialAttendeelProps) => {
   const { mutate } = useSnackbarBlockingMutation<IAttendeeUserRequest>({
-    endpoint: endpoints.attendees.createNew,
+    endpoint: endpoints.attendees.create,
     queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, eventId],
   });
 

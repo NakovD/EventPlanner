@@ -21,7 +21,7 @@ export const AdministrationEvent = ({ event }: IAdministrationEventProps) => {
       <p className="truncate w-40" title={event.category}>
         {event.category}
       </p>
-      <p className="truncate w-26">
+      <p className="truncate w-32">
         Description
         <button className="ml-1" onClick={openDialog}>
           <InfoIcon sx={{ width: '20px' }} />
@@ -29,7 +29,7 @@ export const AdministrationEvent = ({ event }: IAdministrationEventProps) => {
       </p>
       <p className="truncate w-24">{event.date}</p>
       <p className="truncate w-12">{event.time}</p>
-      <p className="truncate w-44">{event.organizerName}</p>
+      <p className="truncate w-40">{event.organizerName}</p>
       <p className="truncate w-20">{event.attendees}</p>
       <p className="truncate w-32">{event.isDeleted ? 'Yes' : 'No'}</p>
       {!event.isDeleted && <Button label="Delete" onClick={deleteEvent} />}

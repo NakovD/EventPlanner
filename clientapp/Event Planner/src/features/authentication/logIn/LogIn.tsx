@@ -5,11 +5,12 @@ import { ILoginForm } from 'features/authentication/logIn/models/loginForm';
 import { Button } from 'features/common/button/Button';
 import { TextField } from 'features/common/form/TextField';
 import { routePaths } from 'infrastructure/routing/routePaths';
+import { generateUniqueUuid } from 'infrastructure/utilities/generateUniqueUuid';
 import { propertyOf } from 'infrastructure/utilities/propertyOf';
 import { Link } from 'react-router-dom';
 
 export const LogIn = () => {
-  const { isError, error, control, onSubmit } = useLogin();
+  const { isError, errors, control, onSubmit } = useLogin();
 
   return (
     <div className="h-full min-h-screen flex bg-gradient-to-l from-light-blue to-background-light to-blue-500">
@@ -26,6 +27,7 @@ export const LogIn = () => {
             control={control}
             name={propertyOf<ILoginForm>('password')}
             label="Password"
+            type="password"
           />
           <p className="shadow-text-light">
             Dont have an account?{' '}
@@ -38,7 +40,13 @@ export const LogIn = () => {
           </p>
           <Button label="Login" isSubmit={true} />
           <FacebookAuth />
-          {isError && error && <Typography color={'red'}>{error}</Typography>}
+          {isError &&
+            errors?.length !== 0 &&
+            errors?.map((e) => (
+              <Typography key={generateUniqueUuid()} color={'red'}>
+                {e.description}
+              </Typography>
+            ))}
         </form>
       </div>
     </div>

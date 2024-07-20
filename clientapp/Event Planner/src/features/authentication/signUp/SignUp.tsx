@@ -26,16 +26,18 @@ export const SignUp = () => {
           <TextField
             name={propertyOf<IRegisterForm>('password')}
             control={control}
+            type="password"
             label="Password"
           />
           <TextField
             name={propertyOf<IRegisterForm>('repeatPassword')}
             control={control}
+            type="password"
             label="Repeat password"
           />
           <Button label="Register" isSubmit={true} />
+          <FacebookAuth />
         </form>
-        <FacebookAuth />
       </div>
     </div>
   );
