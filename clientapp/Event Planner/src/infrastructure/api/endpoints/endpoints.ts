@@ -21,7 +21,7 @@ export const endpoints = {
   },
   attendees: {
     allByEvent: '/Attendee/AllByEvent/:id',
-    createNew: '/Attendee/Create',
+    create: '/Attendee/Create',
     delete: '/Attendee/Delete/:id',
     updateStatus: '/Attendee/UpdateStatus/:id',
     updateExternalStatus: '/Attendee/UpdateExternalStatus/:id',
@@ -29,15 +29,15 @@ export const endpoints = {
   },
   categories: {
     getAll: '/Category/All',
-    update: '/Category/Edit',
+    edit: '/Category/Edit',
     delete: '/Category/Delete/:id',
-    add: '/Category/Add',
+    create: '/Category/Create',
   },
   notifications: {
     unreadCount: '/Notification/UnreadCount',
     getAll: '/Notification/All',
-    markSingleAsReaded: '/Notification/MarkSingleAsRead/:id',
-    delete: 'Notification/DeleteNotification/:id',
+    markSingleAsReaded: '/Notification/MarkAsRead/:id',
+    delete: 'Notification/Delete/:id',
   },
   comments: {
     getAll: '/Comment/All/:id',

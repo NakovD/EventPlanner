@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using EventPlanner.Services.Models.Comment;
     using Microsoft.AspNetCore.Authorization;
+    using EventPlanner.Common.ActionsConstants;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -18,10 +19,10 @@
         }
 
         [AllowAnonymous]
-        [HttpGet("All/{eventId}")]
+        [HttpGet(CommentActionsConstants.GetAllForEvent)]
         public async Task<IActionResult> All([FromRoute]int eventId) => Ok(await commentService.GetAllAsync(eventId));
 
-        [HttpPost("Create")]
+        [HttpPost(CommentActionsConstants.Create)]
         public async Task<IActionResult> Create([FromBody]CommentFormDto dto)
         {
             var isModelValid = ModelState.IsValid;
@@ -39,7 +40,7 @@
             return Ok();
         }
 
-        [HttpPost("Edit/{id}")]
+        [HttpPost(CommentActionsConstants.Edit)]
         public async Task<IActionResult> Edit([FromRoute] int id, [FromBody] CommentFormDto dto)
         {
             var isModelValid = ModelState.IsValid;
@@ -57,7 +58,7 @@
             return Ok();
         }
 
-        [HttpPost("Delete/{id}")]
+        [HttpPost(CommentActionsConstants.Delete)]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if (id <= 0) return BadRequest();

@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
+    using EventPlanner.Common.ActionsConstants;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -30,7 +31,7 @@
         }
 
         [AllowAnonymous]
-        [HttpPost("Register")]
+        [HttpPost(UserActionsConstants.Register)]
         public async Task<IActionResult> CreateUser(RegisterDto dto)
         {
             var isValid = ModelState.IsValid;
@@ -43,7 +44,7 @@
         }
 
         [AllowAnonymous]
-        [HttpPost("Login")]
+        [HttpPost(UserActionsConstants.Login)]
         public async Task<IActionResult> Login(LoginDto dto)
         {
             var isValid = ModelState.IsValid;
@@ -56,7 +57,7 @@
         }
 
         [AllowAnonymous]
-        [HttpGet("Authenticate/{token}")]
+        [HttpGet(UserActionsConstants.Authenticate)]
         public async Task<IActionResult> AuthenticateUser([FromRoute] string token)
         {
             var isTokenValid = await jwtService.ValidateTokenAsync(token);
@@ -75,7 +76,7 @@
         }
 
         [AllowAnonymous]
-        [HttpPost("LoginWithFacebook")]
+        [HttpPost(UserActionsConstants.LoginWithFacebook)]
         public async Task<IActionResult> LoginWithFacebook([FromBody] FacebookDto dto)
         {
             var isModelValid = ModelState.IsValid;
@@ -87,10 +88,10 @@
             return GenerateActionResult(result);
         }
 
-        [HttpGet("Attendee-Users")]
+        [HttpGet(UserActionsConstants.GetAttendeeUsers)]
         public async Task<IActionResult> GetAllAttendeeUsers() => Ok(await userService.GetAllAttendeeUsersAsync());
 
-        [HttpGet("All")]
+        [HttpGet(UserActionsConstants.GetAll)]
         [Authorize(Roles = Admin)]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -99,7 +100,7 @@
             return Ok(allUsers);
         }
 
-        [HttpPost("Delete/{id}")]
+        [HttpPost(UserActionsConstants.Delete)]
         [Authorize(Roles = Admin)]
         public async Task<IActionResult> DeleteUser(string id)
         {

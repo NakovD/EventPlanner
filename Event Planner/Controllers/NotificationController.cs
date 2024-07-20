@@ -1,5 +1,6 @@
 ﻿namespace EventPlanner.Controllers
 {
+    using EventPlanner.Common.ActionsConstants;
     using EventPlanner.Services.Contracts;
     using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,7 @@
             this.notificationService = notificationService;
         }
 
-        [HttpGet("UnreadCount")]
+        [HttpGet(NotificationActionsConstants.UnreadCount)]
         public async Task<IActionResult> UnreadNotificationsCount()
         {
             var userId = GetUserId();
@@ -26,7 +27,7 @@
             return Ok(notificationCount);
         }
 
-        [HttpGet("All")]
+        [HttpGet(NotificationActionsConstants.GetAll)]
         public async Task<IActionResult> GetAllAsync()
         {
             var userId = GetUserId();
@@ -38,7 +39,7 @@
             return Ok(notifications);
         }
 
-        [HttpPost("MarkSingleAsRead/{id}")]
+        [HttpPost(NotificationActionsConstants.MarkAsRead)]
         public async Task<IActionResult> MarkSingleAsReaded(int id)
         {
             var userId = GetUserId();
@@ -52,7 +53,7 @@
             return Ok();
         }
 
-        [HttpPost("DeleteNotification/{id}")]
+        [HttpPost(NotificationActionsConstants.Delete)]
         public async Task<IActionResult> DeleteNotification(int id)
         {
             if (id <= 0) return BadRequest();
