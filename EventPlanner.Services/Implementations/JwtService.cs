@@ -53,7 +53,6 @@
             return new AuthResponse
             {
                 Token = tokenHandler.WriteToken(token),
-                Expiration = expiration,
                 UserName = user.UserName,
                 UserEmail = user.Email,
                 UserId = user.Id,
@@ -72,7 +71,6 @@
 
         private IEnumerable<Claim> CreateClaims(User user, IEnumerable<string> roles)
         {
-
             var rolesClaims = GetRolesClaims(roles);
 
             var otherClaims = new List<Claim> {

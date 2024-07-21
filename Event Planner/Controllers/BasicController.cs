@@ -17,7 +17,7 @@
         {
             if (result.Succeeded) return Ok(result.Result);
 
-            return StatusCode(result.RequestCode, result.Errors);
+            return StatusCode((int)result.RequestStatusCode, result.Errors);
         }
     }
 }

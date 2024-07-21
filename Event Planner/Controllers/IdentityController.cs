@@ -1,31 +1,24 @@
 ﻿namespace EventPlanner.Controllers
 {
-    using EventPlanner.Data.Models;
+    using EventPlanner.Common.ActionsConstants;
     using EventPlanner.Services.Contracts;
     using EventPlanner.Services.Models.Auth;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]
     [ApiController]
     public class IdentityController : BasicController
     {
-        private readonly UserManager<User> userManager;
-
-        private readonly IJwtService jwtService;
-
         private readonly IIdentityService identityService;
 
-        public IdentityController(UserManager<User> userManager, IJwtService jwtService, IIdentityService identityService)
+        public IdentityController(IIdentityService identityService)
         {
-            this.userManager = userManager;
-            this.jwtService = jwtService;
             this.identityService = identityService;
         }
 
         [AllowAnonymous]
-        [HttpPost("Register")]
+        [HttpPost(IdentityActionsConstants.Register)]
         public async Task<IActionResult> CreateUser(RegisterDto dto)
         {
             var isValid = ModelState.IsValid;
@@ -38,7 +31,7 @@
         }
 
         [AllowAnonymous]
-        [HttpPost("Login")]
+        [HttpPost(IdentityActionsConstants.Login)]
         public async Task<IActionResult> Login(LoginDto dto)
         {
             var isValid = ModelState.IsValid;
@@ -51,26 +44,16 @@
         }
 
         [AllowAnonymous]
-        [HttpGet("Authenticate/{token}")]
+        [HttpGet(IdentityActionsConstants.Authenticate)]
         public async Task<IActionResult> AuthenticateUser([FromRoute] string token)
         {
-            var isTokenValid = await jwtService.ValidateTokenAsync(token);
-
-            if (!isTokenValid) return Unauthorized();
-
-            var userId = jwtService.GetUserIdFromToken(token);
-
-            var user = await userManager.FindByIdAsync(userId);
-
-            if (user == null) return BadRequest();
-
-            var result = await identityService.GenerateTokenForUserAsync(user);
+            var result = await this.identityService.ValidateUserAsync(token);
 
             return GenerateActionResult(result);
         }
 
         [AllowAnonymous]
-        [HttpPost("LoginWithFacebook")]
+        [HttpPost(IdentityActionsConstants.LoginWithFacebook)]
         public async Task<IActionResult> LoginWithFacebook([FromBody] FacebookDto dto)
         {
             var isModelValid = ModelState.IsValid;

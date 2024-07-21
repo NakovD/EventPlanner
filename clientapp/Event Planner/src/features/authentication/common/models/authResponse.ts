@@ -4,5 +4,4 @@ export interface IAuthResponse {
   roles: string[];
   userId: string;
   token: string;
-  expiration: string;
 }

@@ -12,8 +12,6 @@
 
         public string Token { get; set; } = null!;
 
-        public DateTime Expiration { get; set; }
-
         public IEnumerable<string> Roles { get; set; } = new List<string>();
     }
 }

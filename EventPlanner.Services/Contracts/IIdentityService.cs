@@ -2,7 +2,6 @@
 {
     using Results;
     using Models.Auth;
-    using EventPlanner.Data.Models;
 
     public interface IIdentityService
     {
@@ -12,6 +11,7 @@
 
         Task<AuthenticationResult<AuthResponse>> LoginWithFacebookAsync(string accessToken);
 
-        Task<AuthenticationResult<AuthResponse>> GenerateTokenForUserAsync(User user);
+        Task<AuthenticationResult<AuthResponse>> ValidateUserAsync(string token);
+
     }
 }
