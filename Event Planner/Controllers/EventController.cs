@@ -11,6 +11,7 @@ namespace EventPlanner.Controllers
     using Microsoft.AspNetCore.DataProtection;
     using Microsoft.AspNetCore.Authorization;
     using EventPlanner.Services.Queries.Event;
+    using EventPlanner.Common.ActionsConstants;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -29,18 +30,18 @@ namespace EventPlanner.Controllers
             dataProtector = dataProtectionProvider.CreateProtector(AttendeeInviteDataPurpose);
         }
 
-        [HttpGet("All")]
+        [HttpGet(EventActionsConstants.GetAll)]
         public async Task<IActionResult> All([FromQuery]AllEventsQuery query)
         {
             var result = await eventService.GetAllAsync(query);
             return Ok(result);
         }
 
-        [HttpGet("All-Administration")]
+        [HttpGet(EventActionsConstants.GetAllForAdmin)]
         [Authorize(Roles = Admin)]
         public async Task<IActionResult> AllAdmin() => Ok(await eventService.GetAllAdministrationAsync());
 
-        [HttpGet("User")]
+        [HttpGet(EventActionsConstants.GetUserEvents)]
         public async Task<IActionResult> AllUserEvents()
         {
             var userId = GetUserId();
@@ -52,7 +53,7 @@ namespace EventPlanner.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet(EventActionsConstants.GetById)]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             if (id <= 0) return BadRequest();
@@ -61,7 +62,7 @@ namespace EventPlanner.Controllers
             return Ok(neededEvent);
         }
 
-        [HttpPost("Create")]
+        [HttpPost(EventActionsConstants.Create)]
         public async Task<IActionResult> Create([FromBody] EventFormDto eventDto)
         {
             var isDtoValid = ModelState.IsValid;
@@ -77,7 +78,7 @@ namespace EventPlanner.Controllers
             return Ok();
         }
 
-        [HttpPost("Edit/{id}")]
+        [HttpPost(EventActionsConstants.Edit)]
         public async Task<IActionResult> Edit([FromBody] EventFormDto eventDto, [FromRoute] int id)
         {
             var isDtoValid = ModelState.IsValid;
@@ -92,7 +93,7 @@ namespace EventPlanner.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("AttendeeOnly/{encryptedData}")]
+        [HttpGet(EventActionsConstants.GetForExternalAttendee)]
         public async Task<IActionResult> AttendeeOnly(string encryptedData)
         {
             var unprotectedData = dataProtector.Unprotect(encryptedData);
@@ -112,7 +113,7 @@ namespace EventPlanner.Controllers
             return Ok(neededEvent);
         }
 
-        [HttpPost("Delete/{id}")]
+        [HttpPost(EventActionsConstants.Delete)]
         [Authorize(Roles = Admin)]
         public async Task<IActionResult> MarkAsDeleted([FromRoute] int id)
         {
@@ -125,7 +126,7 @@ namespace EventPlanner.Controllers
             return Ok();
         }
 
-        [HttpPost("Restore/{id}")]
+        [HttpPost(EventActionsConstants.Restore)]
         [Authorize(Roles = Admin)]
         public async Task<IActionResult> UnmarkAsDeleted([FromRoute] int id)
         {

@@ -5,6 +5,7 @@
 
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
+    using EventPlanner.Common.ActionsConstants;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -17,10 +18,10 @@
             this.userService = userService;
         }
 
-        [HttpGet("Attendee-Users")]
+        [HttpGet(UserActionsConstants.GetAttendeeUsers)]
         public async Task<IActionResult> GetAllAttendeeUsers() => Ok(await userService.GetAllAttendeeUsersAsync());
 
-        [HttpGet("All")]
+        [HttpGet(UserActionsConstants.GetAll)]
         [Authorize(Roles = Admin)]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -29,7 +30,7 @@
             return Ok(allUsers);
         }
 
-        [HttpPost("Delete/{id}")]
+        [HttpPost(UserActionsConstants.Delete)]
         [Authorize(Roles = Admin)]
         public async Task<IActionResult> DeleteUser(string id)
         {

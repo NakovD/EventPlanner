@@ -5,6 +5,8 @@
     using Microsoft.AspNetCore.Mvc;
     using EventPlanner.Services.Models.Category;
     using Microsoft.AspNetCore.Authorization;
+    using EventPlanner.Common.ActionsConstants;
+    using EventPlanner.Common;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -17,18 +19,18 @@
             this.categoryService = categoryService;
         }
 
-        [HttpGet("All")]
+        [HttpGet(CategoryActionsConstants.GetAll)]
         public async Task<IActionResult> Get() => Ok(await categoryService.GetAllAsync());
 
-        [HttpGet("Categories")]
-        [Authorize(Roles = "Admin")]
+        [HttpGet(CategoryActionsConstants.GetAllForAdmin)]
+        [Authorize(Roles = RoleNamesConstants.Admin)]
         public async Task<IActionResult> GetAllCategories()
         {
             return Ok(await categoryService.GetAllAsync());
         }
 
-        [HttpPost("Add")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost(CategoryActionsConstants.Create)]
+        [Authorize(Roles = RoleNamesConstants.Admin)]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryFormDto dto)
         {
             var actionSuccess = await categoryService.CreateAsync(dto);
@@ -38,8 +40,8 @@
             return Ok();
         }
 
-        [HttpPost("Edit")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost(CategoryActionsConstants.Edit)]
+        [Authorize(Roles = RoleNamesConstants.Admin)]
         public async Task<IActionResult> EditCategory([FromBody] CategoryFormDto dto)
         {
             if (dto.Id <= 0) return BadRequest();
@@ -51,8 +53,8 @@
             return Ok();
         }
 
-        [HttpPost("Delete/{id}")]
-        [Authorize(Roles = "Admin")]
+        [HttpPost(CategoryActionsConstants.Delete)]
+        [Authorize(Roles = RoleNamesConstants.Admin)]
         public async Task<IActionResult> DeleteCategory([FromRoute] int id)
         {
             if (id <= 0) return BadRequest();
