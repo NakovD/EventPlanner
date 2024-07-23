@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Identity;
     using System.Threading.Tasks;
     using System.Net;
+    using System.Security.Cryptography;
 
     public class IdentityService : IIdentityService
     {
@@ -154,6 +155,17 @@
             var authResponse = jwtService.CreateToken(user, roles);
 
             return authResponse;
+        }
+
+        private string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+
+                return Convert.ToBase64String(randomNumber);
+            }
         }
 
         private AuthenticationResult<AuthResponse> GenerateSuccessAuthResult(AuthResponse authResponse)
