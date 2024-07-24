@@ -2,6 +2,7 @@
 {
     using Models.Auth;
     using Data.Models;
+    using System.Security.Claims;
 
     public interface IJwtService
     {
@@ -10,5 +11,7 @@
         Task<bool> ValidateTokenAsync(string token);
 
         string GetUserIdFromToken(string token);
+
+        ClaimsPrincipal ValidateExpiredToken(string token);
     }
 }

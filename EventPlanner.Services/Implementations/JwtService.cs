@@ -122,5 +122,18 @@
 
             return claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
         }
+
+        public ClaimsPrincipal ValidateExpiredToken(string token)
+        {
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);
+
+            var jwtSecurityToken = validatedToken as JwtSecurityToken;
+
+            if (validatedToken == null || jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase) {
+                throw new ApplicationException("Invalid token");
+            }
+
+            return principal;
+        }
     }
 }
