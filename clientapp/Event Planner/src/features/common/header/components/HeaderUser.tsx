@@ -1,35 +1,21 @@
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
-import { useAppContext } from 'AppContext';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
+import { useHeaderUser } from 'features/common/header/hooks/useHeaderUser';
 import { routePaths } from 'infrastructure/routing/routePaths';
-import { useState } from 'react';
-import { useDetectClickOutside } from 'react-detect-click-outside';
 import { Link } from 'react-router-dom';
 
 export const HeaderUser = () => {
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
-  const { setIsAuthenticated } = useAppContext();
-
-  const toggleDropdown = () => setIsDropdownVisible(!isDropdownVisible);
-
-  const closeDropdown = () => setIsDropdownVisible(false);
-
-  const ref = useDetectClickOutside({ onTriggered: closeDropdown });
-
-  const signOut = () => setIsAuthenticated();
-
-  const { data } = useReadQuery<number>({
-    endpoint: getRequestsOptions.GetUnreadNotificationsCount.endpoint,
-    queryKey: [getRequestsOptions.GetUnreadNotificationsCount.queryKey],
-  });
-
-  const shouldShowNotificationsCount = (data ?? 0) > 0;
+  const {
+    isDropdownVisible,
+    shouldShowNotificationsCount,
+    notificationsCount,
+    dropdownRef,
+    signOut,
+    toggleDropdown,
+  } = useHeaderUser();
 
   return (
-    <div className="relative" ref={ref}>
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
         className="relative w-10 h-10 rounded-full shrink-0 grid place-items-center"
@@ -37,7 +23,7 @@ export const HeaderUser = () => {
         <AccountBoxIcon sx={{ width: '40px', height: '40px' }} color="secondary" />
         {shouldShowNotificationsCount && (
           <div className="w-5 h-5 text-sm bg-primary-light rounded-full absolute top-0 -right-1">
-            {data}
+            {notificationsCount}
           </div>
         )}
       </button>
