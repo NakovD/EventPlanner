@@ -1,6 +1,5 @@
 import { useAppContext } from 'AppContext';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
+import { useHeaderUserNotificationsCountQuery } from 'features/common/header/hooks/useHeaderUserNotificationsCountQuery';
 import { useState } from 'react';
 import { useDetectClickOutside } from 'react-detect-click-outside';
 
@@ -17,10 +16,7 @@ export const useHeaderUser = () => {
 
   const signOut = () => setIsAuthenticated();
 
-  const { data } = useReadQuery<number>({
-    endpoint: getRequestsOptions.GetUnreadNotificationsCount.endpoint,
-    queryKey: [getRequestsOptions.GetUnreadNotificationsCount.queryKey],
-  });
+  const { data } = useHeaderUserNotificationsCountQuery();
 
   const shouldShowNotificationsCount = (data ?? 0) > 0;
 
