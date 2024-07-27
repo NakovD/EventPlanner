@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useState } from 'react';
+import { useExpandableSection } from 'features/common/expandableSection/hooks/useExpandableSection';
 
 interface IExpandableSectionProps {
   defaultVisible?: boolean;
@@ -12,11 +12,9 @@ export const ExpandableSection = ({
   sectionName,
   children,
 }: IExpandableSectionProps) => {
-  const [isVisible, setIsVisible] = useState(defaultVisible);
-
-  const toggleSection = () => setIsVisible(!isVisible);
-
-  const sectionAccent = isVisible && 'font-bold';
+  const { isVisible, sectionAccent, toggleSection } = useExpandableSection({
+    defaultVisible,
+  });
 
   return (
     <div>
