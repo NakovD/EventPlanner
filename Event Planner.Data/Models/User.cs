@@ -8,6 +8,10 @@
         [Required]
         public DateTime RegistrationDate { get; set; }
 
+        public string RefreshToken { get; set; }
+
+        public DateTime RefreshTokenExpirationTime { get; set; }
+
         public ICollection<Event> Events { get; set; } = new List<Event>();
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
