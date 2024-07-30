@@ -8,21 +8,23 @@
     using Microsoft.AspNetCore.Identity;
     using System.Threading.Tasks;
     using System.Net;
-    using System.Security.Cryptography;
+    using System.Security.Claims;
 
     public class IdentityService : IIdentityService
     {
-        private readonly IJwtService jwtService;
+        private const int REFRESH_TOKEN_EXPIRATION_TIME_IN_DAYS = 7;
+
+        private readonly ITokenService tokenService;
 
         private readonly IFacebookAuthService facebookAuthService;
 
         private readonly UserManager<User> userManager;
 
-        public IdentityService(IJwtService jwtService, UserManager<User> userManager, IFacebookAuthService facebookAuthService)
+        public IdentityService(UserManager<User> userManager, IFacebookAuthService facebookAuthService, ITokenService tokenService)
         {
-            this.jwtService = jwtService;
             this.facebookAuthService = facebookAuthService;
             this.userManager = userManager;
+            this.tokenService = tokenService;
         }
 
         public async Task<AuthenticationResult<AuthResponse>> RegisterAsync(RegisterDto dto)
@@ -59,7 +61,7 @@
 
             await userManager.AddToRoleAsync(newUser, "User");
 
-            var response = jwtService.CreateToken(newUser, new List<string> { "User" });
+            var response = await GenerateTokenForUserAsync(newUser, true);
 
             return this.GenerateSuccessAuthResult(response);
         }
@@ -80,9 +82,7 @@
                 return this.GenerateAuthError(HttpStatusCode.BadRequest, "Bad Credentials!");
             }
 
-            var userRoles = await userManager.GetRolesAsync(user);
-
-            var response = jwtService.CreateToken(user, userRoles);
+            var response = await GenerateTokenForUserAsync(user, true);
 
             return this.GenerateSuccessAuthResult(response);
         }
@@ -104,30 +104,30 @@
             {
                 var registerDto = new RegisterDto
                 {
-                    UserName = $"${userInfo.FirstName}-{userInfo.LastName}",
+                    UserName = $"{userInfo.FirstName}-{userInfo.LastName}",
                     Email = userInfo.Email,
                 };
 
                 return await RegisterAsync(registerDto);
             }
 
-            var response = await GenerateTokenForUserAsync(user);
+            var response = await GenerateTokenForUserAsync(user, true);
 
             return this.GenerateSuccessAuthResult(response);
         }
 
         public async Task<AuthenticationResult<AuthResponse>> ValidateUserAsync(string token)
         {
-            var isTokenValid = await jwtService.ValidateTokenAsync(token);
+            var (isTokenValid, claimsPrincipal) = await tokenService.ValidateTokenAsync(token);
 
             if (!isTokenValid)
             {
                 return this.GenerateAuthError(HttpStatusCode.BadRequest, "Bad Credentials!");
             }
 
-            var userId = jwtService.GetUserIdFromToken(token);
+            var userName = claimsPrincipal.Identity.Name;
 
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByNameAsync(userName);
 
             if (user == null)
             {
@@ -142,30 +142,75 @@
                 UserEmail = user.Email,
                 UserName = user.UserName,
                 Roles = userRoles,
-                Token = token
             };
 
             return this.GenerateSuccessAuthResult(response);
         }
 
-        private async Task<AuthResponse> GenerateTokenForUserAsync(User user)
+        public async Task<AuthenticationResult<AuthResponse>> RefreshTokenAsync(TokenDto tokens)
+        {
+            var principal = tokenService.ValidateExpiredToken(tokens.AccessToken);
+
+            var user = await userManager.FindByNameAsync(principal.Identity.Name);
+
+            if (user == null || user.RefreshToken != tokens.RefreshToken || user.RefreshTokenExpirationTime <= DateTime.Now)
+            {
+                this.GenerateAuthError(HttpStatusCode.BadRequest, "Invalid token.");
+            }
+
+            return this.GenerateSuccessAuthResult(await this.GenerateTokenForUserAsync(user, false));
+        }
+
+        private async Task<AuthResponse> GenerateTokenForUserAsync(User user, bool shouldUpdateRefreshTokenExpirationTime)
         {
             var roles = await userManager.GetRolesAsync(user);
 
-            var authResponse = jwtService.CreateToken(user, roles);
+            var userClaims = this.GetUserClaims(user, roles);
 
-            return authResponse;
+            var accessToken = this.tokenService.CreateAccessToken(userClaims);
+
+            var refreshToken = this.tokenService.GenerateRefreshToken();
+
+            user.RefreshToken = refreshToken;
+
+            if (shouldUpdateRefreshTokenExpirationTime)
+            {
+                user.RefreshTokenExpirationTime = DateTime.Now.AddDays(REFRESH_TOKEN_EXPIRATION_TIME_IN_DAYS);
+            }
+
+            await userManager.UpdateAsync(user);
+
+            return new AuthResponse
+            {
+                UserId = user.Id,
+                UserName = user.UserName,
+                UserEmail = user.Email,
+                Roles = roles,
+                Tokens = new TokenDto
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
+                }
+            };
         }
 
-        private string GenerateRefreshToken()
+        private IEnumerable<Claim> GetUserClaims(User user, IEnumerable<string> roles)
         {
-            var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomNumber);
+            var rolesClams = new List<Claim>();
 
-                return Convert.ToBase64String(randomNumber);
+            foreach (var role in roles)
+            {
+                rolesClams.Add(new Claim(ClaimTypes.Role, role));
             }
+
+            var generalClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+            };
+
+            return generalClaims.Concat(rolesClams);
         }
 
         private AuthenticationResult<AuthResponse> GenerateSuccessAuthResult(AuthResponse authResponse)
@@ -190,5 +235,6 @@
         }
 
         private IdentityError GenerateError(string statusCode, string description) => new IdentityError { Code = statusCode, Description = description };
+
     }
 }

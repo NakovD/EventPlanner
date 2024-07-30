@@ -11,7 +11,8 @@
 
         Task<AuthenticationResult<AuthResponse>> LoginWithFacebookAsync(string accessToken);
 
-        Task<AuthenticationResult<AuthResponse>> ValidateUserAsync(string token);
+        Task<AuthenticationResult<AuthResponse>> RefreshTokenAsync(TokenDto tokens);
 
+        Task<AuthenticationResult<AuthResponse>> ValidateUserAsync(string token);
     }
 }
