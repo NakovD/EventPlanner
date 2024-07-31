@@ -64,5 +64,24 @@
 
             return GenerateActionResult(result);
         }
+
+        [AllowAnonymous]
+        [HttpPost(IdentityActionsConstants.RefreshAuth)]
+        public async Task<IActionResult> RefreshAuth([FromBody] TokenDto tokens)
+        {
+            var result = await identityService.RefreshTokenAsync(tokens);
+
+            return GenerateActionResult(result);
+        }
+
+        [HttpGet(IdentityActionsConstants.LogOut)] 
+        public async Task<IActionResult> LogOut()
+        {
+            var username = User.Identity.Name;
+
+            var result = await this.identityService.LogOut(username);
+
+            return GenerateActionResult(result);
+        }
     }
 }

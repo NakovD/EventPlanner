@@ -7,7 +7,6 @@
     public interface IJwtService
     {
         AuthResponse CreateToken(User user, IEnumerable<string> roles);
-
         Task<bool> ValidateTokenAsync(string token);
 
         string GetUserIdFromToken(string token);

@@ -9,5 +9,9 @@
         public const string Authenticate = "Authenticate/{token}";
 
         public const string LoginWithFacebook = "LoginWithFacebook";
+
+        public const string RefreshAuth = "Refresh";
+
+        public const string LogOut = "Logout";
     }
 }

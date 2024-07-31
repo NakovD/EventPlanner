@@ -52,7 +52,6 @@
 
             return new AuthResponse
             {
-                Token = tokenHandler.WriteToken(token),
                 UserName = user.UserName,
                 UserEmail = user.Email,
                 UserId = user.Id,
@@ -111,6 +110,7 @@
         {
             var validateTokenResult = await tokenHandler.ValidateTokenAsync(token, validationParameters);
 
+
             var isTokenValid = validateTokenResult.IsValid;
 
             return isTokenValid;
@@ -129,7 +129,7 @@
 
             var jwtSecurityToken = validatedToken as JwtSecurityToken;
 
-            if (validatedToken == null || jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase) {
+            if (jwtSecurityToken == null || jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase)) {
                 throw new ApplicationException("Invalid token");
             }
 

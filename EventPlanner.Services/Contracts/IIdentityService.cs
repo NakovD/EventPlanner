@@ -13,6 +13,8 @@
 
         Task<AuthenticationResult<AuthResponse>> RefreshTokenAsync(TokenDto tokens);
 
+        Task<AuthenticationResult<AuthResponse>> LogOut(string userName);
+
         Task<AuthenticationResult<AuthResponse>> ValidateUserAsync(string token);
     }
 }

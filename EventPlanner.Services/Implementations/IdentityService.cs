@@ -161,6 +161,26 @@
             return this.GenerateSuccessAuthResult(await this.GenerateTokenForUserAsync(user, false));
         }
 
+        public async Task<AuthenticationResult<AuthResponse>> LogOut(string userName)
+        {
+            var user = await userManager.FindByNameAsync(userName);
+
+            if (user == null)
+            {
+                return this.GenerateAuthError(HttpStatusCode.BadRequest, "Invalid user");
+            }
+
+            user.RefreshToken = null;
+
+            await this.userManager.UpdateAsync(user);
+
+            return new AuthenticationResult<AuthResponse>
+            {
+                Succeeded = true,
+                RequestStatusCode = HttpStatusCode.NoContent,
+            };
+        }
+
         private async Task<AuthResponse> GenerateTokenForUserAsync(User user, bool shouldUpdateRefreshTokenExpirationTime)
         {
             var roles = await userManager.GetRolesAsync(user);

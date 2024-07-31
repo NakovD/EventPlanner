@@ -4,6 +4,7 @@
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Net;
     using System.Security.Claims;
 
     [Authorize]
@@ -15,7 +16,9 @@
 
         protected IActionResult GenerateActionResult<T, TError>(IResult<T, TError> result)
         {
-            if (result.Succeeded) return Ok(result.Result);
+            if (result.Succeeded && result.RequestStatusCode == HttpStatusCode.OK) return Ok(result.Result);
+
+            if (result.Succeeded && result.RequestStatusCode == HttpStatusCode.NoContent) return NoContent();
 
             return StatusCode((int)result.RequestStatusCode, result.Errors);
         }

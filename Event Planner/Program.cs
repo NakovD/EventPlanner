@@ -161,6 +161,8 @@ namespace EventPlanner
 
             services.AddScoped<IFacebookAuthService, FacebookAuthService>();
 
+            services.AddScoped<ITokenService, TokenService>();
+
             services.AddHttpClient();
         }
 

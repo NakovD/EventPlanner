@@ -8,7 +8,7 @@
         [Required]
         public DateTime RegistrationDate { get; set; }
 
-        public string RefreshToken { get; set; }
+        public string? RefreshToken { get; set; }
 
         public DateTime RefreshTokenExpirationTime { get; set; }
 
