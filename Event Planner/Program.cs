@@ -141,8 +141,6 @@ namespace EventPlanner
 
             services.AddScoped<IEmailSender, EmailSender.Implementations.EmailSender>();
 
-            services.AddScoped<IJwtService, JwtService>();
-
             services.AddScoped<IAttendeeService, AttendeeService>();
 
             services.AddScoped<IJsonService, JsonService>();
