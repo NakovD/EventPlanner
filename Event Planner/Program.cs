@@ -128,6 +128,20 @@ namespace EventPlanner
                         ValidIssuer = validIssuer,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(validKey))
                     };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = (ctx) =>
+                        {
+                            ctx.Request.Cookies.TryGetValue(WebConstants.AccessTokenCookieName, out var accessToken);
+
+                            if (string.IsNullOrWhiteSpace(accessToken)) return Task.CompletedTask;
+
+                            ctx.Token = accessToken;
+
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
             services.AddAuthorization();

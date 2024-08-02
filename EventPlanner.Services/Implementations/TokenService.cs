@@ -11,11 +11,10 @@
     
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
+    using EventPlanner.Common;
 
     public class TokenService : ITokenService
-    {
-        private const int EXPIRATION_IN_MUNITES = 3;
-
+    { 
         private readonly IConfiguration configuration;
 
         private readonly JwtSecurityTokenHandler tokenHandler;
@@ -50,7 +49,7 @@
 
         public string CreateAccessToken(IEnumerable<Claim> claims)
         {
-            var expiration = DateTime.Now.AddMinutes(EXPIRATION_IN_MUNITES);
+            var expiration = DateTime.Now.AddMinutes(Constants.AccessTokenExpirationTimeInMinutes);
 
             var accessToken = new JwtSecurityToken(
                 configuration["Jwt:Issuer"],

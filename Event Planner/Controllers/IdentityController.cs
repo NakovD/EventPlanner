@@ -1,5 +1,6 @@
 ﻿namespace EventPlanner.Controllers
 {
+    using EventPlanner.Common;
     using EventPlanner.Common.ActionsConstants;
     using EventPlanner.Services.Contracts;
     using EventPlanner.Services.Models.Auth;
@@ -40,6 +41,8 @@
 
             var result = await identityService.LoginAsync(dto);
 
+            this.SetTokensInsideCookie(result.Result.Tokens, HttpContext);
+
             return GenerateActionResult(result);
         }
 
@@ -62,6 +65,8 @@
 
             var result = await identityService.LoginWithFacebookAsync(dto.AccessToken);
 
+            this.SetTokensInsideCookie(result.Result.Tokens, HttpContext);
+
             return GenerateActionResult(result);
         }
 
@@ -74,7 +79,7 @@
             return GenerateActionResult(result);
         }
 
-        [HttpGet(IdentityActionsConstants.LogOut)] 
+        [HttpGet(IdentityActionsConstants.LogOut)]
         public async Task<IActionResult> LogOut()
         {
             var username = User.Identity.Name;
@@ -82,6 +87,27 @@
             var result = await this.identityService.LogOut(username);
 
             return GenerateActionResult(result);
+        }
+
+        private void SetTokensInsideCookie(TokenDto tokenDto, HttpContext context)
+        {
+            context.Response.Cookies.Append(WebConstants.AccessTokenCookieName, tokenDto.AccessToken, new CookieOptions
+            {
+                Secure = true,
+                HttpOnly = true,
+                IsEssential = true,
+                Expires = DateTime.Now.AddMinutes(Constants.AccessTokenExpirationTimeInMinutes),
+                SameSite = SameSiteMode.None
+            });
+
+            context.Response.Cookies.Append(WebConstants.RefreshTokenCookieName, tokenDto.RefreshToken, new CookieOptions
+            {
+                Secure = true,
+                HttpOnly = true,
+                IsEssential = true,
+                Expires = DateTime.Now.AddDays(Constants.RefreshTokenExpirationTimeInDays),
+                SameSite = SameSiteMode.None
+            });
         }
     }
 }

@@ -9,11 +9,10 @@
     using System.Threading.Tasks;
     using System.Net;
     using System.Security.Claims;
+    using EventPlanner.Common;
 
     public class IdentityService : IIdentityService
     {
-        private const int REFRESH_TOKEN_EXPIRATION_TIME_IN_DAYS = 7;
-
         private readonly ITokenService tokenService;
 
         private readonly IFacebookAuthService facebookAuthService;
@@ -195,7 +194,7 @@
 
             if (shouldUpdateRefreshTokenExpirationTime)
             {
-                user.RefreshTokenExpirationTime = DateTime.Now.AddDays(REFRESH_TOKEN_EXPIRATION_TIME_IN_DAYS);
+                user.RefreshTokenExpirationTime = DateTime.Now.AddDays(Constants.RefreshTokenExpirationTimeInDays);
             }
 
             await userManager.UpdateAsync(user);
@@ -255,6 +254,5 @@
         }
 
         private IdentityError GenerateError(string statusCode, string description) => new IdentityError { Code = statusCode, Description = description };
-
     }
 }

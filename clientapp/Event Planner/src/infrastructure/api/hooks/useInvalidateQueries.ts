@@ -5,8 +5,7 @@ export const useInvalidateQueries = () => {
   const queryClient = useQueryClient();
 
   const invalidate = useCallback(
-    (queryKey: QueryKey) =>
-      queryClient.invalidateQueries(queryKey),
+    (queryKey: QueryKey) => queryClient.invalidateQueries(queryKey),
     [queryClient],
   );
 
