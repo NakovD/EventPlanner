@@ -71,10 +71,19 @@
         }
 
         [AllowAnonymous]
-        [HttpPost(IdentityActionsConstants.RefreshAuth)]
-        public async Task<IActionResult> RefreshAuth([FromBody] TokenDto tokens)
+        [HttpGet(IdentityActionsConstants.RefreshAuth)]
+        public async Task<IActionResult> RefreshAuth()
         {
-            var result = await identityService.RefreshTokenAsync(tokens);
+            HttpContext.Request.Cookies.TryGetValue(Constants.AccessTokenCookieName, out var accessToken);
+            HttpContext.Request.Cookies.TryGetValue(Constants.RefreshTokenCookieName, out var refreshToken);
+
+            var tokenDto = new TokenDto
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+            };
+
+            var result = await identityService.RefreshTokenAsync(tokenDto);
 
             return GenerateActionResult(result);
         }
