@@ -133,7 +133,7 @@ namespace EventPlanner
                     {
                         OnMessageReceived = (ctx) =>
                         {
-                            ctx.Request.Cookies.TryGetValue(WebConstants.AccessTokenCookieName, out var accessToken);
+                            ctx.Request.Cookies.TryGetValue(Constants.AccessTokenCookieName, out var accessToken);
 
                             if (string.IsNullOrWhiteSpace(accessToken)) return Task.CompletedTask;
 

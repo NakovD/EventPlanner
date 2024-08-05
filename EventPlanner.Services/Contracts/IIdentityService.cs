@@ -2,6 +2,7 @@
 {
     using Results;
     using Models.Auth;
+    using Microsoft.AspNetCore.Http;
 
     public interface IIdentityService
     {
@@ -16,5 +17,7 @@
         Task<AuthenticationResult<AuthResponse>> LogOut(string userName);
 
         Task<AuthenticationResult<AuthResponse>> ValidateUserAsync(string token);
+
+        void SetTokensInsideCookie(TokenDto tokenDto, HttpContext context);
     }
 }

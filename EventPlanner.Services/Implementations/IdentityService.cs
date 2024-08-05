@@ -10,6 +10,8 @@
     using System.Net;
     using System.Security.Claims;
     using EventPlanner.Common;
+    using Microsoft.AspNetCore.Http;
+    using EventPlanner.Services.Models.User;
 
     public class IdentityService : IIdentityService
     {
@@ -254,5 +256,26 @@
         }
 
         private IdentityError GenerateError(string statusCode, string description) => new IdentityError { Code = statusCode, Description = description };
+
+        public void SetTokensInsideCookie(TokenDto tokenDto, HttpContext context)
+        {
+            context.Response.Cookies.Append(Constants.AccessTokenCookieName, tokenDto.AccessToken, new CookieOptions
+            {
+                Secure = true,
+                HttpOnly = true,
+                IsEssential = true,
+                Expires = DateTime.Now.AddMinutes(Constants.AccessTokenExpirationTimeInMinutes),
+                SameSite = SameSiteMode.None,
+            });
+
+            context.Response.Cookies.Append(Constants.RefreshTokenCookieName, tokenDto.RefreshToken, new CookieOptions
+            {
+                Secure = true,
+                HttpOnly = true,
+                IsEssential = true,
+                Expires = DateTime.Now.AddDays(Constants.RefreshTokenExpirationTimeInDays),
+                SameSite = SameSiteMode.None,
+            });
+        }
     }
 }

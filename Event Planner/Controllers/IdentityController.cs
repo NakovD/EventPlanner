@@ -98,25 +98,5 @@
             return GenerateActionResult(result);
         }
 
-        private void SetTokensInsideCookie(TokenDto tokenDto, HttpContext context)
-        {
-            context.Response.Cookies.Append(WebConstants.AccessTokenCookieName, tokenDto.AccessToken, new CookieOptions
-            {
-                Secure = true,
-                HttpOnly = true,
-                IsEssential = true,
-                Expires = DateTime.Now.AddMinutes(Constants.AccessTokenExpirationTimeInMinutes),
-                SameSite = SameSiteMode.None
-            });
-
-            context.Response.Cookies.Append(WebConstants.RefreshTokenCookieName, tokenDto.RefreshToken, new CookieOptions
-            {
-                Secure = true,
-                HttpOnly = true,
-                IsEssential = true,
-                Expires = DateTime.Now.AddDays(Constants.RefreshTokenExpirationTimeInDays),
-                SameSite = SameSiteMode.None
-            });
-        }
     }
 }
