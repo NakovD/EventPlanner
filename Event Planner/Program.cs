@@ -69,7 +69,7 @@ namespace EventPlanner
 
             var clientAppHost = builder.Configuration.GetValue<string>(WebConstants.ClientAppHost);
 
-            app.UseCors(options => options.WithOrigins(clientAppHost).AllowAnyHeader());
+            app.UseCors(options => options.WithOrigins(clientAppHost).AllowAnyHeader().AllowCredentials().AllowAnyMethod());
 
             #endregion
 
