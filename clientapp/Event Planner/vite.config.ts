@@ -7,7 +7,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), mkcert()],
   server: {
-    port: 5173,
+    port: 5100,
     https: true,
   },
 });
