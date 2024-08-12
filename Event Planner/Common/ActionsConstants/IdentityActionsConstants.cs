@@ -6,7 +6,7 @@
 
         public const string Login = "Login";
 
-        public const string Authenticate = "Authenticate/{token}";
+        public const string UserData = "UserData";
 
         public const string LoginWithFacebook = "LoginWithFacebook";
 

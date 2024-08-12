@@ -1,90 +1,57 @@
-import { IAuthResponse } from 'features/authentication/common/models/authResponse';
 import { IUser } from 'features/authentication/common/models/user';
 import { useBlocker } from 'features/common/blocker/hooks/useBlocker';
 import { IBlocker } from 'features/common/blocker/models/blocker';
 import { useSnackbarSetup } from 'features/common/snackbar/hooks/useSnackbarSetup';
-import { ISnackBarProps } from 'features/common/snackbar/models/snackbarProps';
-import { SnackBarType } from 'features/common/snackbar/models/snackBarType';
-import { endpoints } from 'infrastructure/api/endpoints/endpoints';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
-import { constants } from 'infrastructure/constants';
-import { useLocalStorage } from 'infrastructure/hooks/useLocalStorage';
-import { hasValue } from 'infrastructure/utilities/hasValue';
-import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { ISnackbarResult } from 'features/common/snackbar/models/snackbarResult';
+import { createContext, useCallback, useContext, useState } from 'react';
 
-interface IAppContextProps {
+interface IAppContextBaseProps {
   children: React.ReactNode;
+  isAuthenticated: boolean;
 }
 
-interface ISnackbar {
-  openSnackBar: (type: SnackBarType, message?: string) => void;
-  snackBarProps: ISnackBarProps;
+interface IAppContextAuthenticatedProps extends IAppContextBaseProps {
+  isAuthenticated: true;
+  user: IUser;
 }
+
+interface IAppContextNotAuthenticatedProps extends IAppContextBaseProps {
+  isAuthenticated: false;
+}
+
+type AppContextProps = IAppContextAuthenticatedProps | IAppContextNotAuthenticatedProps;
 
 type AppContext = {
-  isReady: boolean;
   isAuthenticated: boolean;
   user: IUser | undefined;
-  setIsAuthenticated: (token?: string, user?: IUser) => void;
+  setUser: (user: IUser) => void;
+  logout: VoidFunction;
   blocker: IBlocker;
-  snackBar: ISnackbar;
+  snackBar: ISnackbarResult;
 };
 
 const AppContextValue = createContext<AppContext | null>(null);
 
-export const AppContextProvider = ({ children }: IAppContextProps) => {
-  const { getItem, setItem, deleteItem } = useLocalStorage();
-
-  const token = getItem<string>(constants.localStorageTokenKey);
-
-  const [user, setUser] = useState<IUser | undefined>(undefined);
-
-  const isQueryEnabled = user === undefined && hasValue(token);
-
-  const { data, isError, isSuccess, isFetched } = useReadQuery<IAuthResponse>({
-    endpoint: replacePlaceholderWithId(endpoints.identity.authenticate, token ?? ''),
-    queryKey: ['authenticate-user'],
-    enabled: isQueryEnabled,
+export const AppContextProvider = ({ children, ...rest }: AppContextProps) => {
+  const [authState, setAuthState] = useState<{ isAuthenticated: boolean; user?: IUser }>({
+    isAuthenticated: rest.isAuthenticated,
+    user: rest.isAuthenticated ? rest.user : undefined,
   });
 
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    isQueryEnabled ? setIsReady(isFetched) : setIsReady(true);
-    if (isError) return authCallback();
-    if (isSuccess && data)
-      setUser({
-        userEmail: data.userEmail,
-        userName: data.userName,
-        userId: data.userId,
-        userRoles: data.roles,
-      });
-  }, [isError, isSuccess]);
-
-  const [isAuthenticated, setIsAuthenticated] = useState(hasValue(token));
-
-  const authCallback = useCallback((token?: string, user?: IUser) => {
-    const isTokenValid = hasValue(token);
-    if (!isTokenValid) {
-      setIsAuthenticated(false);
-      deleteItem(constants.localStorageTokenKey);
-      return;
-    }
-    setItem(constants.localStorageTokenKey, token);
-    setIsAuthenticated(true);
-    setUser(user);
-  }, []);
+  const setUser = useCallback(
+    (user: IUser) => setAuthState({ isAuthenticated: true, user }),
+    [],
+  );
 
   const blocker = useBlocker();
 
   const { snackBarProps, openSnackBar } = useSnackbarSetup();
 
   const context: AppContext = {
-    isReady,
-    user,
-    isAuthenticated,
-    setIsAuthenticated: authCallback,
+    user: authState.user,
+    isAuthenticated: authState.isAuthenticated,
+    setUser,
+    logout: () => setAuthState({ isAuthenticated: false, user: undefined }),
     blocker,
     snackBar: {
       snackBarProps,

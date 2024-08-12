@@ -3,6 +3,7 @@
     using Results;
     using Models.Auth;
     using Microsoft.AspNetCore.Http;
+    using EventPlanner.Services.Models.User;
 
     public interface IIdentityService
     {
@@ -16,7 +17,9 @@
 
         Task<AuthenticationResult<AuthResponse>> LogOut(string userName);
 
-        Task<AuthenticationResult<AuthResponse>> ValidateUserAsync(string token);
+        Task<AuthenticationResult<CurrentAuthenticatedUserDto>> GetCurrentUserData(string userName);
+
+        void SetTokensInsideCookie(TokenDto tokenDto, HttpContext httpContext);
 
         void SetTokensInsideCookie(TokenDto tokenDto, HttpContext context);
     }

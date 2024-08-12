@@ -117,7 +117,7 @@
             return this.GenerateSuccessAuthResult(response);
         }
 
-        public async Task<AuthenticationResult<AuthResponse>> ValidateUserAsync(string token)
+        public async Task<AuthenticationResult<CurrentAuthenticatedUserDto>> GetCurrentUserData(string userName)
         {
             var (isTokenValid, claimsPrincipal) = await tokenService.ValidateTokenAsync(token);
 
@@ -132,20 +132,35 @@
 
             if (user == null)
             {
-                return this.GenerateAuthError(HttpStatusCode.BadRequest, "Bad Credentials!");
+                return new AuthenticationResult<CurrentAuthenticatedUserDto>
+                {
+                    RequestStatusCode = HttpStatusCode.BadRequest,
+                    Errors = new List<IdentityError>
+                    {
+                        this.GenerateError(HttpStatusCode.BadRequest.ToString(), "Bad credentials")
+                    },
+                    Succeeded = false,
+                    Result = null
+                };
             }
 
             var userRoles = await this.userManager.GetRolesAsync(user);
 
-            var response = new AuthResponse
+            var userDto = new CurrentAuthenticatedUserDto
             {
+
                 UserId = user.Id,
-                UserEmail = user.Email,
-                UserName = user.UserName,
+                UserEmail = user.Email!,
+                UserName = user.UserName!,
                 Roles = userRoles,
             };
 
-            return this.GenerateSuccessAuthResult(response);
+            return new AuthenticationResult<CurrentAuthenticatedUserDto>
+            {
+                RequestStatusCode = HttpStatusCode.OK,
+                Succeeded = true,
+                Result = userDto
+            };
         }
 
         public async Task<AuthenticationResult<AuthResponse>> RefreshTokenAsync(TokenDto tokens)

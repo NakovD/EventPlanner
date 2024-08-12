@@ -3,7 +3,9 @@ export const endpoints = {
     login: '/Identity/login',
     loginWithFacebook: '/Identity/LoginWithFacebook',
     register: '/Identity/register',
-    authenticate: '/Identity/authenticate/:id',
+    getUserData: '/Identity/UserData',
+    refresh: '/Identity/refresh',
+    logout: '/Identity/logout',
   },
   events: {
     getAll: '/Event/All',
