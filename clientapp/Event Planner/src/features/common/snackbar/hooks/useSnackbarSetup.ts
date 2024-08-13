@@ -1,3 +1,4 @@
+import { ISnackbarResult } from 'features/common/snackbar/models/snackbarResult';
 import { SnackBarType } from 'features/common/snackbar/models/snackBarType';
 import { useState } from 'react';
 
@@ -6,7 +7,7 @@ interface ISnackBarOptions {
   message?: string;
 }
 
-export const useSnackbarSetup = () => {
+export const useSnackbarSetup = (): ISnackbarResult => {
   const [snackBarOptions, setSnackbarOptions] = useState<ISnackBarOptions>({
     message: 'This is info message',
     type: 'info',
