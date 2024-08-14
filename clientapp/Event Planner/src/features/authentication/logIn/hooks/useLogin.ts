@@ -19,7 +19,7 @@ const validationSchema = yup.object({
 });
 
 export const useLogin = () => {
-  const { isAuthenticated, setIsAuthenticated } = useAppContext();
+  const { isAuthenticated, setUser } = useAppContext();
   const { mutate, isSuccess, data, error, isError } = useBlockingMutation<
     ILoginRequest,
     IAuthResponse,
@@ -41,7 +41,7 @@ export const useLogin = () => {
     if (isAuthenticated) navigate(routePaths.allEvents.path);
     if (!isSuccess || !data) return;
 
-    setIsAuthenticated(data.token, {
+    setUser({
       userId: data.userId,
       userName: data.userName,
       userEmail: data.userEmail,

@@ -15,7 +15,7 @@ interface IFacebookAuthRequest {
 export const useFacebookAuth = () => {
   const navigate = useNavigate();
 
-  const { setIsAuthenticated } = useAppContext();
+  const { setUser } = useAppContext();
 
   FB.init({
     appId: FACEBOOK_APP_ID,
@@ -34,7 +34,7 @@ export const useFacebookAuth = () => {
   useEffect(() => {
     if (!isSuccess || !data) return;
 
-    setIsAuthenticated(data.token, {
+    setUser({
       userId: data.userId,
       userName: data.userName,
       userEmail: data.userEmail,

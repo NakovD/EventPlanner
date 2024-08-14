@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
 export const useRegister = () => {
-  const { isAuthenticated, setIsAuthenticated } = useAppContext();
+  const { isAuthenticated, setUser } = useAppContext();
   const { mutate, isError, error, isSuccess, data } = useBlockingMutation<
     IRegisterRequest,
     IAuthResponse,
@@ -60,7 +60,7 @@ export const useRegister = () => {
     if (isAuthenticated) navigate(routePaths.allEvents.path);
     if (!isSuccess || !data) return;
 
-    setIsAuthenticated(data.token, {
+    setUser({
       userId: data.userId,
       userName: data.userName,
       userEmail: data.userEmail,
