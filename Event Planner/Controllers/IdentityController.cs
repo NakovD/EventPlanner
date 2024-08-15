@@ -2,10 +2,12 @@
 {
     using EventPlanner.Common;
     using EventPlanner.Common.ActionsConstants;
+    using EventPlanner.Results;
     using EventPlanner.Services.Contracts;
     using EventPlanner.Services.Models.Auth;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Net;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -28,7 +30,7 @@
 
             var result = await identityService.RegisterAsync(dto);
 
-            return GenerateActionResult(result);
+            return HandleAuthResult(result);
         }
 
         [AllowAnonymous]
@@ -41,18 +43,17 @@
 
             var result = await identityService.LoginAsync(dto);
 
-            this.SetTokensInsideCookie(result.Result.Tokens, HttpContext);
-
-            return GenerateActionResult(result);
+            return HandleAuthResult(result);
         }
 
-        [AllowAnonymous]
-        [HttpGet(IdentityActionsConstants.Authenticate)]
-        public async Task<IActionResult> AuthenticateUser([FromRoute] string token)
+        [HttpGet(IdentityActionsConstants.UserData)]
+        public async Task<IActionResult> UserData()
         {
-            var result = await this.identityService.ValidateUserAsync(token);
+            var username = User.Identity.Name;
 
-            return GenerateActionResult(result);
+            var result = await this.identityService.GetCurrentUserData(username);
+
+            return this.GenerateActionResult(result);
         }
 
         [AllowAnonymous]
@@ -65,9 +66,7 @@
 
             var result = await identityService.LoginWithFacebookAsync(dto.AccessToken);
 
-            this.SetTokensInsideCookie(result.Result.Tokens, HttpContext);
-
-            return GenerateActionResult(result);
+            return HandleAuthResult(result);
         }
 
         [AllowAnonymous]
@@ -77,6 +76,8 @@
             HttpContext.Request.Cookies.TryGetValue(Constants.AccessTokenCookieName, out var accessToken);
             HttpContext.Request.Cookies.TryGetValue(Constants.RefreshTokenCookieName, out var refreshToken);
 
+            if (accessToken == null || refreshToken == null) return Unauthorized();
+
             var tokenDto = new TokenDto
             {
                 AccessToken = accessToken,
@@ -85,18 +86,33 @@
 
             var result = await identityService.RefreshTokenAsync(tokenDto);
 
-            return GenerateActionResult(result);
+            return HandleAuthResult(result);
         }
 
-        [HttpGet(IdentityActionsConstants.LogOut)]
+        [HttpPost(IdentityActionsConstants.LogOut)]
         public async Task<IActionResult> LogOut()
         {
             var username = User.Identity.Name;
 
             var result = await this.identityService.LogOut(username);
 
+            this.identityService.ExpireAuthCookie(HttpContext);
+
             return GenerateActionResult(result);
         }
 
+        private IActionResult HandleAuthResult(AuthenticationResult<AuthResponse> result)
+        {
+            if (result.RequestStatusCode == HttpStatusCode.OK && result.Result != null)
+            {
+                this.identityService.SetTokensInsideCookie(result.Result.TokenDto, HttpContext);
+
+                return Ok(result.Result.User);
+            }
+
+            this.identityService.ExpireAuthCookie(HttpContext);
+
+            return this.GenerateActionResult(result);
+        }
     }
 }

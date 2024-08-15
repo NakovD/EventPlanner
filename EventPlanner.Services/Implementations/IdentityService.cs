@@ -119,14 +119,6 @@
 
         public async Task<AuthenticationResult<CurrentAuthenticatedUserDto>> GetCurrentUserData(string userName)
         {
-            var (isTokenValid, claimsPrincipal) = await tokenService.ValidateTokenAsync(token);
-
-            if (!isTokenValid)
-            {
-                return this.GenerateAuthError(HttpStatusCode.BadRequest, "Bad Credentials!");
-            }
-
-            var userName = claimsPrincipal.Identity.Name;
 
             var user = await userManager.FindByNameAsync(userName);
 
@@ -218,11 +210,14 @@
 
             return new AuthResponse
             {
-                UserId = user.Id,
-                UserName = user.UserName,
-                UserEmail = user.Email,
-                Roles = roles,
-                Tokens = new TokenDto
+                User = new CurrentAuthenticatedUserDto
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    UserEmail = user.Email,
+                    Roles = roles,
+                },
+                TokenDto = new TokenDto
                 {
                     AccessToken = accessToken,
                     RefreshToken = refreshToken
@@ -279,7 +274,7 @@
                 Secure = true,
                 HttpOnly = true,
                 IsEssential = true,
-                Expires = DateTime.Now.AddMinutes(Constants.AccessTokenExpirationTimeInMinutes),
+                Expires = DateTime.Now.AddDays(3),
                 SameSite = SameSiteMode.None,
             });
 
@@ -289,6 +284,27 @@
                 HttpOnly = true,
                 IsEssential = true,
                 Expires = DateTime.Now.AddDays(Constants.RefreshTokenExpirationTimeInDays),
+                SameSite = SameSiteMode.None,
+            });
+        }
+
+        public void ExpireAuthCookie(HttpContext context)
+        {
+            context.Response.Cookies.Append(Constants.AccessTokenCookieName, "", new CookieOptions
+            {
+                Secure = true,
+                HttpOnly = true,
+                IsEssential = true,
+                Expires = DateTime.Now.AddDays(-1),
+                SameSite = SameSiteMode.None,
+            });
+
+            context.Response.Cookies.Append(Constants.RefreshTokenCookieName, "", new CookieOptions
+            {
+                Secure = true,
+                HttpOnly = true,
+                IsEssential = true,
+                Expires = DateTime.Now.AddDays(-1),
                 SameSite = SameSiteMode.None,
             });
         }

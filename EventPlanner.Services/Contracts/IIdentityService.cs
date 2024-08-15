@@ -21,6 +21,6 @@
 
         void SetTokensInsideCookie(TokenDto tokenDto, HttpContext httpContext);
 
-        void SetTokensInsideCookie(TokenDto tokenDto, HttpContext context);
+        void ExpireAuthCookie(HttpContext httpContext);
     }
 }
