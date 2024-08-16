@@ -75,7 +75,16 @@
 
         public ClaimsPrincipal ValidateExpiredToken(string token)
         {
-            var principal = tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);
+            var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = false,
+                ValidateIssuerSigningKey = true,
+                ValidAudience = configuration["Jwt:Audience"],
+                ValidIssuer = configuration["Jwt:Issuer"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.GetJwtKey()))
+            }, out var validatedToken);
 
             var jwtSecurityToken = validatedToken as JwtSecurityToken;
 
