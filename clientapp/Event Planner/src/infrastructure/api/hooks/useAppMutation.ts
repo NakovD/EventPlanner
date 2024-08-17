@@ -1,6 +1,7 @@
 import { useMutation, UseMutationOptions, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { API } from 'infrastructure/api';
+import { useErrorHandler } from 'infrastructure/api/hooks/useErrorHandler';
 import { IUseAppMutationOptions } from 'infrastructure/api/models/mutationOptions';
 
 export const useAppMutation = <TRequest, TResponse = void, TError = void>(
@@ -20,6 +21,8 @@ export const useAppMutation = <TRequest, TResponse = void, TError = void>(
       options.queryKey && queryClient.invalidateQueries(options.queryKey);
     },
   });
+
+  useErrorHandler(mutation.error);
 
   return mutation;
 };

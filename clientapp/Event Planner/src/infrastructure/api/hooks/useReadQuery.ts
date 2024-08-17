@@ -1,6 +1,7 @@
 import { QueryKey, useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { API } from 'infrastructure/api';
+import { useErrorHandler } from 'infrastructure/api/hooks/useErrorHandler';
 
 interface IUseReadQueryOptions {
   endpoint: string;
@@ -17,6 +18,8 @@ export const useReadQuery = <TData>(
   const queryKey = options.queryKey;
 
   const query = useQuery<TData, AxiosError>(queryKey, queryFn, options);
+
+  useErrorHandler(query.error);
 
   return query;
 };
