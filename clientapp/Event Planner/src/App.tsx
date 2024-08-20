@@ -17,8 +17,7 @@ export const App = () => {
   useReadQuery<ICategory[]>({
     endpoint: getRequestsOptions.GetAllCategories.endpoint,
     queryKey: [getRequestsOptions.GetAllCategories.queryKey],
-    cacheTime: 18_00_000,
-    staleTime: 18_000_000,
+    staleTime: Infinity,
     enabled: isAuthenticated,
   });
 
