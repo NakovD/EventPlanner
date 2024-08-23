@@ -1,10 +1,6 @@
+import { useAdministrationCategoryMutation } from 'features/administration/categories/hooks/useAdministrationCategoryMutation';
 import { ICategoryForm } from 'features/administration/categories/models/categoryForm';
-import { ICategoryRequest } from 'features/administration/categories/models/categoryRequest';
 import { ICategory } from 'features/events/form/models/category';
-import { endpoints } from 'infrastructure/api/endpoints/endpoints';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useSnackbarBlockingMutation } from 'infrastructure/api/hooks/useSnackbarBlockingMutation';
-import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useForm } from 'react-hook-form';
 
 interface IUseAdministrationCategoryFormOptions {
@@ -22,17 +18,10 @@ export const useAdministrationCategoryForm = ({
     defaultValues: { categoryName: categoryName },
   });
 
-  const endpoint = category
-    ? replacePlaceholderWithId(endpoints.categories.edit, category?.id)
-    : endpoints.categories.create;
-
-  const { mutate } = useSnackbarBlockingMutation<ICategoryRequest>({
-    endpoint,
-    queryKey: [getRequestsOptions.GetAllCategories.queryKey],
-  });
+  const mutation = useAdministrationCategoryMutation(category?.id);
 
   const onSubmit = handleSubmit((data) => {
-    mutate({ id: category?.id, name: data.categoryName });
+    mutation.mutate({ id: category?.id, name: data.categoryName });
     onSubmitCallback();
   });
 
