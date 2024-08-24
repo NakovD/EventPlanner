@@ -3,19 +3,14 @@ import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOpti
 import { useSnackbarBlockingMutation } from 'infrastructure/api/hooks/useSnackbarBlockingMutation';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 
-interface IUseAdministrationEventDeleteOptions {
+interface IUseAdministrationEventDeleteMutationOptions {
   eventId: number;
 }
 
-export const useAdministrationEventDelete = ({
+export const useAdministrationEventDeleteMutation = ({
   eventId,
-}: IUseAdministrationEventDeleteOptions) => {
-  const { mutate } = useSnackbarBlockingMutation({
+}: IUseAdministrationEventDeleteMutationOptions) =>
+  useSnackbarBlockingMutation<void>({
     endpoint: replacePlaceholderWithId(endpoints.events.delete, eventId),
     queryKey: [getRequestsOptions.GetAllEventsForAdmins.queryKey],
   });
-
-  return {
-    deleteEvent: () => mutate({}),
-  };
-};

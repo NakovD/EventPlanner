@@ -1,5 +1,5 @@
 import InfoIcon from '@mui/icons-material/Info';
-import { useAdministrationEventDelete } from 'features/administration/events/hooks/useAdministrationEventDelete';
+import { useAdministrationEventDeleteMutation } from 'features/administration/events/hooks/useAdministrationEventDelete';
 import { useAdministrationEventRestore } from 'features/administration/events/hooks/useAdministrationEventRestore';
 import { IAdminEvent } from 'features/administration/events/models/IAdminEvent';
 import { Button } from 'features/common/button/Button';
@@ -11,7 +11,9 @@ interface IAdministrationEventProps {
 }
 
 export const AdministrationEvent = ({ event }: IAdministrationEventProps) => {
-  const { deleteEvent } = useAdministrationEventDelete({ eventId: event.id });
+  const { mutate: deleteEvent } = useAdministrationEventDeleteMutation({
+    eventId: event.id,
+  });
   const { restoreEvent } = useAdministrationEventRestore({ eventId: event.id });
   const { openDialog, dialogProps } = useAppDialog();
 
@@ -32,7 +34,7 @@ export const AdministrationEvent = ({ event }: IAdministrationEventProps) => {
       <p className="truncate w-40">{event.organizerName}</p>
       <p className="truncate w-20">{event.attendees}</p>
       <p className="truncate w-32">{event.isDeleted ? 'Yes' : 'No'}</p>
-      {!event.isDeleted && <Button label="Delete" onClick={deleteEvent} />}
+      {!event.isDeleted && <Button label="Delete" onClick={() => deleteEvent()} />}
       {event.isDeleted && <Button label="Restore" onClick={restoreEvent} />}
       <AppDialog {...dialogProps}>{event.description}</AppDialog>
     </div>
