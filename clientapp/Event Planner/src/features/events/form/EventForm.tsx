@@ -74,7 +74,7 @@ export const EventForm = ({ title, eventId, event }: IEventFormProps) => {
         />
         <Button
           className="place-self-center w-28"
-          isSubmit={true}
+          type="submit"
           disabled={!isSubmitEnabled}
           label="Submit"
         />

@@ -35,7 +35,7 @@ export const Register = () => {
             type="password"
             label="Repeat password"
           />
-          <Button label="Register" isSubmit={true} />
+          <Button label="Register" type="submit" />
           <FacebookAuth />
         </form>
       </div>

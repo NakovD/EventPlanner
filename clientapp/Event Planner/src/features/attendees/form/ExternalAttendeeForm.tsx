@@ -22,7 +22,7 @@ export const ExternalAttendeeForm = ({ eventId }: IExternalAttendeeFormProps) =>
         control={control}
         label="Attendee Email"
       />
-      <Button className="mt-3" isSubmit={true} label="Submit" />
+      <Button className="mt-3" type="submit" label="Submit" />
     </form>
   );
 };

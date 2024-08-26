@@ -1,5 +1,5 @@
 import { IAttendee } from 'features/attendees/models/attendee';
-import { Button } from 'features/common/button/Button';
+import { ButtonLink } from 'features/common/button/ButtonLink';
 import { ExpandableSection } from 'features/common/expandableSection/ExpandableSection';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
@@ -26,7 +26,7 @@ export const EventAttendeesList = ({
         ))}
       </div>
       {canEdit && (
-        <Button
+        <ButtonLink
           className="mt-5"
           label="Manage attendees"
           to={replacePlaceholderWithId(routePaths.manageAttendees.path, eventId)}

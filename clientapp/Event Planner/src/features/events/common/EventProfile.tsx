@@ -1,7 +1,7 @@
 import { useAppContext } from 'AppContext';
 import { EventAttendeesList } from 'features/attendees/components/EventAttendeesList';
 import { IAttendee } from 'features/attendees/models/attendee';
-import { Button } from 'features/common/button/Button';
+import { ButtonLink } from 'features/common/button/ButtonLink';
 import { EventComments } from 'features/events/common/comment/EventComments';
 import { EventAttendeeControls } from 'features/events/common/EventAttendeeControls';
 import { EventAttendeeExternalControls } from 'features/events/common/EventAttendeeExternalControls';
@@ -114,7 +114,7 @@ export const EventProfile = ({
         </div>
 
         {canEdit && (
-          <Button
+          <ButtonLink
             className="m-3"
             to={replacePlaceholderWithId(routePaths.eventEdit.path, event?.id)}
             label="Edit this event"

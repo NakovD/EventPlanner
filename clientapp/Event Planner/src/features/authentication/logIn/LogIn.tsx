@@ -38,7 +38,7 @@ export const LogIn = () => {
               Sign up here
             </Link>
           </p>
-          <Button label="Login" isSubmit={true} />
+          <Button label="Login" type="submit" />
           <FacebookAuth />
           {isError &&
             errors?.length !== 0 &&
