@@ -16,6 +16,7 @@ module.exports = {
       'light-blue': '#5887FF',
       'shadow-color': 'black',
       'blocker-color': 'rgba(0, 0, 0, 0.3)',
+      'fade-color': 'rgba(0, 0, 0, 0.6)',
       transparent: 'transparent',
     },
     extend: {},
