@@ -1,5 +1,5 @@
 import { useAppContext } from 'AppContext';
-import { useAppDialog } from 'features/common/dialog/hooks/useAppDialog';
+import { useActionModal } from 'features/common/modal/actionModal/hooks/external/useActionModal';
 import { IComment } from 'features/events/common/comment/models/comment';
 import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
@@ -25,7 +25,7 @@ export const useEventComment = ({ comment, eventId }: IUseEventCommentOptions) =
 
   const closeEditForm = () => setIsFormVisible(false);
 
-  const { dialogProps, openDialog, closeDialog } = useAppDialog();
+  const { modalRef, openModal, closeModal } = useActionModal();
 
   const { mutate } = useSnackbarBlockingMutation({
     endpoint: replacePlaceholderWithId(endpoints.comments.delete, comment.id),
@@ -36,15 +36,14 @@ export const useEventComment = ({ comment, eventId }: IUseEventCommentOptions) =
 
   const onDeleteComment = () => {
     deleteComment();
-    closeDialog();
+    closeModal();
   };
 
   return {
     canEdit,
     isFormVisible,
-    dialogProps,
-    openDialog,
-    closeDialog,
+    modalRef,
+    openModal,
     onDeleteComment,
     toggleEditForm,
     closeEditForm,
