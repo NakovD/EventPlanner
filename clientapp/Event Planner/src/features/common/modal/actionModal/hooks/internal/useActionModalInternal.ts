@@ -51,8 +51,10 @@ export const useActionModalInternal = ({
       e.clientX > modalDimensions?.right ||
       e.clientY < modalDimensions?.top ||
       e.clientY > modalDimensions?.bottom
-    )
+    ) {
       modalRef.current?.close();
+      handleClose();
+    }
   };
 
   return {
