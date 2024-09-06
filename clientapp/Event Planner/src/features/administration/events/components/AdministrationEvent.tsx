@@ -1,9 +1,7 @@
 import InfoIcon from '@mui/icons-material/Info';
-import { useAdministrationEventDeleteMutation } from 'features/administration/events/hooks/useAdministrationEventDelete';
-import { useAdministrationEventRestore } from 'features/administration/events/hooks/useAdministrationEventRestore';
+import { useAdministrationEvent } from 'features/administration/events/hooks/useAdministrationEvent';
 import { IAdminEvent } from 'features/administration/events/models/IAdminEvent';
 import { Button } from 'features/common/button/Button';
-import { useInfoModal } from 'features/common/modal/infoModal/hooks/external/useInfoModal';
 import { InfoModal } from 'features/common/modal/infoModal/InfoModal';
 
 interface IAdministrationEventProps {
@@ -11,11 +9,9 @@ interface IAdministrationEventProps {
 }
 
 export const AdministrationEvent = ({ event }: IAdministrationEventProps) => {
-  const { mutate: deleteEvent } = useAdministrationEventDeleteMutation({
+  const { modalRef, restoreEvent, deleteEvent, openModal } = useAdministrationEvent({
     eventId: event.id,
   });
-  const { restoreEvent } = useAdministrationEventRestore({ eventId: event.id });
-  const { modalRef, openModal } = useInfoModal();
 
   return (
     <div className="flex gap-6 mb-4 items-center">
@@ -35,7 +31,7 @@ export const AdministrationEvent = ({ event }: IAdministrationEventProps) => {
       <p className="truncate w-20">{event.attendees}</p>
       <p className="truncate w-32">{event.isDeleted ? 'Yes' : 'No'}</p>
       {!event.isDeleted && <Button label="Delete" onClick={() => deleteEvent()} />}
-      {event.isDeleted && <Button label="Restore" onClick={restoreEvent} />}
+      {event.isDeleted && <Button label="Restore" onClick={() => restoreEvent()} />}
       <InfoModal ref={modalRef}>{event.description}</InfoModal>
     </div>
   );
