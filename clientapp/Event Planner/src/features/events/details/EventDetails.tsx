@@ -1,21 +1,16 @@
 import { useAppContext } from 'AppContext';
 import { EventProfile } from 'features/events/common/EventProfile';
-import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
-import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useParams } from 'react-router-dom';
+import { useEventDetailsQuery } from './hooks/useEventDetailsQuery';
 
 export const EventDetails = () => {
   const { id } = useParams();
+
   if (!id) throw new Error('No id found!');
 
   const { user } = useAppContext();
 
-  const { data: event } = useReadQuery<IAllEventsEntity>({
-    endpoint: replacePlaceholderWithId(getRequestsOptions.GetSingleEvent.endpoint, id),
-    queryKey: [getRequestsOptions.GetSingleEvent.queryKey],
-  });
+  const { data: event } = useEventDetailsQuery(id);
 
   const canEdit = user?.userId === event?.organizerId;
 
