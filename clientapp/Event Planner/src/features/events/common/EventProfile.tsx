@@ -1,15 +1,14 @@
 import { useAppContext } from 'AppContext';
 import { EventAttendeesList } from 'features/attendees/components/EventAttendeesList';
-import { IAttendee } from 'features/attendees/models/attendee';
 import { ButtonLink } from 'features/common/button/ButtonLink';
 import { EventComments } from 'features/events/common/comment/EventComments';
 import { EventAttendeeControls } from 'features/events/common/EventAttendeeControls';
 import { EventAttendeeExternalControls } from 'features/events/common/EventAttendeeExternalControls';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
+
+import { useEventAttendeesQuery } from './hooks/useEventAttendeesQuery';
 
 interface IEventProfileProps {
   canEdit: boolean;
@@ -24,13 +23,7 @@ export const EventProfile = ({
 }: IEventProfileProps) => {
   const { user } = useAppContext();
 
-  const { data: attendees } = useReadQuery<IAttendee[]>({
-    endpoint: replacePlaceholderWithId(
-      getRequestsOptions.GetAllEventAttendees.endpoint,
-      event.id,
-    ),
-    queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, event.id],
-  });
+  const { data: attendees } = useEventAttendeesQuery(event.id);
 
   const userAttendee = attendees?.find((a) => a.userId === user?.userId);
 
