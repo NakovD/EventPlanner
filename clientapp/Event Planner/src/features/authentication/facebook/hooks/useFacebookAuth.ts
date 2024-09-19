@@ -46,12 +46,15 @@ export const useFacebookAuth = () => {
 
   const onButtonClick = () =>
     FB.getLoginStatus((responseStatus) => {
-      if (responseStatus.status === 'connected') {
+      if (
+        responseStatus.status === 'connected' &&
+        responseStatus.authResponse.accessToken
+      ) {
         mutate({ accessToken: responseStatus.authResponse.accessToken });
       } else {
         FB.login(
           (response) => {
-            if (response.status === 'connected')
+            if (response.status === 'connected' && response.authResponse.accessToken)
               mutate({ accessToken: response.authResponse.accessToken });
           },
           { scope: 'public_profile, email' },

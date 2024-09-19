@@ -125,12 +125,6 @@ export const EventProfile = ({
             {event?.description}
           </p>
           <p className="text-base leading-4 mt-7 text-gray-600"></p>
-          {/* <p className="text-base leading-4 mt-4 text-gray-600">Length: 13.2 inches</p>
-          <p className="text-base leading-4 mt-4 text-gray-600">Height: 10 inches</p>
-          <p className="text-base leading-4 mt-4 text-gray-600">Depth: 5.1 inches</p>
-          <p className="md:w-96 text-base leading-normal text-gray-600 mt-4">
-            Composition: 100% calf leather, inside: 100% lamb leather
-          </p> */}
         </div>
         {shouldShowAttendeeActions && (
           <EventAttendeeControls attendeeId={userAttendee.id} eventId={event.id} />

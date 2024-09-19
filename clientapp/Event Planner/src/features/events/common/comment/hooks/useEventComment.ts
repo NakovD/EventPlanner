@@ -27,12 +27,12 @@ export const useEventComment = ({ comment, eventId }: IUseEventCommentOptions) =
 
   const { modalRef, openModal, closeModal } = useActionModal();
 
-  const { mutate } = useSnackbarBlockingMutation({
+  const { mutate } = useSnackbarBlockingMutation<void>({
     endpoint: replacePlaceholderWithId(endpoints.comments.delete, comment.id),
     queryKey: [getRequestsOptions.GetAllComments.queryKey, eventId],
   });
 
-  const deleteComment = () => mutate({});
+  const deleteComment = () => mutate();
 
   const onDeleteComment = () => {
     deleteComment();
