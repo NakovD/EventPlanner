@@ -1,4 +1,4 @@
-export interface IAdminEvent {
+export interface IAdministratinoEvent {
   id: number;
   title: string;
   date: string;

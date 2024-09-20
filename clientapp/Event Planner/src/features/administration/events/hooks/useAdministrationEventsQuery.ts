@@ -1,10 +1,10 @@
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 
-import { IAdminEvent } from '../models/IAdminEvent';
+import { IAdministratinoEvent } from '../models/administratinoEvent';
 
 export const useAdministrationEventsQuery = () =>
-  useReadQuery<IAdminEvent[]>({
+  useReadQuery<IAdministratinoEvent[]>({
     endpoint: getRequestsOptions.GetAllEventsForAdmins.endpoint,
     queryKey: [getRequestsOptions.GetAllEventsForAdmins.queryKey],
   });
