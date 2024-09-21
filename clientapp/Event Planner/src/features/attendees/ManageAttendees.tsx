@@ -2,24 +2,18 @@ import { useAppContext } from 'AppContext';
 import { EventAttendee } from 'features/attendees/components/EventAttendee';
 import { EventPotentialAttendee } from 'features/attendees/components/EventPotentialAttendee';
 import { ExternalAttendeeForm } from 'features/attendees/form/ExternalAttendeeForm';
-import { IAttendee } from 'features/attendees/models/attendee';
 import { IAttendeeUser } from 'features/attendees/models/attendeeUser';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
-import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useParams } from 'react-router-dom';
+
+import { useAttendeesQuery } from './hooks/useAttendeesQuery';
 
 export const ManageAttendees = () => {
   const { id: eventId } = useParams();
   if (!eventId) throw new Error('No id found!');
 
-  const { data: invitedAttendees } = useReadQuery<IAttendee[]>({
-    endpoint: replacePlaceholderWithId(
-      getRequestsOptions.GetAllEventAttendees.endpoint,
-      eventId,
-    ),
-    queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, +eventId],
-  });
+  const { data: invitedAttendees } = useAttendeesQuery(eventId);
 
   const { data: internalUsers } = useReadQuery<IAttendeeUser[]>({
     endpoint: getRequestsOptions.GetAllAttendeeUsers.endpoint,
