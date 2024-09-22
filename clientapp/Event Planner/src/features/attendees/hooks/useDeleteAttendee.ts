@@ -14,13 +14,13 @@ export const useDeleteAttendee = ({ id, eventId }: IUseDeleteAttendeeOptions) =>
 
   const endpoint = replacePlaceholderWithId(endpoints.attendees.delete, id);
 
-  const { mutate } = useSnackbarBlockingMutation({
+  const { mutate } = useSnackbarBlockingMutation<void>({
     endpoint: endpoint,
     queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, eventId],
     onSuccess: () => invalidate([getRequestsOptions.GetAllAttendeeUsers.queryKey]),
   });
 
-  const deleteAttendee = () => mutate({});
+  const deleteAttendee = () => mutate();
 
   return {
     deleteAttendee,

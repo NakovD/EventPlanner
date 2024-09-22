@@ -2,11 +2,9 @@ import { useAppContext } from 'AppContext';
 import { EventAttendee } from 'features/attendees/components/EventAttendee';
 import { EventPotentialAttendee } from 'features/attendees/components/EventPotentialAttendee';
 import { ExternalAttendeeForm } from 'features/attendees/form/ExternalAttendeeForm';
-import { IAttendeeUser } from 'features/attendees/models/attendeeUser';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 import { useParams } from 'react-router-dom';
 
+import { useAttendeeInternalUsersQuery } from './hooks/useAttendeeInternalUsersQuery';
 import { useAttendeesQuery } from './hooks/useAttendeesQuery';
 
 export const ManageAttendees = () => {
@@ -15,10 +13,7 @@ export const ManageAttendees = () => {
 
   const { data: invitedAttendees } = useAttendeesQuery(eventId);
 
-  const { data: internalUsers } = useReadQuery<IAttendeeUser[]>({
-    endpoint: getRequestsOptions.GetAllAttendeeUsers.endpoint,
-    queryKey: [getRequestsOptions.GetAllAttendeeUsers.queryKey],
-  });
+  const { data: internalUsers } = useAttendeeInternalUsersQuery();
 
   const { user } = useAppContext();
 
