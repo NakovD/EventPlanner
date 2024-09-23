@@ -1,37 +1,37 @@
-import { useAppContext } from 'AppContext';
 import { EventAttendee } from 'features/attendees/components/EventAttendee';
 import { EventPotentialAttendee } from 'features/attendees/components/EventPotentialAttendee';
 import { ExternalAttendeeForm } from 'features/attendees/form/ExternalAttendeeForm';
-import { useParams } from 'react-router-dom';
 
-import { useAttendeeInternalUsersQuery } from './hooks/useAttendeeInternalUsersQuery';
-import { useAttendeesQuery } from './hooks/useAttendeesQuery';
+import { useManageAttendees } from './hooks/useManageAttendees';
 
 export const ManageAttendees = () => {
-  const { id: eventId } = useParams();
-  if (!eventId) throw new Error('No id found!');
+  const { eventId, attendeeInternalUsersQuery, invitedAttendeesQuery, user } =
+    useManageAttendees();
 
-  const { data: invitedAttendees } = useAttendeesQuery(eventId);
+  const hasAttendees =
+    invitedAttendeesQuery.isSuccess && invitedAttendeesQuery.data.length > 0;
 
-  const { data: internalUsers } = useAttendeeInternalUsersQuery();
-
-  const { user } = useAppContext();
-
-  const filteredInternalUsers = internalUsers?.filter(
-    (au) =>
-      !invitedAttendees?.some((ia) => ia.userId === au.id) && au.id !== user?.userId,
-  );
+  const filteredInternalUsers = attendeeInternalUsersQuery.isSuccess
+    ? attendeeInternalUsersQuery.data.filter(
+        (au) =>
+          invitedAttendeesQuery.data?.some((ia) => ia.userId === au.id) &&
+          au.id !== user?.userId,
+      )
+    : [];
 
   return (
     <div>
       <h1 className="mb-3 text-xl font-bold">Manage your event attendees</h1>
       <p className="mb-3">These are your current attendees:</p>
-      {invitedAttendees?.length === 0 && <p>You havent invited anyone!</p>}
-      <div className="grid grid-cols-3 gap-3 my-5">
-        {invitedAttendees?.map((a) => (
-          <EventAttendee key={a.id} attendee={a} />
-        ))}
-      </div>
+      {invitedAttendeesQuery.isLoading && <p>Loading...</p>}
+      {!hasAttendees && <p>You havent invited anyone!</p>}
+      {invitedAttendeesQuery.isSuccess && (
+        <div className="grid grid-cols-3 gap-3 my-5">
+          {invitedAttendeesQuery.data.map((a) => (
+            <EventAttendee key={a.id} attendee={a} />
+          ))}
+        </div>
+      )}
       <p className="mb-8">Here you can invite more people on our platform:</p>
       <div className="mb-5">
         {filteredInternalUsers?.map((au, i) => (
