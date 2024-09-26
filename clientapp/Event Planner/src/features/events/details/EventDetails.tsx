@@ -1,6 +1,7 @@
 import { useAppContext } from 'AppContext';
 import { EventProfile } from 'features/events/common/EventProfile';
 import { useParams } from 'react-router-dom';
+
 import { useEventDetailsQuery } from './hooks/useEventDetailsQuery';
 
 export const EventDetails = () => {
