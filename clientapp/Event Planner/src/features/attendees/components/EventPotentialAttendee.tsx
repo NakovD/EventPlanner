@@ -1,10 +1,8 @@
 import { IAttendeeUser } from 'features/attendees/models/attendeeUser';
-import { IAttendeeUserRequest } from 'features/attendees/models/attendeeUserRequest';
 import { Button } from 'features/common/button/Button';
-import { endpoints } from 'infrastructure/api/endpoints/endpoints';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useSnackbarBlockingMutation } from 'infrastructure/api/hooks/useSnackbarBlockingMutation';
 import { routePaths } from 'infrastructure/routing/routePaths';
+
+import { useCreateAttendeeMutation } from '../hooks/useCreateAttendeeMutation';
 
 interface IEventPotentialAttendeelProps {
   userData: IAttendeeUser;
@@ -15,10 +13,7 @@ export const EventPotentialAttendee = ({
   userData,
   eventId,
 }: IEventPotentialAttendeelProps) => {
-  const { mutate } = useSnackbarBlockingMutation<IAttendeeUserRequest>({
-    endpoint: endpoints.attendees.create,
-    queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, eventId],
-  });
+  const { mutate } = useCreateAttendeeMutation(eventId);
 
   const eventPath = `${window.location.origin}${routePaths.eventDetails.path}`;
 

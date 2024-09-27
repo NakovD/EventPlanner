@@ -1,4 +1,5 @@
 import { CircularProgress } from '@mui/material';
+import { ServerErrorMessage } from 'features/common/message/errorMessage/ServerErrorMessage';
 import { EventForm } from 'features/events/form/EventForm';
 
 import { useEventEdit } from './hooks/useEventEdit';
@@ -16,7 +17,7 @@ export const EventEdit = () => {
           title="Edit your special event"
         />
       )}
-      {isError && <p>Something went wrong.</p>}
+      {isError && <ServerErrorMessage />}
     </div>
   );
 };

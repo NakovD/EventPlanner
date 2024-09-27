@@ -1,12 +1,13 @@
 import { EventCard } from 'features/events/common/EventCard';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { Link } from 'react-router-dom';
+
 import { useUserEventsQuery } from './hooks/useUserEventQuery';
 
 export const UserEvents = () => {
   const { isSuccess, data, isLoading } = useUserEventsQuery();
 
-  const shouldShowEmpty = isLoading ? false : (isSuccess ? data?.length === 0 : false);
+  const shouldShowEmpty = isLoading ? false : isSuccess ? data.length === 0 : false;
 
   return (
     <>
