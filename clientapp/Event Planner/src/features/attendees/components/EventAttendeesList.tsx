@@ -14,24 +14,22 @@ export const EventAttendeesList = ({
   eventId,
   canEdit,
   attendees,
-}: IEventAttendeesListProps) => {
-  return (
-    <ExpandableSection sectionName="Attendees">
-      <div className="flex gap-5 flex-col">
-        {attendees.map((a) => (
-          <div key={a.id} className="flex gap-4">
-            <p>Name: {a.name}</p>
-            <p>Status: {a.status}</p>
-          </div>
-        ))}
-      </div>
-      {canEdit && (
-        <ButtonLink
-          className="mt-5"
-          label="Manage attendees"
-          to={replacePlaceholderWithId(routePaths.manageAttendees.path, eventId)}
-        />
-      )}
-    </ExpandableSection>
-  );
-};
+}: IEventAttendeesListProps) => (
+  <ExpandableSection sectionName="Attendees">
+    <div className="flex gap-5 flex-col">
+      {attendees.map((a) => (
+        <div key={a.id} className="flex gap-4">
+          <p>Name: {a.name}</p>
+          <p>Status: {a.status}</p>
+        </div>
+      ))}
+    </div>
+    {canEdit && (
+      <ButtonLink
+        className="mt-5"
+        label="Manage attendees"
+        to={replacePlaceholderWithId(routePaths.manageAttendees.path, eventId)}
+      />
+    )}
+  </ExpandableSection>
+);
