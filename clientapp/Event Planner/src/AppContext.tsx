@@ -1,9 +1,10 @@
 import { IUser } from 'features/authentication/common/models/user';
-import { useBlocker } from 'features/common/blocker/hooks/useBlocker';
-import { IBlocker } from 'features/common/blocker/models/blocker';
+import { IBlockerStore } from 'features/common/blocker/models/blockerStore';
+import { createBlockerStore } from 'features/common/blocker/store/blockerStore';
 import { useSnackbarSetup } from 'features/common/snackbar/hooks/useSnackbarSetup';
 import { ISnackbarResult } from 'features/common/snackbar/models/snackbarResult';
 import { createContext, useCallback, useContext, useState } from 'react';
+import { StoreApi, useStore } from 'zustand';
 
 interface IAppContextBaseProps {
   children: React.ReactNode;
@@ -26,7 +27,7 @@ type AppContext = {
   user: IUser | undefined;
   setUser: (user: IUser) => void;
   logout: VoidFunction;
-  blocker: IBlocker;
+  blockerStore: StoreApi<IBlockerStore>;
   snackBar: ISnackbarResult;
 };
 
@@ -43,7 +44,7 @@ export const AppContextProvider = ({ children, ...rest }: AppContextProps) => {
     [],
   );
 
-  const blocker = useBlocker();
+  const [blockerStore] = useState(createBlockerStore);
 
   const { snackBarProps, openSnackBar } = useSnackbarSetup();
 
@@ -52,7 +53,7 @@ export const AppContextProvider = ({ children, ...rest }: AppContextProps) => {
     isAuthenticated: authState.isAuthenticated,
     setUser,
     logout: () => setAuthState({ isAuthenticated: false, user: undefined }),
-    blocker,
+    blockerStore,
     snackBar: {
       snackBarProps,
       openSnackBar,
@@ -69,4 +70,10 @@ export const useAppContext = () => {
     throw new Error('Wrap your components in AppContextProvider to use this context!');
 
   return context;
+};
+
+export const useBlocker = <U,>(selector: (state: IBlockerStore) => U) => {
+  const { blockerStore } = useAppContext();
+
+  return useStore<StoreApi<IBlockerStore>, U>(blockerStore, selector);
 };
