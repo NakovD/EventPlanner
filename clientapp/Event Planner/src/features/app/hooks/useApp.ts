@@ -1,18 +1,15 @@
-import { useAppContext } from 'AppContext';
-import { Blocker } from 'features/common/blocker/Blocker';
-import { SnackBar } from 'features/common/snackbar/Snackbar';
+import { useAppContext, useBlockerStore } from 'AppContext';
 import { ICategory } from 'features/events/form/models/category';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
-import { router } from 'infrastructure/routing/router';
-import { RouterProvider } from 'react-router-dom';
 
-export const App = () => {
+export const useApp = () => {
   const {
-    blocker: { isBlocking },
     snackBar: { snackBarProps },
     isAuthenticated,
   } = useAppContext();
+
+  const isBlocking = useBlockerStore((s) => s.isBlocking);
 
   useReadQuery<ICategory[]>({
     endpoint: getRequestsOptions.GetAllCategories.endpoint,
@@ -21,11 +18,8 @@ export const App = () => {
     enabled: isAuthenticated,
   });
 
-  return (
-    <>
-      <RouterProvider router={router} />
-      {isBlocking && <Blocker />}
-      <SnackBar {...snackBarProps} />
-    </>
-  );
+  return {
+    snackBarProps,
+    isBlocking,
+  };
 };

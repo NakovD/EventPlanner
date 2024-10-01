@@ -72,7 +72,7 @@ export const useAppContext = () => {
   return context;
 };
 
-export const useBlocker = <U,>(selector: (state: IBlockerStore) => U) => {
+export const useBlockerStore = <U,>(selector: (state: IBlockerStore) => U) => {
   const { blockerStore } = useAppContext();
 
   return useStore<StoreApi<IBlockerStore>, U>(blockerStore, selector);
