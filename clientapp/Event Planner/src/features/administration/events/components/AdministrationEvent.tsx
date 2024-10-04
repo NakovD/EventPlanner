@@ -1,11 +1,12 @@
 import InfoIcon from '@mui/icons-material/Info';
 import { useAdministrationEvent } from 'features/administration/events/hooks/useAdministrationEvent';
-import { IAdminEvent } from 'features/administration/events/models/IAdminEvent';
 import { Button } from 'features/common/button/Button';
 import { InfoModal } from 'features/common/modal/infoModal/InfoModal';
 
+import { IAdministrationEvent } from '../models/administratinoEvent';
+
 interface IAdministrationEventProps {
-  event: IAdminEvent;
+  event: IAdministrationEvent;
 }
 
 export const AdministrationEvent = ({ event }: IAdministrationEventProps) => {

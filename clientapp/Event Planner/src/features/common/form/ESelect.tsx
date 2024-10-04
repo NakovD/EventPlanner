@@ -35,7 +35,6 @@ export const ESelect = <
         autoComplete={false}
         id={name}
         options={options}
-        placeholder={name}
         isOptionEqualToValue={(option, value) => option.value === value.value}
         disabled={disabled}
         onChange={(e, value) =>

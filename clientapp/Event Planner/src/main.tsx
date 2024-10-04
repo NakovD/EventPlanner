@@ -6,7 +6,7 @@ import '@fontsource/roboto/700.css';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { App } from 'App';
+import { App } from 'features/app/App';
 import { AuthLoader } from 'features/authentication/authLoader/AuthLoader';
 import { queryClientConfig } from 'infrastructure/api/queryClient/QueryClientConfig';
 import React from 'react';
