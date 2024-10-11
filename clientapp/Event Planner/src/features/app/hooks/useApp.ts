@@ -4,10 +4,7 @@ import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOpti
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 
 export const useApp = () => {
-  const {
-    snackBar: { snackBarProps },
-    isAuthenticated,
-  } = useAppContext();
+  const { isAuthenticated } = useAppContext();
 
   const isBlocking = useBlockerStore((s) => s.isBlocking);
 
@@ -19,7 +16,6 @@ export const useApp = () => {
   });
 
   return {
-    snackBarProps,
     isBlocking,
   };
 };
