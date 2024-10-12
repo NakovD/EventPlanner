@@ -10,7 +10,10 @@ export const useBlockingMutation = <TRequest, TResponse = void, TError = void>(
     UseMutationOptions<TResponse, AxiosError<TError>, TRequest>,
 ) => {
   const { block, unblock } = useBlockerStore(
-    useShallow((s) => ({ block: s.block, unblock: s.unblock })),
+    useShallow((s) => ({
+      block: s.block,
+      unblock: s.unblock,
+    })),
   );
 
   const onMutate = options.onMutate;

@@ -1,6 +1,6 @@
 import { UseMutationOptions } from '@tanstack/react-query';
-import { useAppContext } from 'AppContext';
 import { AxiosError } from 'axios';
+import { toaster } from 'features/common/toaster/toaster';
 import { useBlockingMutation } from 'infrastructure/api/hooks/useBlockingMutation';
 import { IUseAppMutationOptions } from 'infrastructure/api/models/mutationOptions';
 
@@ -12,22 +12,18 @@ export const useSnackbarBlockingMutation = <TRequest, TResponse = void, TError =
   options: ISnackBarBlockingMutationOptions &
     UseMutationOptions<TResponse, AxiosError<TError>, TRequest>,
 ) => {
-  const {
-    snackBar: { openSnackBar },
-  } = useAppContext();
-
   const onSuccess = options.onSuccess;
 
   options.onSuccess = (data, variables, context) => {
     onSuccess?.(data, variables, context);
-    openSnackBar('success', options?.snackbarMessage);
+    toaster.showSuccess(options.snackbarMessage);
   };
 
   const onError = options.onError;
 
   options.onError = (error, variables, context) => {
     onError?.(error, variables, context);
-    openSnackBar('error', options?.snackbarMessage);
+    toaster.showError(options.snackbarMessage);
   };
 
   const mutation = useBlockingMutation(options);
