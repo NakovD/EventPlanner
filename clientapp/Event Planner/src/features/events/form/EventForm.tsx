@@ -4,9 +4,7 @@ import { ESelect } from 'features/common/form/ESelect';
 import { TextArea } from 'features/common/form/TextArea';
 import { TextField } from 'features/common/form/TextField';
 import { useEventForm } from 'features/events/form/hooks/useEventForm';
-import { IEventForm } from 'features/events/form/models/eventForm';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
-import { propertyOf } from 'infrastructure/utilities/propertyOf';
 
 interface IEventFormProps {
   title: string;
@@ -31,13 +29,13 @@ export const EventForm = ({ title, eventId, event }: IEventFormProps) => {
       <form onSubmit={onSubmit} className="grid grid-cols-2 gap-6 my-12 w-4/5 mx-auto">
         <TextField
           control={control}
-          name={propertyOf<IEventForm>('title')}
+          name="title"
           label="Title"
           info="The title. Think of something awesome."
         />
         <TextArea
           control={control}
-          name={propertyOf<IEventForm>('description')}
+          name="description"
           label="Description"
           info="Some brief explanation(250 chars) about your event."
         />
@@ -45,7 +43,7 @@ export const EventForm = ({ title, eventId, event }: IEventFormProps) => {
           label="Category"
           control={control}
           options={categories}
-          name={propertyOf<IEventForm>('category')}
+          name="category"
         />
         <div className="flex flex-col gap-2">
           <span>Image Link: </span>
@@ -56,19 +54,19 @@ export const EventForm = ({ title, eventId, event }: IEventFormProps) => {
         </div>
         <TextField
           control={control}
-          name={propertyOf<IEventForm>('location')}
+          name="location"
           label="Location"
           info="The place where you event will happen."
         />
         <TextField
           control={control}
-          name={propertyOf<IEventForm>('time')}
+          name="time"
           label="Time"
           info="Events need to have exact hour which they start in format: hh:mm."
         />
         <TextField
           control={control}
-          name={propertyOf<IEventForm>('date')}
+          name="date"
           label="Date"
           info="The date for your epic event in format: dd/MM/yyyy and should be after today."
         />

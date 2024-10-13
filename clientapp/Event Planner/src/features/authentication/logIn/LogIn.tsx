@@ -1,12 +1,10 @@
 import { Typography } from '@mui/material';
 import { FacebookAuth } from 'features/authentication/facebook/FacebookAuth';
 import { useLogin } from 'features/authentication/logIn/hooks/useLogin';
-import { ILoginForm } from 'features/authentication/logIn/models/loginForm';
 import { Button } from 'features/common/button/Button';
 import { TextField } from 'features/common/form/TextField';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { generateUniqueUuid } from 'infrastructure/utilities/generateUniqueUuid';
-import { propertyOf } from 'infrastructure/utilities/propertyOf';
 import { Link } from 'react-router-dom';
 
 export const LogIn = () => {
@@ -18,17 +16,8 @@ export const LogIn = () => {
         <img src="/images/sign-in.jpg" alt="free event image" />
         <form className="p-10 flex gap-7 flex-col justify-center" onSubmit={onSubmit}>
           <h2 className="text-4xl mb-10">Login Form</h2>
-          <TextField
-            control={control}
-            name={propertyOf<ILoginForm>('userName')}
-            label="Username"
-          />
-          <TextField
-            control={control}
-            name={propertyOf<ILoginForm>('password')}
-            label="Password"
-            type="password"
-          />
+          <TextField control={control} name="userName" label="Username" />
+          <TextField control={control} name="password" label="Password" type="password" />
           <p className="shadow-text-light">
             Dont have an account?{' '}
             <Link
