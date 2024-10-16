@@ -1,6 +1,6 @@
 import { useAdministrationCategoryMutation } from 'features/administration/categories/hooks/useAdministrationCategoryMutation';
 import { ICategoryForm } from 'features/administration/categories/models/categoryForm';
-import { ICategory } from 'features/events/form/models/category';
+import { ICategory } from 'features/administration/categories/models/category';
 import { useForm } from 'react-hook-form';
 
 interface IUseAdministrationCategoryFormOptions {

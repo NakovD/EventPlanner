@@ -1,5 +1,5 @@
 import { useAdministrationDelegateCategoryMutation } from 'features/administration/categories/hooks/useAdministrationDeleteCategoryMutation';
-import { ICategory } from 'features/events/form/models/category';
+import { ICategory } from 'features/administration/categories/models/category';
 import { useState } from 'react';
 
 interface IUseAdministrationCategoryOptions {

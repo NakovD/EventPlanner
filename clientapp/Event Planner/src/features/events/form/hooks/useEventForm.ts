@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IOption } from 'features/common/form/models/option';
 import { useEventCategories } from 'features/events/form/hooks/useEventCategories';
-import { ICategory } from 'features/events/form/models/category';
+import { ICategory } from 'features/administration/categories/models/category';
 import { IEventForm } from 'features/events/form/models/eventForm';
 import { IEventRequest } from 'features/events/form/models/eventRequest';
 import { eventValidationSchema } from 'features/events/form/validators/eventValidationSchema';

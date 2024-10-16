@@ -1,7 +1,7 @@
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useAdministrationCategoryForm } from 'features/administration/categories/hooks/useAdministrationCategoryForm';
 import { TextField } from 'features/common/form/TextField';
-import { ICategory } from 'features/events/form/models/category';
+import { ICategory } from 'features/administration/categories/models/category';
 
 interface IAdministrationCategoryFormProps {
   category?: ICategory;

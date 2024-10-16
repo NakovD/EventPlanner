@@ -1,5 +1,5 @@
 import { useAppContext, useBlockerStore } from 'AppContext';
-import { ICategory } from 'features/events/form/models/category';
+import { ICategory } from 'features/administration/categories/models/category';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 

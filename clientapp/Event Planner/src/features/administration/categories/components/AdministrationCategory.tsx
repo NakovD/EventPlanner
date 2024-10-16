@@ -3,7 +3,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { AdministrationCategoryForm } from 'features/administration/categories/components/AdministrationCategoryForm';
 import { useAdministrationCategory } from 'features/administration/categories/hooks/useAdministrationCategory';
-import { ICategory } from 'features/events/form/models/category';
+import { ICategory } from 'features/administration/categories/models/category';
 
 interface IAdministrationCategoryProps {
   category: ICategory;
