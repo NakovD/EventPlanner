@@ -14,7 +14,7 @@ type ButtonProps = ButtonLinkWithLabelProps | ButtonLinkWithChildrenProps;
 
 export const ButtonLink = ({ className, ...rest }: ButtonProps) => {
   const buttonStyles = classNames(
-    'py-2 px-4 text-text-dark focus:outline-none hover bg-primary-light',
+    'inline-block py-2 px-4 text-text-dark focus:outline-none hover bg-primary-light',
     className,
   );
 

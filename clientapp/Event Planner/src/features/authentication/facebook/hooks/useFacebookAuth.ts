@@ -6,7 +6,14 @@ import { routePaths } from 'infrastructure/routing/routePaths';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const FACEBOOK_APP_ID = import.meta.env.VITE_FACEBOOK_APP_ID as string;
+const FACEBOOK_APP_ID = import.meta.env.VITE_FACEBOOK_APP_ID;
+
+FB.init({
+  appId: FACEBOOK_APP_ID,
+  cookie: true,
+  xfbml: true,
+  version: '17.0',
+});
 
 interface IFacebookAuthRequest {
   accessToken: string;
@@ -16,13 +23,6 @@ export const useFacebookAuth = () => {
   const navigate = useNavigate();
 
   const { setUser } = useAppContext();
-
-  FB.init({
-    appId: FACEBOOK_APP_ID,
-    cookie: true,
-    xfbml: true,
-    version: '17.0',
-  });
 
   const { mutate, isSuccess, data } = useBlockingMutation<
     IFacebookAuthRequest,

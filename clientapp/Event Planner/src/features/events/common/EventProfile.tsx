@@ -108,7 +108,7 @@ export const EventProfile = ({
 
         {canEdit && (
           <ButtonLink
-            className="m-3"
+            className="mt-4"
             to={replacePlaceholderWithId(routePaths.eventEdit.path, event?.id)}
             label="Edit this event"
           />
