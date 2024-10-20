@@ -1,9 +1,8 @@
 import { IUser } from 'features/authentication/common/models/user';
-import { useBlocker } from 'features/common/blocker/hooks/useBlocker';
-import { IBlocker } from 'features/common/blocker/models/blocker';
-import { useSnackbarSetup } from 'features/common/snackbar/hooks/useSnackbarSetup';
-import { ISnackbarResult } from 'features/common/snackbar/models/snackbarResult';
+import { IBlockerStore } from 'features/common/blocker/models/blockerStore';
+import { createBlockerStore } from 'features/common/blocker/store/blockerStore';
 import { createContext, useCallback, useContext, useState } from 'react';
+import { StoreApi, useStore } from 'zustand';
 
 interface IAppContextBaseProps {
   children: React.ReactNode;
@@ -26,8 +25,7 @@ type AppContext = {
   user: IUser | undefined;
   setUser: (user: IUser) => void;
   logout: VoidFunction;
-  blocker: IBlocker;
-  snackBar: ISnackbarResult;
+  blockerStore: StoreApi<IBlockerStore>;
 };
 
 const AppContextValue = createContext<AppContext | null>(null);
@@ -43,20 +41,14 @@ export const AppContextProvider = ({ children, ...rest }: AppContextProps) => {
     [],
   );
 
-  const blocker = useBlocker();
-
-  const { snackBarProps, openSnackBar } = useSnackbarSetup();
+  const [blockerStore] = useState(createBlockerStore);
 
   const context: AppContext = {
     user: authState.user,
     isAuthenticated: authState.isAuthenticated,
     setUser,
     logout: () => setAuthState({ isAuthenticated: false, user: undefined }),
-    blocker,
-    snackBar: {
-      snackBarProps,
-      openSnackBar,
-    },
+    blockerStore,
   };
 
   return <AppContextValue.Provider value={context}>{children}</AppContextValue.Provider>;
@@ -69,4 +61,10 @@ export const useAppContext = () => {
     throw new Error('Wrap your components in AppContextProvider to use this context!');
 
   return context;
+};
+
+export const useBlockerStore = <U,>(selector: (state: IBlockerStore) => U) => {
+  const { blockerStore } = useAppContext();
+
+  return useStore<StoreApi<IBlockerStore>, U>(blockerStore, selector);
 };

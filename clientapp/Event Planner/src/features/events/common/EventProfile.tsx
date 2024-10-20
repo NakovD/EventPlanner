@@ -1,15 +1,14 @@
 import { useAppContext } from 'AppContext';
 import { EventAttendeesList } from 'features/attendees/components/EventAttendeesList';
-import { IAttendee } from 'features/attendees/models/attendee';
-import { Button } from 'features/common/button/Button';
+import { ButtonLink } from 'features/common/button/ButtonLink';
 import { EventComments } from 'features/events/common/comment/EventComments';
 import { EventAttendeeControls } from 'features/events/common/EventAttendeeControls';
 import { EventAttendeeExternalControls } from 'features/events/common/EventAttendeeExternalControls';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
+
+import { useEventAttendeesQuery } from './hooks/useEventAttendeesQuery';
 
 interface IEventProfileProps {
   canEdit: boolean;
@@ -24,13 +23,7 @@ export const EventProfile = ({
 }: IEventProfileProps) => {
   const { user } = useAppContext();
 
-  const { data: attendees } = useReadQuery<IAttendee[]>({
-    endpoint: replacePlaceholderWithId(
-      getRequestsOptions.GetAllEventAttendees.endpoint,
-      event.id,
-    ),
-    queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, event.id],
-  });
+  const { data: attendees } = useEventAttendeesQuery(event.id);
 
   const userAttendee = attendees?.find((a) => a.userId === user?.userId);
 
@@ -114,8 +107,8 @@ export const EventProfile = ({
         </div>
 
         {canEdit && (
-          <Button
-            className="m-3"
+          <ButtonLink
+            className="mt-4"
             to={replacePlaceholderWithId(routePaths.eventEdit.path, event?.id)}
             label="Edit this event"
           />
@@ -132,12 +125,6 @@ export const EventProfile = ({
             {event?.description}
           </p>
           <p className="text-base leading-4 mt-7 text-gray-600"></p>
-          {/* <p className="text-base leading-4 mt-4 text-gray-600">Length: 13.2 inches</p>
-          <p className="text-base leading-4 mt-4 text-gray-600">Height: 10 inches</p>
-          <p className="text-base leading-4 mt-4 text-gray-600">Depth: 5.1 inches</p>
-          <p className="md:w-96 text-base leading-normal text-gray-600 mt-4">
-            Composition: 100% calf leather, inside: 100% lamb leather
-          </p> */}
         </div>
         {shouldShowAttendeeActions && (
           <EventAttendeeControls attendeeId={userAttendee.id} eventId={event.id} />

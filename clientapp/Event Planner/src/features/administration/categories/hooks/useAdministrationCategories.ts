@@ -1,13 +1,8 @@
-import { ICategory } from 'features/events/form/models/category';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
+import { useAdministrationCategoriesQuery } from 'features/administration/categories/hooks/useAdministrationCategoriesQuery';
 import { useState } from 'react';
 
 export const useAdministrationCategories = () => {
-  const { data, isLoading } = useReadQuery<ICategory[]>({
-    endpoint: getRequestsOptions.GetAllCategories.endpoint,
-    queryKey: [getRequestsOptions.GetAllCategories.queryKey],
-  });
+  const { data, isLoading } = useAdministrationCategoriesQuery();
 
   const hasCategories = data?.length !== 0;
 

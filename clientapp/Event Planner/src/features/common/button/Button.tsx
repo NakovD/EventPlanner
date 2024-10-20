@@ -1,45 +1,44 @@
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { ButtonHTMLAttributes, ReactNode } from 'react';
 
-interface IButtonProps {
+interface ButtonWithLabelProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   label: string;
-  className?: string;
-  to?: string;
-  isSubmit?: boolean;
-  disabled?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
+interface ButtonWithChildrenProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
+  children: ReactNode;
+}
+
+type ButtonProps = ButtonWithLabelProps | ButtonWithChildrenProps;
+
 export const Button = ({
-  label,
-  to,
-  className,
-  isSubmit = false,
   disabled,
-  onClick,
-}: IButtonProps) => {
+  className,
+  type = 'button',
+  ...rest
+}: ButtonProps) => {
   const buttonStyles = classNames(
-    'py-2 px-4  text-text-dark focus:outline-none hover',
+    'py-2 px-4 text-text-dark focus:outline-none hover',
     className,
     { ['cursor-not-allowed bg-primary-dark']: disabled },
     { ['bg-primary-light']: !disabled },
   );
 
-  if (to) {
+  if ('label' in rest) {
     return (
-      <Link className={'inline-block ' + buttonStyles} to={to}>
-        {label}
-      </Link>
+      <button className={buttonStyles} disabled={disabled} type={type} {...rest}>
+        {rest.label}
+      </button>
     );
   }
-  return (
-    <button
-      className={buttonStyles}
-      type={isSubmit ? 'submit' : 'button'}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      {label}
-    </button>
-  );
+
+  if ('children' in rest) {
+    return (
+      <button className={buttonStyles} disabled={disabled} type={type} {...rest}>
+        {rest.children}
+      </button>
+    );
+  }
 };

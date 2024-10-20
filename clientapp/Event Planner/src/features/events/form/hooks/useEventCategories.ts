@@ -1,4 +1,4 @@
-import { ICategory } from 'features/events/form/models/category';
+import { ICategory } from 'features/administration/categories/models/category';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useGetQueryData } from 'infrastructure/api/hooks/useGetQueryData';
 

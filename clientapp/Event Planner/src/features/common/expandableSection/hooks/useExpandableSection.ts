@@ -11,7 +11,7 @@ export const useExpandableSection = ({
 
   const toggleSection = () => setIsVisible(!isVisible);
 
-  const sectionAccent = isVisible && 'font-bold';
+  const sectionAccent = isVisible ? 'font-bold' : '';
 
   return {
     isVisible,

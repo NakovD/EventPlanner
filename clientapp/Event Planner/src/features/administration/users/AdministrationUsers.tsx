@@ -1,13 +1,8 @@
 import { AdministrationUser } from 'features/administration/users/components/AdministrationUser';
-import { IAdminUser } from 'features/administration/users/models/adminUser';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
+import { useAdministrationUsersQuery } from 'features/administration/users/hooks/useAdministrationUsersQuery';
 
 export const AdministrationUsers = () => {
-  const { data, isLoading } = useReadQuery<IAdminUser[]>({
-    endpoint: getRequestsOptions.GetAllUsers.endpoint,
-    queryKey: [getRequestsOptions.GetAllUsers.queryKey],
-  });
+  const { data, isLoading } = useAdministrationUsersQuery();
 
   const hasUsers = data?.length !== 0 && !isLoading;
 
