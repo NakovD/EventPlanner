@@ -1,4 +1,4 @@
-import { Button } from 'features/common/button/Button';
+import { ButtonLink } from 'features/common/button/ButtonLink';
 import { HeaderAdminDropdown } from 'features/common/header/components/HeaderAdminDropdown';
 import { HeaderUser } from 'features/common/header/components/HeaderUser';
 import { useHeader } from 'features/common/header/hooks/useHeader';
@@ -113,7 +113,7 @@ export const Header = () => {
       </nav>
       {isAuthenticated && <HeaderUser />}
       {!isAuthenticated && (
-        <Button to={routePaths.login.path} label={routePaths.login.name} />
+        <ButtonLink to={routePaths.login.path} label={routePaths.login.name} />
       )}
     </header>
   );

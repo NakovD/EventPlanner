@@ -1,4 +1,4 @@
-import { ManageAttendees } from 'features/attendees/manage/ManageAttendees';
+import { ManageAttendees } from 'features/attendees/ManageAttendees';
 import { LogIn } from 'features/authentication/logIn/LogIn';
 import { Register } from 'features/authentication/register/Register';
 import { Layout } from 'features/common/layout/Layout';

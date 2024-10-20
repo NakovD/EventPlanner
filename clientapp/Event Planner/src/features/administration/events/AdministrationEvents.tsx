@@ -1,13 +1,9 @@
 import { AdministrationEvent } from 'features/administration/events/components/AdministrationEvent';
-import { IAdminEvent } from 'features/administration/events/models/IAdminEvent';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
+
+import { useAdministrationEventsQuery } from './hooks/useAdministrationEventsQuery';
 
 export const AdministrationEvents = () => {
-  const { data, isLoading } = useReadQuery<IAdminEvent[]>({
-    endpoint: getRequestsOptions.GetAllEventsForAdmins.endpoint,
-    queryKey: [getRequestsOptions.GetAllEventsForAdmins.queryKey],
-  });
+  const { data, isLoading } = useAdministrationEventsQuery();
 
   const hasEvents = data?.length !== 0 && !isLoading;
 

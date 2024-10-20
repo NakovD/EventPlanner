@@ -1,17 +1,13 @@
 import { EventCard } from 'features/events/common/EventCard';
-import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { Link } from 'react-router-dom';
 
-export const UserEvents = () => {
-  const { data, isLoading } = useReadQuery<IAllEventsEntity[]>({
-    endpoint: getRequestsOptions.GetAllUserEvents.endpoint,
-    queryKey: [getRequestsOptions.GetAllUserEvents.queryKey],
-  });
+import { useUserEventsQuery } from './hooks/useUserEventQuery';
 
-  const shouldShowEmpty = data?.length === 0;
+export const UserEvents = () => {
+  const { isSuccess, data, isLoading } = useUserEventsQuery();
+
+  const shouldShowEmpty = isLoading ? false : isSuccess ? data.length === 0 : false;
 
   return (
     <>

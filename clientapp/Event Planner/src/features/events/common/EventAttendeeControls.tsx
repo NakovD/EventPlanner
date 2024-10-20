@@ -1,11 +1,7 @@
 import { AttendeeStatusType } from 'features/attendees/enums/attendeeStatusType';
-import { IAttendeeStatusRequest } from 'features/attendees/models/attendeeStatusRequest';
 import { Button } from 'features/common/button/Button';
 import { ExpandableSection } from 'features/common/expandableSection/ExpandableSection';
-import { endpoints } from 'infrastructure/api/endpoints/endpoints';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useSnackbarBlockingMutation } from 'infrastructure/api/hooks/useSnackbarBlockingMutation';
-import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
+import { useEventAttendeeStatusMutation } from './hooks/useEventAttendeeStatusMutation';
 
 interface IEventAttendeeControlsProps {
   attendeeId: number;
@@ -16,10 +12,7 @@ export const EventAttendeeControls = ({
   attendeeId,
   eventId,
 }: IEventAttendeeControlsProps) => {
-  const { mutate } = useSnackbarBlockingMutation<IAttendeeStatusRequest>({
-    endpoint: replacePlaceholderWithId(endpoints.attendees.updateStatus, attendeeId),
-    queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, eventId],
-  });
+  const { mutate } = useEventAttendeeStatusMutation({ attendeeId, eventId });
 
   return (
     <ExpandableSection sectionName="Your actions">

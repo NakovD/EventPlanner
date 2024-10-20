@@ -1,19 +1,18 @@
 import InfoIcon from '@mui/icons-material/Info';
-import { useAdministrationEventDelete } from 'features/administration/events/hooks/useAdministrationEventDelete';
-import { useAdministrationEventRestore } from 'features/administration/events/hooks/useAdministrationEventRestore';
-import { IAdminEvent } from 'features/administration/events/models/IAdminEvent';
+import { useAdministrationEvent } from 'features/administration/events/hooks/useAdministrationEvent';
 import { Button } from 'features/common/button/Button';
-import { AppDialog } from 'features/common/dialog/AppDialog';
-import { useAppDialog } from 'features/common/dialog/hooks/useAppDialog';
+import { InfoModal } from 'features/common/modal/infoModal/InfoModal';
+
+import { IAdministrationEvent } from '../models/administratinoEvent';
 
 interface IAdministrationEventProps {
-  event: IAdminEvent;
+  event: IAdministrationEvent;
 }
 
 export const AdministrationEvent = ({ event }: IAdministrationEventProps) => {
-  const { deleteEvent } = useAdministrationEventDelete({ eventId: event.id });
-  const { restoreEvent } = useAdministrationEventRestore({ eventId: event.id });
-  const { openDialog, dialogProps } = useAppDialog();
+  const { modalRef, restoreEvent, deleteEvent, openModal } = useAdministrationEvent({
+    eventId: event.id,
+  });
 
   return (
     <div className="flex gap-6 mb-4 items-center">
@@ -23,7 +22,7 @@ export const AdministrationEvent = ({ event }: IAdministrationEventProps) => {
       </p>
       <p className="truncate w-32">
         Description
-        <button className="ml-1" onClick={openDialog}>
+        <button className="ml-1" onClick={openModal}>
           <InfoIcon sx={{ width: '20px' }} />
         </button>
       </p>
@@ -32,9 +31,9 @@ export const AdministrationEvent = ({ event }: IAdministrationEventProps) => {
       <p className="truncate w-40">{event.organizerName}</p>
       <p className="truncate w-20">{event.attendees}</p>
       <p className="truncate w-32">{event.isDeleted ? 'Yes' : 'No'}</p>
-      {!event.isDeleted && <Button label="Delete" onClick={deleteEvent} />}
-      {event.isDeleted && <Button label="Restore" onClick={restoreEvent} />}
-      <AppDialog {...dialogProps}>{event.description}</AppDialog>
+      {!event.isDeleted && <Button label="Delete" onClick={() => deleteEvent()} />}
+      {event.isDeleted && <Button label="Restore" onClick={() => restoreEvent()} />}
+      <InfoModal ref={modalRef}>{event.description}</InfoModal>
     </div>
   );
 };
