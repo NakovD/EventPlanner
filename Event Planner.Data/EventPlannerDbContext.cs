@@ -17,6 +17,8 @@
 
         public DbSet<Comment> Comments { get; set; } = null!;
 
+        public DbSet<Link> Links { get; set; } = null!;
+
         public EventPlannerDbContext(DbContextOptions<EventPlannerDbContext> options) : base(options)
         {
         }
@@ -26,6 +28,10 @@
             builder.Entity<User>()
                 .Property(u => u.RegistrationDate)
                 .HasDefaultValueSql("getdate()");
+
+            builder.Entity<Link>()
+                .Property(l => l.CreatedOn)
+                .HasDefaultValueSql("getDate()");
 
             builder.Entity<Event>()
                 .HasMany(e => e.Comments)
