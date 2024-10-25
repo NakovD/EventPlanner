@@ -175,6 +175,8 @@ namespace EventPlanner
 
             services.AddScoped<ITokenService, TokenService>();
 
+            services.AddScoped<ILinkService, LinkService>();
+
             services.AddHttpClient();
         }
 
@@ -193,6 +195,8 @@ namespace EventPlanner
                 configAction.AddProfile<UserProfile>();
 
                 configAction.AddProfile<CommentProfile>();
+
+                configAction.AddProfile<LinkProfile>();
             });
         }
 
