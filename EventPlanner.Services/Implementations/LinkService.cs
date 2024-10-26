@@ -43,8 +43,9 @@
 
         public async Task<LinkDto?> GetAsync(string linkId)
         {
-            var neededLink = await this.dbContext.Links.SingleOrDefaultAsync(l => l.Id == linkId);
-            
+            var neededLink = await this.dbContext.Links
+                .Include(l => l.Attendee).SingleOrDefaultAsync(l => l.Id == linkId);
+
             return this.mapper.Map<LinkDto?>(neededLink);
         }
     }
