@@ -28,6 +28,10 @@
 
         public User? User { get; set; }
 
+        public string? LinkId { get; set; }
+
+        public Link? Link { get; set; }
+
         [Required]
         public RSVPStatus Status { get; set; }
 
