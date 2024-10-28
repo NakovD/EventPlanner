@@ -15,16 +15,15 @@ interface IEventAttendeeExternalControlsProps {
 export const EventAttendeeExternalControls = ({
   eventId,
 }: IEventAttendeeExternalControlsProps) => {
-  const { id: encryptedData } = useParams();
-  if (!encryptedData) throw new Error('No id was found!');
+  //to do: refactor that
+  const { id: linkId } = useParams();
+
+  if (!linkId) throw new Error('No id was found!');
 
   const invalidate = useInvalidateQueries();
 
   const { mutate } = useSnackbarBlockingMutation<IAttendeeStatusRequest>({
-    endpoint: replacePlaceholderWithId(
-      endpoints.attendees.updateExternalStatus,
-      encryptedData,
-    ),
+    endpoint: replacePlaceholderWithId(endpoints.attendees.updateExternalStatus, linkId),
     queryKey: [getRequestsOptions.GetAllEventAttendees.queryKey, eventId],
     onSuccess: () => invalidate([getRequestsOptions.GetExternalAttendeeStatus.queryKey]),
   });
