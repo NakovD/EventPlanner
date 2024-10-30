@@ -7,6 +7,7 @@
     using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
     using System;
+    using MailKit.Security;
 
     public class EmailSender : IEmailSender
     {
@@ -31,8 +32,7 @@
 
                 try
                 {
-                    await client.ConnectAsync(emailConfiguration.SmtpServer, emailConfiguration.Port, true);
-                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    await client.ConnectAsync(emailConfiguration.SmtpServer, emailConfiguration.Port, SecureSocketOptions.StartTls);
                     await client.AuthenticateAsync(emailConfiguration.UserName, emailConfiguration.Password);
 
                     await client.SendAsync(emailMessage);
