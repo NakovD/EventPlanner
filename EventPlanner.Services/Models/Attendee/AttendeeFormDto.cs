@@ -17,6 +17,7 @@
 
         public string? UserId { get; set; }
 
+        [Required]
         public string EmailUrl { get; set; } = null!;
     }
 }

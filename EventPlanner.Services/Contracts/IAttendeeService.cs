@@ -17,7 +17,7 @@
 
         Task<bool> UpdateExternalAttendeeStatusAsync(int id, int newStatus);
 
-        Task<int> GetExternalAttendeeStatusAsync(int id);
+        Task<int> GetExternalAttendeeStatusAsync(int linkId);
 
         Task<bool> MarkAsDeletedAsync(int id, string userId);
     }

@@ -17,9 +17,9 @@
             this.emailSender = emailSender;
         }
 
-        public async Task SendEmailInviteAsync(string receiver, string attendeeName, string eventName, string eventUrl, string protectedData)
+        public async Task SendEmailInviteAsync(string receiver, string attendeeName, string eventName, string eventUrl, string linkId)
         {
-            var validEmailUrl = PrepareEmailUrl(eventUrl, protectedData);
+            var validEmailUrl = PrepareEmailUrl(eventUrl, linkId);
 
             var message = GenerateInviteMessage(receiver, attendeeName, eventName, validEmailUrl);
 
@@ -37,11 +37,11 @@
             return message;
         }
 
-        private string PrepareEmailUrl(string eventUrl, string protectedData)
+        private string PrepareEmailUrl(string eventUrl, string linkId)
         {
             var formattedUrl = eventUrl.Replace(":id", "");
 
-            return $"{formattedUrl}{protectedData}";
+            return $"{formattedUrl}{linkId}";
         }
     }
 }
