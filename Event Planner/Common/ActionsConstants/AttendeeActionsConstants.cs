@@ -10,8 +10,8 @@
 
         public const string UpdateStatus = "UpdateStatus/{id}";
 
-        public const string UpdateStatusExternal = "UpdateExternalStatus/{encryptedData}";
+        public const string UpdateStatusExternal = "UpdateExternalStatus/{linkId}";
 
-        public const string GetStatusExternal = "ExternalStatus/{encryptedData}";
+        public const string GetStatusExternal = "ExternalStatus/{linkId}";
     }
 }

@@ -14,7 +14,7 @@
 
         public const string Edit = "Edit/{id}";
 
-        public const string GetForExternalAttendee = "AttendeeOnly/{encryptedData}";
+        public const string GetForExternalAttendee = "AttendeeOnly/{linkId}";
 
         public const string Delete = "Delete/{id}";
 
