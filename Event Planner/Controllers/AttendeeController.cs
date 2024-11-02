@@ -4,12 +4,9 @@ namespace EventPlanner.Controllers
 {
     using Services.Contracts;
     using Services.Models.Attendee;
-    using Services.Models.Event;
-    using static WebConstants;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.DataProtection;
     using EventPlanner.Common.ActionsConstants;
 
     [Route("api/[controller]")]
@@ -21,7 +18,7 @@ namespace EventPlanner.Controllers
 
         private readonly IEventService eventService;
 
-        private readonly IDataProtector dataProtector;
+        private readonly ILinkService linkService;
 
         private readonly IJsonService jsonService;
 
@@ -29,11 +26,11 @@ namespace EventPlanner.Controllers
 
         private readonly INotificationService notificationService;
 
-        public AttendeeController(IAttendeeService attendeeService, IEventService eventService, IDataProtectionProvider dataProtectionProvider, IJsonService jsonService, IEmailService emailService, INotificationService notificationService)
+        public AttendeeController(IAttendeeService attendeeService, IEventService eventService, ILinkService linkService, IJsonService jsonService, IEmailService emailService, INotificationService notificationService)
         {
             this.attendeeService = attendeeService;
             this.eventService = eventService;
-            dataProtector = dataProtectionProvider.CreateProtector(AttendeeInviteDataPurpose);
+            this.linkService = linkService;
             this.jsonService = jsonService;
             this.emailService = emailService;
             this.notificationService = notificationService;
@@ -65,12 +62,18 @@ namespace EventPlanner.Controllers
 
             var isExternal = attendeeFormDto.UserId == null;
 
-            var protectedUserData = isExternal ? ProtectUserData(new EventAttendeeDto { AttendeeId = attendeeId, EventId = neededEvent!.Id }) : neededEvent.Id.ToString();
+            if (isExternal) {
+                var (isSuccess, linkId) = await this.linkService.CreateAsync(attendeeId, DateTime.Parse(neededEvent!.Date));
 
-            await emailService.SendEmailInviteAsync(attendeeFormDto.Email, attendeeFormDto.Name, neededEvent.Title, attendeeFormDto.EmailUrl, protectedUserData);
+                if (!isSuccess) return this.StatusCode(500);
 
-            if (!isExternal)
+                await emailService.SendEmailInviteAsync(attendeeFormDto.Email, attendeeFormDto.Name, neededEvent!.Title, attendeeFormDto.EmailUrl, linkId!);
+            }
+
+            else
             {
+                await emailService.SendEmailInviteAsync(attendeeFormDto.Email, attendeeFormDto.Name, neededEvent!.Title, attendeeFormDto.EmailUrl, "");
+
                 var notificaitonCreationSuccess = await notificationService.CreateEventInviteNotificationAsync(attendeeFormDto.UserId, neededEvent);
 
                 if (!notificaitonCreationSuccess) return StatusCode(500);
@@ -125,27 +128,25 @@ namespace EventPlanner.Controllers
 
         [AllowAnonymous]
         [HttpPost(AttendeeActionsConstants.UpdateStatusExternal)]
-        public async Task<IActionResult> UpdateExternalAttendeeStatus([FromRoute] string encryptedData, [FromBody] AttendeeStatusDto dto)
+        public async Task<IActionResult> UpdateExternalAttendeeStatus([FromRoute] string linkId, [FromBody] AttendeeStatusDto dto)
         {
-            var unprotectedData = UnProtectUserData(encryptedData);
+            var link = await this.linkService.GetAsync(linkId);
 
-            if (unprotectedData == null) return BadRequest();
+            if (link == null) return BadRequest();
 
             var isModeValid = ModelState.IsValid;
 
             if (!isModeValid) return BadRequest();
 
-            var action = await attendeeService.UpdateExternalAttendeeStatusAsync(unprotectedData.AttendeeId, dto.NewStatus);
+            var action = await attendeeService.UpdateExternalAttendeeStatusAsync(link.Attendee.Id, dto.NewStatus);
 
             if (!action) return BadRequest();
 
-            var attendee = await attendeeService.GetByIdAsync(unprotectedData.AttendeeId);
+            if (link.Attendee == null) return BadRequest();
 
-            if (attendee == null) return BadRequest();
+            var eventCreatorId = await eventService.GetEventCreatorIdAsync(link.Attendee.EventId);
 
-            var eventCreatorId = await eventService.GetEventCreatorIdAsync(attendee.EventId);
-
-            var notificationCreationSuccess = await notificationService.CreateEventUpdateNotificationAsync(eventCreatorId, attendee);
+            var notificationCreationSuccess = await notificationService.CreateEventUpdateNotificationAsync(eventCreatorId, link.Attendee);
 
             if (!notificationCreationSuccess) return StatusCode(500);
 
@@ -154,34 +155,18 @@ namespace EventPlanner.Controllers
 
         [AllowAnonymous]
         [HttpGet(AttendeeActionsConstants.GetStatusExternal)]
-        public async Task<IActionResult> GetExternalAttendeeStatus([FromRoute] string encryptedData)
+        public async Task<IActionResult> GetExternalAttendeeStatus([FromRoute] string linkId)
         {
-            var unprotectedData = UnProtectUserData(encryptedData);
+            var link = await this.linkService.GetAsync(linkId);
 
-            if (unprotectedData == null) return BadRequest();
+            if (link == null) return BadRequest();
 
-            var result = await attendeeService.GetExternalAttendeeStatusAsync(unprotectedData.AttendeeId);
+            var result = await attendeeService.GetExternalAttendeeStatusAsync(link.Attendee.Id);
 
             if (result == -1) return BadRequest();
 
             return Ok(result);
 
-        }
-
-        private string ProtectUserData(EventAttendeeDto eventAttendeeDto)
-        {
-            var eventAttendeeDtoAsJsonString = jsonService.Serialize(eventAttendeeDto);
-            var protectedData = dataProtector.Protect(eventAttendeeDtoAsJsonString);
-
-            return protectedData;
-        }
-
-        private EventAttendeeDto? UnProtectUserData(string encryptedData)
-        {
-            var unProtectedData = dataProtector.Unprotect(encryptedData);
-            var data = jsonService.Deserialize<EventAttendeeDto>(unProtectedData);
-
-            return data;
         }
     }
 }
