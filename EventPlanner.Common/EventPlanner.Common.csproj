@@ -5,7 +5,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Errors\Identity\" />
+    <Compile Remove="Errors\**" />
+    <EmbeddedResource Remove="Errors\**" />
+    <None Remove="Errors\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.7" />

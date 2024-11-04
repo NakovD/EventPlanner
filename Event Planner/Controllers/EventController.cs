@@ -19,15 +19,15 @@ namespace EventPlanner.Controllers
     {
         private readonly IEventService eventService;
 
-        private readonly IDataProtector dataProtector;
+        private readonly ILinkService linkService;
 
         private readonly IJsonService jsonService;
 
-        public EventController(IEventService eventService, IDataProtectionProvider dataProtectionProvider, IJsonService jsonService)
+        public EventController(IEventService eventService, ILinkService linkService, IJsonService jsonService)
         {
             this.eventService = eventService;
             this.jsonService = jsonService;
-            dataProtector = dataProtectionProvider.CreateProtector(AttendeeInviteDataPurpose);
+            this.linkService = linkService;
         }
 
         [HttpGet(EventActionsConstants.GetAll)]
@@ -94,21 +94,19 @@ namespace EventPlanner.Controllers
 
         [AllowAnonymous]
         [HttpGet(EventActionsConstants.GetForExternalAttendee)]
-        public async Task<IActionResult> AttendeeOnly(string encryptedData)
+        public async Task<IActionResult> AttendeeOnly(string linkId)
         {
-            var unprotectedData = dataProtector.Unprotect(encryptedData);
+            var link = await this.linkService.GetAsync(linkId);
 
-            var dto = jsonService.Deserialize<EventAttendeeDto>(unprotectedData);
+            if (link == null) return BadRequest();
 
-            if (dto == null) return BadRequest();
+            if (link.Attendee.EventId <= 0) return BadRequest();
 
-            if (dto.EventId <= 0) return BadRequest();
-
-            var neededEvent = await eventService.GetByIdAsync(dto.EventId);
+            var neededEvent = await eventService.GetByIdAsync(link.Attendee.EventId);
 
             if (neededEvent == null) return BadRequest();
 
-            if (neededEvent.OrganizerId == dto.AttendeeId.ToString()) return BadRequest();
+            if (neededEvent.OrganizerId == link.Attendee.Id.ToString()) return BadRequest();
 
             return Ok(neededEvent);
         }
