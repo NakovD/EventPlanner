@@ -1,12 +1,11 @@
 import { useAppContext } from 'AppContext';
-import { useParams } from 'react-router-dom';
+import { useValidIdParam } from 'infrastructure/hooks/useValidIdParam';
 
 import { useAttendeeInternalUsersQuery } from './useAttendeeInternalUsersQuery';
 import { useAttendeesQuery } from './useAttendeesQuery';
 
 export const useManageAttendees = () => {
-  const { id: eventId } = useParams();
-  if (!eventId) throw new Error('No id found!');
+  const eventId = useValidIdParam();
 
   const invitedAttendeesQuery = useAttendeesQuery(eventId);
 
