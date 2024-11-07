@@ -1,13 +1,11 @@
 import { useAppContext } from 'AppContext';
 import { EventProfile } from 'features/events/common/EventProfile';
-import { useParams } from 'react-router-dom';
+import { useValidIdParam } from 'infrastructure/hooks/useValidIdParam';
 
 import { useEventDetailsQuery } from './hooks/useEventDetailsQuery';
 
 export const EventDetails = () => {
-  const { id } = useParams();
-
-  if (!id) throw new Error('No id found!');
+  const id = useValidIdParam();
 
   const { user } = useAppContext();
 
