@@ -6,6 +6,7 @@ import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 import { useParams } from 'react-router-dom';
 
+//to do: refactor this
 export const EventDetailsAttendeeOnly = () => {
   const { id: encryptedData } = useParams();
   if (!encryptedData) throw new Error('No id was found!');

@@ -4,6 +4,7 @@ import { useValidIdParam } from 'infrastructure/hooks/useValidIdParam';
 
 import { useEventDetailsQuery } from './hooks/useEventDetailsQuery';
 
+//To do: refactor this;
 export const EventDetails = () => {
   const id = useValidIdParam();
 

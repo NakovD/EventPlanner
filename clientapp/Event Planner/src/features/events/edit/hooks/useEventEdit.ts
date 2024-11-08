@@ -1,9 +1,8 @@
 import { useEventDetailsQuery } from 'features/events/details/hooks/useEventDetailsQuery';
-import { useParams } from 'react-router-dom';
+import { useValidIdParam } from 'infrastructure/hooks/useValidIdParam';
 
 export const useEventEdit = () => {
-  const { id } = useParams();
-  if (!id) throw new Error('No id found!');
+  const id = useValidIdParam();
 
   const query = useEventDetailsQuery(id);
 
