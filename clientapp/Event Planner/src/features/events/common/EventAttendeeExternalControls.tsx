@@ -5,8 +5,8 @@ import { endpoints } from 'infrastructure/api/endpoints/endpoints';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useInvalidateQueries } from 'infrastructure/api/hooks/useInvalidateQueries';
 import { useSnackbarBlockingMutation } from 'infrastructure/api/hooks/useSnackbarBlockingMutation';
+import { useValidIdParam } from 'infrastructure/hooks/useValidIdParam';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
-import { useParams } from 'react-router-dom';
 
 interface IEventAttendeeExternalControlsProps {
   eventId: number;
@@ -16,9 +16,7 @@ export const EventAttendeeExternalControls = ({
   eventId,
 }: IEventAttendeeExternalControlsProps) => {
   //to do: refactor that
-  const { id: linkId } = useParams();
-
-  if (!linkId) throw new Error('No id was found!');
+  const linkId = useValidIdParam();
 
   const invalidate = useInvalidateQueries();
 
