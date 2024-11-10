@@ -3,18 +3,17 @@ import { EventProfile } from 'features/events/common/EventProfile';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
 import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
 import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
+import { useValidIdParam } from 'infrastructure/hooks/useValidIdParam';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
-import { useParams } from 'react-router-dom';
 
 //to do: refactor this
 export const EventDetailsAttendeeOnly = () => {
-  const { id: encryptedData } = useParams();
-  if (!encryptedData) throw new Error('No id was found!');
+  const id = useValidIdParam();
 
   const { data: event } = useReadQuery<IAllEventsEntity>({
     endpoint: replacePlaceholderWithId(
       getRequestsOptions.GetEventForAttendeeOnly.endpoint,
-      encryptedData,
+      id,
     ),
     queryKey: [getRequestsOptions.GetEventForAttendeeOnly.queryKey],
   });
@@ -22,7 +21,7 @@ export const EventDetailsAttendeeOnly = () => {
   const { data: attendeeStatus } = useReadQuery<AttendeeStatusType>({
     endpoint: replacePlaceholderWithId(
       getRequestsOptions.GetExternalAttendeeStatus.endpoint,
-      encryptedData,
+      id,
     ),
     queryKey: [getRequestsOptions.GetExternalAttendeeStatus.queryKey],
   });
