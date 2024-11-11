@@ -1,18 +1,16 @@
-import { useAppContext } from 'AppContext';
 import { EventProfile } from 'features/events/common/EventProfile';
-import { useValidIdParam } from 'infrastructure/hooks/useValidIdParam';
 
-import { useEventDetailsQuery } from './hooks/useEventDetailsQuery';
+import { useEventDetails } from './hooks/useEventDetails';
 
 //To do: refactor this;
 export const EventDetails = () => {
-  const id = useValidIdParam();
+  const { canEdit, query } = useEventDetails();
 
-  const { user } = useAppContext();
+  const { isLoading, isError, data } = query;
 
-  const { data: event } = useEventDetailsQuery(id);
+  if (isLoading) return <p>Loading...</p>;
 
-  const canEdit = user?.userId === event?.organizerId;
+  if (isError) return <p>Error occured!</p>;
 
-  return event && <EventProfile event={event} canEdit={canEdit} />;
+  return <EventProfile event={data} canEdit={canEdit} />;
 };
