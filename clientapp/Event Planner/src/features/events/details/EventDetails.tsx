@@ -2,7 +2,6 @@ import { EventProfile } from 'features/events/common/EventProfile';
 
 import { useEventDetails } from './hooks/useEventDetails';
 
-//To do: refactor this;
 export const EventDetails = () => {
   const { canEdit, query } = useEventDetails();
 
