@@ -1,9 +1,7 @@
 import { AttendeeStatusType } from 'features/attendees/enums/attendeeStatusType';
 import { Button } from 'features/common/button/Button';
-import { useInvalidateQueries } from 'infrastructure/api/hooks/useInvalidateQueries';
-import { useValidIdParam } from 'infrastructure/hooks/useValidIdParam';
 
-import { useEventAttendeeExternalStatusMutation } from './hooks/useEventAttendeeExternalStatusMutation';
+import { useEventAttendeeExternalControls } from './hooks/useEventAttendeeExternalControls';
 
 interface IEventAttendeeExternalControlsProps {
   eventId: number;
@@ -12,16 +10,7 @@ interface IEventAttendeeExternalControlsProps {
 export const EventAttendeeExternalControls = ({
   eventId,
 }: IEventAttendeeExternalControlsProps) => {
-  //to do: refactor that
-  const linkId = useValidIdParam();
-
-  //to do invalidate into custom hook;
-  // const invalidate = useInvalidateQueries();
-
-  const { mutate } = useEventAttendeeExternalStatusMutation({
-    linkId,
-    eventId: eventId.toString(),
-  });
+  const { mutate } = useEventAttendeeExternalControls({ eventId });
 
   return (
     <div className="my-3 flex gap-2">
