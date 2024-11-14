@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import { useAppContext } from 'AppContext';
 import { EventAttendeesList } from 'features/attendees/components/EventAttendeesList';
 import { ButtonLink } from 'features/common/button/ButtonLink';
@@ -33,14 +34,6 @@ export const EventProfile = ({
 
   return (
     <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
-      <div className="xl:w-2/6 lg:w-2/5 w-80 md:block hidden">
-        <img className="w-full" alt="img of a girl posing" src={event?.image} />
-        <img
-          className="mt-6 w-full"
-          alt="img of a girl posing"
-          src="https://i.ibb.co/qxkRXSq/component-image-two.png"
-        />
-      </div>
       <div className="md:hidden">
         <img
           className="w-full"
@@ -71,41 +64,6 @@ export const EventProfile = ({
         </div>
       </div>
       <div className="xl:w-2/5 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
-        <div className="border-b border-gray-200 pb-6">
-          <p className="text-sm leading-none text-gray-600">{event?.date}</p>
-          <h1
-            className="
-                lg:text-2xl
-                text-xl
-                font-semibold
-                lg:leading-6
-                leading-7
-                text-gray-800
-                mt-2
-              "
-          >
-            {event?.title}
-          </h1>
-        </div>
-        <div className="py-4 border-b border-gray-200 flex items-center justify-between">
-          <p className="text-base leading-4 text-gray-800">Location</p>
-          <div className="flex items-center justify-center">
-            <p className="text-sm leading-none text-gray-600">{event?.location}</p>
-          </div>
-        </div>
-        <div className="py-4 border-b border-gray-200 flex items-center justify-between">
-          <p className="text-base leading-4 text-gray-800">Category</p>
-          <div className="flex items-center justify-center">
-            <p className="text-sm leading-none text-gray-600">{event?.category}</p>
-          </div>
-        </div>
-        <div className="py-4 border-b border-gray-200 flex items-center justify-between">
-          <p className="text-base leading-4 text-gray-800">Time</p>
-          <div className="flex items-center justify-center">
-            <p className="text-sm leading-none text-gray-600 mr-3">{event?.time}</p>
-          </div>
-        </div>
-
         {canEdit && (
           <ButtonLink
             className="mt-4"
@@ -139,3 +97,53 @@ export const EventProfile = ({
     </div>
   );
 };
+
+EventProfile.Image = ({ imageUrl }: { imageUrl: string }) => (
+  <div className="xl:w-2/6 lg:w-2/5 w-80 md:block hidden">
+    <img className="w-full" alt="img of a girl posing" src={imageUrl} />
+    <img
+      className="mt-6 w-full"
+      alt="img of a girl posing"
+      src="https://i.ibb.co/qxkRXSq/component-image-two.png"
+    />
+  </div>
+);
+
+EventProfile.Details = ({ event }: { event: IAllEventsEntity }) => (
+  <>
+    <div className="border-b border-gray-200 pb-6">
+      <p className="text-sm leading-none text-gray-600">{event?.date}</p>
+      <h1
+        className="
+                lg:text-2xl
+                text-xl
+                font-semibold
+                lg:leading-6
+                leading-7
+                text-gray-800
+                mt-2
+              "
+      >
+        {event?.title}
+      </h1>
+    </div>
+    <div className="py-4 border-b border-gray-200 flex items-center justify-between">
+      <p className="text-base leading-4 text-gray-800">Location</p>
+      <div className="flex items-center justify-center">
+        <p className="text-sm leading-none text-gray-600">{event?.location}</p>
+      </div>
+    </div>
+    <div className="py-4 border-b border-gray-200 flex items-center justify-between">
+      <p className="text-base leading-4 text-gray-800">Category</p>
+      <div className="flex items-center justify-center">
+        <p className="text-sm leading-none text-gray-600">{event?.category}</p>
+      </div>
+    </div>
+    <div className="py-4 border-b border-gray-200 flex items-center justify-between">
+      <p className="text-base leading-4 text-gray-800">Time</p>
+      <div className="flex items-center justify-center">
+        <p className="text-sm leading-none text-gray-600 mr-3">{event?.time}</p>
+      </div>
+    </div>
+  </>
+);
