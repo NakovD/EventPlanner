@@ -8,6 +8,7 @@ import { EventAttendeeExternalControls } from 'features/events/common/EventAtten
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
+import { ComponentProps, ReactNode } from 'react';
 
 import { useEventAttendeesQuery } from './hooks/useEventAttendeesQuery';
 
@@ -22,91 +23,33 @@ export const EventProfile = ({
   shouldShowExternalAttendeeControls = false,
   event,
 }: IEventProfileProps) => {
-  const { user } = useAppContext();
-
-  const { data: attendees } = useEventAttendeesQuery(event.id);
-
-  const userAttendee = attendees?.find((a) => a.userId === user?.userId);
-
-  const shouldShowAttendeeActions = userAttendee !== undefined;
-
-  const isExternalAttendee = !user && !shouldShowExternalAttendeeControls;
-
   return (
     <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
-      <div className="md:hidden">
-        <img
-          className="w-full"
-          alt="img of a girl posing"
-          src="https://i.ibb.co/QMdWfzX/component-image-one.png"
+      <EventProfile.Image imageUrl={event.image} />
+      <EventProfile.Wrapper>
+        <EventProfile.Details event={event} />
+        {canEdit && <EventProfile.Edit eventId={event.id} />}
+        <EventProfile.ExternalControlls
+          eventId={event.id}
+          hasAttendeeUpdatedStatus={false}
         />
-        <div className="flex items-center justify-between mt-3 space-x-4 md:space-x-0">
-          <img
-            alt="img-tag-one"
-            className="md:w-48 md:h-48 w-full"
-            src="https://i.ibb.co/cYDrVGh/Rectangle-245.png"
-          />
-          <img
-            alt="img-tag-one"
-            className="md:w-48 md:h-48 w-full"
-            src="https://i.ibb.co/f17NXrW/Rectangle-244.png"
-          />
-          <img
-            alt="img-tag-one"
-            className="md:w-48 md:h-48 w-full"
-            src="https://i.ibb.co/cYDrVGh/Rectangle-245.png"
-          />
-          <img
-            alt="img-tag-one"
-            className="md:w-48 md:h-48 w-full"
-            src="https://i.ibb.co/f17NXrW/Rectangle-244.png"
-          />
-        </div>
-      </div>
-      <div className="xl:w-2/5 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
-        {canEdit && (
-          <ButtonLink
-            className="mt-4"
-            to={replacePlaceholderWithId(routePaths.eventEdit.path, event?.id)}
-            label="Edit this event"
-          />
-        )}
-        {shouldShowExternalAttendeeControls && (
-          <EventAttendeeExternalControls eventId={event.id} />
-        )}
-        {isExternalAttendee && (
-          <p className="mt-3">You have already updated your status for this event!</p>
-        )}
-        <div className="mt-4">
-          Event Description
-          <p className="xl:pr-48 text-base lg:leading-tight leading-normal text-gray-600 mt-7">
-            {event?.description}
-          </p>
-          <p className="text-base leading-4 mt-7 text-gray-600"></p>
-        </div>
-        {shouldShowAttendeeActions && (
-          <EventAttendeeControls attendeeId={userAttendee.id} eventId={event.id} />
-        )}
-        <EventAttendeesList
-          attendees={attendees ?? []}
-          canEdit={canEdit}
-          eventId={event?.id ?? 0}
-        />
-        <EventComments eventId={event.id} />
-      </div>
+        <EventProfile.Description description={event.description} />
+        <EventProfile.Attendees canEdit={canEdit} eventId={event.id} />
+        <EventProfile.Comments eventId={event.id} />
+      </EventProfile.Wrapper>
     </div>
   );
 };
 
 EventProfile.Image = ({ imageUrl }: { imageUrl: string }) => (
-  <div className="xl:w-2/6 lg:w-2/5 w-80 md:block hidden">
-    <img className="w-full" alt="img of a girl posing" src={imageUrl} />
-    <img
-      className="mt-6 w-full"
-      alt="img of a girl posing"
-      src="https://i.ibb.co/qxkRXSq/component-image-two.png"
-    />
-  </div>
+  <>
+    <div className="xl:w-2/6 lg:w-2/5 w-80 md:block hidden">
+      <img className="w-full" alt="img of a girl posing" src={imageUrl} />
+    </div>
+    <div className="md:hidden">
+      <img className="w-full" alt="img of a girl posing" src={imageUrl} />
+    </div>
+  </>
 );
 
 EventProfile.Details = ({ event }: { event: IAllEventsEntity }) => (
@@ -146,4 +89,84 @@ EventProfile.Details = ({ event }: { event: IAllEventsEntity }) => (
       </div>
     </div>
   </>
+);
+
+EventProfile.Edit = ({ eventId }: { eventId: number }) => (
+  <ButtonLink
+    className="mt-4"
+    to={replacePlaceholderWithId(routePaths.eventEdit.path, eventId)}
+    label="Edit this event"
+  />
+);
+
+EventProfile.AttendeeControls = ({ eventId }: { eventId: number }) => (
+  <EventAttendeeExternalControls eventId={eventId} />
+);
+
+EventProfile.ExternalControlls = ({
+  eventId,
+  hasAttendeeUpdatedStatus,
+}: {
+  eventId: number;
+  hasAttendeeUpdatedStatus: boolean;
+}) => {
+  const { user } = useAppContext();
+
+  const isExternalAttendee = !user && !hasAttendeeUpdatedStatus;
+
+  return (
+    <>
+      <EventAttendeeExternalControls eventId={eventId} />
+      {isExternalAttendee && (
+        <p className="mt-3">You have already updated your status for this event!</p>
+      )}
+    </>
+  );
+};
+
+EventProfile.Description = ({ description }: { description: string }) => (
+  <div className="mt-4">
+    Event Description
+    <p className="xl:pr-48 text-base lg:leading-tight leading-normal text-gray-600 mt-7">
+      {description}
+    </p>
+    <p className="text-base leading-4 mt-7 text-gray-600"></p>
+  </div>
+);
+
+EventProfile.Wrapper = ({ children }: { children: ReactNode }) => (
+  <div className="xl:w-2/5 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">{children} </div>
+);
+
+EventProfile.Attendees = ({
+  canEdit,
+  eventId,
+}: {
+  eventId: number;
+  canEdit: boolean;
+}) => {
+  const { user } = useAppContext();
+
+  const { data: attendees } = useEventAttendeesQuery(eventId);
+
+  const userAttendee = attendees?.find((a) => a.userId === user?.userId);
+
+  const shouldShowAttendeeActions = userAttendee !== undefined;
+
+  return (
+    <>
+      <EventAttendeesList
+        attendees={attendees ?? []}
+        canEdit={canEdit}
+        eventId={eventId}
+      />
+      {shouldShowAttendeeActions && (
+        <EventAttendeeControls attendeeId={userAttendee.id} eventId={eventId} />
+      )}
+    </>
+  );
+};
+
+EventProfile.Comments = (props: ComponentProps<typeof EventComments>) => (
+  <EventComments {...props} />
 );

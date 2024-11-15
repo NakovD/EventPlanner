@@ -1,6 +1,7 @@
 import { AttendeeStatusType } from 'features/attendees/enums/attendeeStatusType';
 import { Button } from 'features/common/button/Button';
 import { ExpandableSection } from 'features/common/expandableSection/ExpandableSection';
+
 import { useEventAttendeeStatusMutation } from './hooks/useEventAttendeeStatusMutation';
 
 interface IEventAttendeeControlsProps {
