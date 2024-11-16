@@ -13,33 +13,14 @@ import { ComponentProps, ReactNode } from 'react';
 import { useEventAttendeesQuery } from './hooks/useEventAttendeesQuery';
 
 interface IEventProfileProps {
-  canEdit: boolean;
-  shouldShowExternalAttendeeControls?: boolean;
-  event: IAllEventsEntity;
+  children: ReactNode;
 }
 
-export const EventProfile = ({
-  canEdit,
-  shouldShowExternalAttendeeControls = false,
-  event,
-}: IEventProfileProps) => {
-  return (
-    <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
-      <EventProfile.Image imageUrl={event.image} />
-      <EventProfile.Wrapper>
-        <EventProfile.Details event={event} />
-        {canEdit && <EventProfile.Edit eventId={event.id} />}
-        <EventProfile.ExternalControlls
-          eventId={event.id}
-          hasAttendeeUpdatedStatus={false}
-        />
-        <EventProfile.Description description={event.description} />
-        <EventProfile.Attendees canEdit={canEdit} eventId={event.id} />
-        <EventProfile.Comments eventId={event.id} />
-      </EventProfile.Wrapper>
-    </div>
-  );
-};
+export const EventProfile = ({ children }: IEventProfileProps) => (
+  <div className="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
+    {children}
+  </div>
+);
 
 EventProfile.Image = ({ imageUrl }: { imageUrl: string }) => (
   <>
@@ -112,11 +93,11 @@ EventProfile.ExternalControlls = ({
 }) => {
   const { user } = useAppContext();
 
-  const isExternalAttendee = !user && !hasAttendeeUpdatedStatus;
+  const isExternalAttendee = !user && hasAttendeeUpdatedStatus;
 
   return (
     <>
-      <EventAttendeeExternalControls eventId={eventId} />
+      {!hasAttendeeUpdatedStatus && <EventAttendeeExternalControls eventId={eventId} />}
       {isExternalAttendee && (
         <p className="mt-3">You have already updated your status for this event!</p>
       )}
