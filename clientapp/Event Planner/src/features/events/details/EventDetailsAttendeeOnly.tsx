@@ -1,41 +1,36 @@
 import { AttendeeStatusType } from 'features/attendees/enums/attendeeStatusType';
+import { AppSkeleton } from 'features/common/skeleton/AppSkeleton';
 import { EventProfile } from 'features/events/common/EventProfile';
-import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
-import { getRequestsOptions } from 'infrastructure/api/endpoints/getRequestsOptions';
-import { useReadQuery } from 'infrastructure/api/hooks/useReadQuery';
-import { useValidIdParam } from 'infrastructure/hooks/useValidIdParam';
-import { replacePlaceholderWithId } from 'infrastructure/utilities/replacePlaceholderWithId';
 
-//to do: refactor this
+import { useEventDetailsAttendeeOnly } from './hooks/useEventDetailsAttendeeOnly';
+
 export const EventDetailsAttendeeOnly = () => {
-  const id = useValidIdParam();
+  const { eventQuery, attendeeStatusQuery } = useEventDetailsAttendeeOnly();
 
-  const { data: event } = useReadQuery<IAllEventsEntity>({
-    endpoint: replacePlaceholderWithId(
-      getRequestsOptions.GetEventForAttendeeOnly.endpoint,
-      id,
-    ),
-    queryKey: [getRequestsOptions.GetEventForAttendeeOnly.queryKey],
-  });
+  if (eventQuery.isLoading) return <p>Loading...</p>;
 
-  const { data: attendeeStatus } = useReadQuery<AttendeeStatusType>({
-    endpoint: replacePlaceholderWithId(
-      getRequestsOptions.GetExternalAttendeeStatus.endpoint,
-      id,
-    ),
-    queryKey: [getRequestsOptions.GetExternalAttendeeStatus.queryKey],
-  });
+  if (eventQuery.isError) return <p>Error occured!</p>;
 
-  const shouldShowExternalAttendeeControls =
-    attendeeStatus === AttendeeStatusType.NotResponded;
+  const { data: event } = eventQuery;
 
   return (
-    event && (
-      <EventProfile
-        event={event}
-        shouldShowExternalAttendeeControls={shouldShowExternalAttendeeControls}
-        canEdit={false}
-      />
-    )
+    <EventProfile>
+      <EventProfile.Image imageUrl={event.image} />
+      <EventProfile.Wrapper>
+        <EventProfile.Details event={event} />
+        {attendeeStatusQuery.isLoading && <AppSkeleton width="full-width" height={40} />}
+        {attendeeStatusQuery.isSuccess && (
+          <EventProfile.ExternalControlls
+            eventId={event.id}
+            hasAttendeeUpdatedStatus={
+              attendeeStatusQuery.data !== AttendeeStatusType.NotResponded
+            }
+          />
+        )}
+        <EventProfile.Description description={event.description} />
+        <EventProfile.Attendees canEdit={false} eventId={event.id} />
+        <EventProfile.Comments eventId={event.id} />
+      </EventProfile.Wrapper>
+    </EventProfile>
   );
 };
