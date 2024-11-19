@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import { FacebookAuth } from 'features/authentication/facebook/FacebookAuth';
 import { useLogin } from 'features/authentication/logIn/hooks/useLogin';
 import { Button } from 'features/common/button/Button';
-import { TextField } from 'features/common/form/TextField';
+import { Textfield } from 'features/common/form/TextField';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { generateUniqueUuid } from 'infrastructure/utilities/generateUniqueUuid';
 import { Link } from 'react-router-dom';
@@ -16,8 +16,8 @@ export const LogIn = () => {
         <img src="/images/sign-in.jpg" alt="free event image" />
         <form className="p-10 flex gap-7 flex-col justify-center" onSubmit={onSubmit}>
           <h2 className="text-4xl mb-10">Login Form</h2>
-          <TextField control={control} name="userName" label="Username" />
-          <TextField control={control} name="password" label="Password" type="password" />
+          <Textfield control={control} name="userName" label="Username" />
+          <Textfield control={control} name="password" label="Password" type="password" />
           <p className="shadow-text-light">
             Dont have an account?{' '}
             <Link
