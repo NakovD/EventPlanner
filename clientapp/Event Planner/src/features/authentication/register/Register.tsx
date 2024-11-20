@@ -1,7 +1,7 @@
 import { FacebookAuth } from 'features/authentication/facebook/FacebookAuth';
 import { useRegister } from 'features/authentication/register/hooks/useRegister';
 import { Button } from 'features/common/button/Button';
-import { TextField } from 'features/common/form/TextField';
+import { Textfield } from 'features/common/form/TextField';
 
 export const Register = () => {
   const { control, onSubmit } = useRegister();
@@ -11,10 +11,10 @@ export const Register = () => {
         <img src="/images/sign-up.jpg" alt="free event image" />
         <form className="p-10 flex gap-7 flex-col justify-center" onSubmit={onSubmit}>
           <h2 className="text-4xl mb-10">Register Form</h2>
-          <TextField name="userName" control={control} label="Username" />
-          <TextField name="email" control={control} label="Email" />
-          <TextField name="password" control={control} type="password" label="Password" />
-          <TextField
+          <Textfield name="userName" control={control} label="Username" />
+          <Textfield name="email" control={control} label="Email" />
+          <Textfield name="password" control={control} type="password" label="Password" />
+          <Textfield
             name="repeatPassword"
             control={control}
             type="password"
