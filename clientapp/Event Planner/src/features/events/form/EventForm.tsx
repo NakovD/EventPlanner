@@ -2,7 +2,7 @@ import { CloudinaryWidget } from 'features/cloudinaryWidget/CloudinaryWidget';
 import { Button } from 'features/common/button/Button';
 import { ESelect } from 'features/common/form/ESelect';
 import { TextArea } from 'features/common/form/TextArea';
-import { TextField } from 'features/common/form/TextField';
+import { Textfield } from 'features/common/form/Textfield';
 import { useEventForm } from 'features/events/form/hooks/useEventForm';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
 
@@ -27,7 +27,7 @@ export const EventForm = ({ title, eventId, event }: IEventFormProps) => {
     <>
       <h1 className="text-3xl text-center mb-5">{title}</h1>
       <form onSubmit={onSubmit} className="grid grid-cols-2 gap-6 my-12 w-4/5 mx-auto">
-        <TextField
+        <Textfield
           control={control}
           name="title"
           label="Title"
@@ -52,19 +52,19 @@ export const EventForm = ({ title, eventId, event }: IEventFormProps) => {
           </span>
           <CloudinaryWidget onError={onCloudinaryError} onSuccess={onCloudinarySuccess} />
         </div>
-        <TextField
+        <Textfield
           control={control}
           name="location"
           label="Location"
           info="The place where you event will happen."
         />
-        <TextField
+        <Textfield
           control={control}
           name="time"
           label="Time"
           info="Events need to have exact hour which they start in format: hh:mm."
         />
-        <TextField
+        <Textfield
           control={control}
           name="date"
           label="Date"
