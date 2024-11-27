@@ -9,6 +9,7 @@ type Textarea<TFormValues extends FieldValues> = Omit<
   label: string;
   control: Control<TFormValues>;
   name: FieldPath<TFormValues>;
+  helperText?: string;
 };
 
 export const Textarea = <TFormValues extends FieldValues>({
@@ -16,6 +17,7 @@ export const Textarea = <TFormValues extends FieldValues>({
   control,
   name,
   className,
+  helperText,
   onChange,
   onBlur,
   ...rest
@@ -38,6 +40,7 @@ export const Textarea = <TFormValues extends FieldValues>({
         className={classNames(className, { ['accent-light']: fieldState.invalid })}
         {...rest}
       />
+      {helperText && <p>{helperText}</p>}
     </label>
   );
 };
