@@ -1,4 +1,4 @@
-import { TextArea } from 'features/common/form/TextArea';
+import { Textarea } from 'features/common/form/Textareaa';
 import { useEventCommentForm } from 'features/events/common/comment/form/hooks/useEventCommentForm';
 import { IComment } from 'features/events/common/comment/models/comment';
 
@@ -24,7 +24,7 @@ export const EventCommentForm = ({
   return (
     <form className="mt-6 mb-3 flex gap-5" onSubmit={onSubmit}>
       <div className="w-80">
-        <TextArea control={control} name="content" label="Content" />
+        <Textarea control={control} name="content" label="Content" />
       </div>
       <button className="text-sm self-end font-semibold text-primary-light" type="submit">
         {submitLabel}
