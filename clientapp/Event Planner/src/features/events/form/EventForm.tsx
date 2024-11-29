@@ -1,7 +1,7 @@
 import { CloudinaryWidget } from 'features/cloudinaryWidget/CloudinaryWidget';
 import { Button } from 'features/common/button/Button';
 import { ESelect } from 'features/common/form/ESelect';
-import { TextArea } from 'features/common/form/TextArea';
+import { Textarea } from 'features/common/form/Textareaa';
 import { Textfield } from 'features/common/form/Textfield';
 import { useEventForm } from 'features/events/form/hooks/useEventForm';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';
@@ -33,11 +33,11 @@ export const EventForm = ({ title, eventId, event }: IEventFormProps) => {
           label="Title"
           info="The title. Think of something awesome."
         />
-        <TextArea
+        <Textarea
           control={control}
           name="description"
           label="Description"
-          info="Some brief explanation(250 chars) about your event."
+          helperText="Some brief explanation(250 chars) about your event."
         />
         <ESelect
           label="Category"
