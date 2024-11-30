@@ -1,4 +1,4 @@
-import { Textarea } from 'features/common/form/Textareaa';
+import { Textarea } from 'features/common/form/Textarea';
 import { useEventCommentForm } from 'features/events/common/comment/form/hooks/useEventCommentForm';
 import { IComment } from 'features/events/common/comment/models/comment';
 

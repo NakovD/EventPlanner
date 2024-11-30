@@ -1,7 +1,7 @@
 import { CloudinaryWidget } from 'features/cloudinaryWidget/CloudinaryWidget';
 import { Button } from 'features/common/button/Button';
 import { ESelect } from 'features/common/form/ESelect';
-import { Textarea } from 'features/common/form/Textareaa';
+import { Textarea } from 'features/common/form/Textarea';
 import { Textfield } from 'features/common/form/Textfield';
 import { useEventForm } from 'features/events/form/hooks/useEventForm';
 import { IAllEventsEntity } from 'features/events/models/allEventsEntity';

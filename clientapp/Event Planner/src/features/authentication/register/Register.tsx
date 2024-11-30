@@ -1,7 +1,7 @@
 import { FacebookAuth } from 'features/authentication/facebook/FacebookAuth';
 import { useRegister } from 'features/authentication/register/hooks/useRegister';
 import { Button } from 'features/common/button/Button';
-import { Textfield } from 'features/common/form/TextField';
+import { Textfield } from 'features/common/form/Textfield';
 
 export const Register = () => {
   const { control, onSubmit } = useRegister();

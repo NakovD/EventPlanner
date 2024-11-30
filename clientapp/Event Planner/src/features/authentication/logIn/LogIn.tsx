@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import { FacebookAuth } from 'features/authentication/facebook/FacebookAuth';
 import { useLogin } from 'features/authentication/logIn/hooks/useLogin';
 import { Button } from 'features/common/button/Button';
-import { Textfield } from 'features/common/form/TextField';
+import { Textfield } from 'features/common/form/Textfield';
 import { routePaths } from 'infrastructure/routing/routePaths';
 import { generateUniqueUuid } from 'infrastructure/utilities/generateUniqueUuid';
 import { Link } from 'react-router-dom';
