@@ -1,6 +1,6 @@
 import { CloudinaryWidget } from 'features/cloudinaryWidget/CloudinaryWidget';
 import { Button } from 'features/common/button/Button';
-import { ESelect } from 'features/common/form/ESelect';
+import { SingleSelect } from 'features/common/form/singleSelect/SingleSelect';
 import { Textarea } from 'features/common/form/Textarea';
 import { Textfield } from 'features/common/form/Textfield';
 import { useEventForm } from 'features/events/form/hooks/useEventForm';
@@ -39,7 +39,7 @@ export const EventForm = ({ title, eventId, event }: IEventFormProps) => {
           label="Description"
           helperText="Some brief explanation(250 chars) about your event."
         />
-        <ESelect
+        <SingleSelect
           label="Category"
           control={control}
           options={categories}
