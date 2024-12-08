@@ -36,7 +36,6 @@ export const BaseTextField = ({
         <input
           className="w-full"
           autoComplete="off"
-          color="warning"
           value={value}
           defaultValue={defaultValue}
           onChange={handleChange}
