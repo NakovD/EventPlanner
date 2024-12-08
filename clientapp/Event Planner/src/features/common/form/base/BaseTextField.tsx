@@ -1,5 +1,4 @@
 import ClearIcon from '@mui/icons-material/Clear';
-import { TextField } from '@mui/material';
 import classNames from 'classnames';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useDebounce } from 'usehooks-ts';
@@ -32,16 +31,17 @@ export const BaseTextField = ({
 
   return (
     <div className={classNames('flex gap-3', className)}>
-      <TextField
-        className="w-full"
-        autoComplete="off"
-        color="warning"
-        value={value}
-        defaultValue={defaultValue}
-        variant="standard"
-        label={label}
-        onChange={handleChange}
-      />
+      <label>
+        {label}
+        <input
+          className="w-full"
+          autoComplete="off"
+          color="warning"
+          value={value}
+          defaultValue={defaultValue}
+          onChange={handleChange}
+        />
+      </label>
       <button onClick={onClear}>
         <ClearIcon />
       </button>
