@@ -1,4 +1,3 @@
-import { Typography } from '@mui/material';
 import { FacebookAuth } from 'features/authentication/facebook/FacebookAuth';
 import { useLogin } from 'features/authentication/logIn/hooks/useLogin';
 import { Button } from 'features/common/button/Button';
@@ -32,9 +31,9 @@ export const LogIn = () => {
           {isError &&
             errors?.length !== 0 &&
             errors?.map((e) => (
-              <Typography key={generateUniqueUuid()} color={'red'}>
+              <p className="text-primary-light" key={generateUniqueUuid()}>
                 {e.description}
-              </Typography>
+              </p>
             ))}
         </form>
       </div>
