@@ -1,10 +1,8 @@
 import ClearIcon from '@mui/icons-material/Clear';
-import { FormControl, InputLabel } from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import classNames from 'classnames';
 import { IOption } from 'features/common/form/models/option';
-import { useState } from 'react';
+import { useId, useState } from 'react';
+import Select from 'react-select';
 
 interface IBaseSelectProps<TOptionValue extends number | string> {
   className?: string;
@@ -19,39 +17,34 @@ export const BaseSelect = <TOptionValue extends number | string>({
   onChange,
   options,
 }: IBaseSelectProps<TOptionValue>) => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState<IOption<TOptionValue> | undefined>(undefined);
 
-  const handleChange = (event: SelectChangeEvent) => {
-    const value = event.target.value;
-    setValue(value);
-    const option = options.find((o) => o.value === value) as IOption<TOptionValue>;
-    onChange(option);
+  const handleChange = (value: IOption<TOptionValue>) => {
+    setValue({ label: value.label, value: value.value });
+    onChange(value);
   };
 
   const onClear = () => {
-    setValue('');
+    setValue(undefined);
     onChange(undefined);
   };
 
+  const id = useId();
+
   return (
     <div className={classNames('flex gap-3', className)}>
-      <FormControl className="w-full">
-        <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={value}
-          label={label}
-          className="w-full"
-          onChange={handleChange}
-        >
-          {options.map((o) => (
-            <MenuItem key={o.value} value={o.value}>
-              {o.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <fieldset className="w-full">
+        <label htmlFor={id}>
+          {label}
+          <Select
+            id={id}
+            options={options}
+            value={value}
+            onChange={(newValue) => newValue && handleChange(newValue)}
+            isMulti={false}
+          />
+        </label>
+      </fieldset>
       <button onClick={onClear}>
         <ClearIcon />
       </button>
