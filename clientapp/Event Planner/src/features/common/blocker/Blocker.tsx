@@ -1,9 +1,9 @@
-import { CircularProgress } from '@mui/material';
+import { Loader } from '../loader/Loader';
 
 export const Blocker = () => {
   return (
     <div className="w-screen h-screen fixed grid place-items-center bg-blocker-color">
-      <CircularProgress sx={{ width: '80px !important;', height: '80px !important;' }} />
+      <Loader className="w-20 h-20" />
     </div>
   );
 };
