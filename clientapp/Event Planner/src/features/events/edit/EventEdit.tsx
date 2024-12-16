@@ -1,4 +1,4 @@
-import { CircularProgress } from '@mui/material';
+import { Loader } from 'features/common/loader/Loader';
 import { ServerErrorMessage } from 'features/common/message/errorMessage/ServerErrorMessage';
 import { EventForm } from 'features/events/form/EventForm';
 
@@ -9,7 +9,7 @@ export const EventEdit = () => {
 
   return (
     <div className="my-10">
-      {isLoading && <CircularProgress color="secondary" />}
+      {isLoading && <Loader />}
       {isSuccess && (
         <EventForm
           event={event}
